@@ -14,7 +14,9 @@ Quick start
 1. Install Fidus Writer if you haven't done so already.
 
 2. Within the virtual environment set up for your Fidus Writer instance,
-   running `pip install fiduswriter-ojs`
+   running:: 
+   
+    pip install fiduswriter-ojs
 
 3. Add "ojs" to your INSTALLED_APPS setting in the configuration.py file 
    like this::
@@ -25,11 +27,15 @@ Quick start
     ]
 
 
-4. Run `python manage.py migrate` to create the polls models.
+4. Run this to create the models::
 
-5. Run `python manage.py transpile` to create the needed JavaScript files.
+    python manage.py migrate
 
-6. (Re)start your Fidus Writer server
+5. Create the needed JavaScript files by running this::
+
+    python manage.py transpile
+
+6. (Re)start your Fidus Writer server.
 
 7. Following the install instructions of the Fidus Writer plugin to connect 
    the two plugins with each other.
