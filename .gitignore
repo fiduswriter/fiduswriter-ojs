@@ -1,0 +1,4 @@
+*.pyc
+*~
+dist/
+fiduswriter_ojs.egg-info/
