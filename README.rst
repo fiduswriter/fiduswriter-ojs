@@ -4,11 +4,11 @@ FidusWriter-OJS
 
 FidusWriter-OJS is a Fidus writer plugin to connect a Fidus Writer instance 
 with Open Journal Systems (OJS). 
-This plugin has to be combined with the Fidus Writer plugin for OJS.
+This plugin has to be combined with the `OJS-FidusWriter plugin <https://github.com/fiduswriter/ojs-fiduswriter>`_ for OJS.
 
 
 
-Quick start
+Installation
 -----------
 
 1. Install Fidus Writer if you haven't done so already.
@@ -37,5 +37,14 @@ Quick start
 
 6. (Re)start your Fidus Writer server.
 
-7. Following the install instructions of the Fidus Writer plugin to connect 
+7. Following the install instructions of the `OJS-FidusWriter plugin <https://github.com/fiduswriter/ojs-fiduswriter>`_ to connect 
    the two plugins with each other.
+
+
+Credits
+-----------
+
+This plugin has been developed by the `Opening Scolarly Communications in the Social Sciences (OSCOSS) <http://www.gesis.org/?id=10714>`_ project, financed by the German Research Foundation (DFG) and executed by the University of Bonn and GESIS – Leibniz Institute for the Social Sciences. 
+
+Lead Developers: `Fakhri Momeni <https://github.com/momenifi>`_ and `Johannes Wilm <https://github.com/johanneswilm>`_
+
