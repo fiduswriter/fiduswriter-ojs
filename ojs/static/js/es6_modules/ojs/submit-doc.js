@@ -13,7 +13,6 @@ export class SendDocSubmission {
         journalId,
         firstname,
         lastname,
-        email,
         affiliation,
         webpage
     ) {
