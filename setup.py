@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='fiduswriter-ojs',
-    version='3.1.12',
+    version='3.2.0-rc.1',
     packages=find_packages(),
     include_package_data=True,
     license='AGPL License',
