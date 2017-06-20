@@ -21,10 +21,10 @@ Installation
 3. Add "ojs" to your INSTALLED_APPS setting in the configuration.py file
    like this::
 
-    INSTALLED_APPS = [
+    INSTALLED_APPS += (
         ...
         'ojs',
-    ]
+    )
 
 
 4. Run this to create the models::
