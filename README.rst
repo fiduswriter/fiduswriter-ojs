@@ -13,7 +13,7 @@ Installation
 
 1. Install Fidus Writer if you haven't done so already.
 
-2. Within the virtual environment set up for your Fidus Writer instance, install the version of the plugin corresponding to your Fidus Writer installation. If you are running Fidus Writer 3.2, the command is:
+2. Within the virtual environment set up for your Fidus Writer instance, install the version of the plugin corresponding to your Fidus Writer installation. If you are running Fidus Writer 3.2, the command is::
 
     pip install "fiduswriter-ojs<3.3"
 
