@@ -78,20 +78,11 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.submission = Submission()
         self.submission.submitter = self.user
         self.submission.journal_id = journal_id
-        # Save the attached file as the submission file, transforming it
-        # from the python file_object format Tornado provides it in to the
-        # format used by Django.
-        file_object = self.request.files['file'][0]
-        self.submission.file_object.save(
-            file_object.filename,
-            ContentFile(file_object.body),
-            save=False
-        )
         self.submission.save()
         # Create two revisions:
-        # - 0: this is the submitted file that should not be changed
-        # - 1: this is the submitted file, but this version can be changed
-        # by an editor to become the first review file.
+        # - 0: this is the submitted doc that should not be changed
+        # - 1: this is the submitted doc, but this version can be changed
+        # by an editor to become the first review doc.
         self.revision = SubmissionRevision()
         self.revision.submission = self.submission
         self.revision.version = "1.0.0"

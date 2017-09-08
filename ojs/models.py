@@ -20,26 +20,11 @@ class Journal(models.Model):
         return self.name
 
 
-def submission_filename(instance, filename):
-    return '/'.join([
-        'submission',
-        str(instance.journal.id),
-        str(instance.submitter.id),
-        filename
-    ])
-
-
 # A submission registered with OJS
 class Submission(models.Model):
     submitter = models.ForeignKey(User)
     journal = models.ForeignKey(Journal)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
-    # The submission is uploaded from FW client to server as a zip file. This
-    # zip file is imported into the editor's account the first time an editor
-    # or reviewer is opening a document of a revision with version==0.
-    # We do this, as the submitter won't have access rights to the media
-    # library of the editor.
-    file_object = models.FileField(upload_to=submission_filename)
 
     def __unicode__(self):
         return u'{ojs_jid} in {journal} by {submitter}'.format(
@@ -66,7 +51,7 @@ class Author(models.Model):
         )
 
 
-# Within each submission, there is a new file upload for each revision
+# Within each submission, there is a new revision for each revision
 class SubmissionRevision(models.Model):
     submission = models.ForeignKey(Submission)
     # version = stage ID + "." + round + "." + (0 for reviewer or 5 for author)

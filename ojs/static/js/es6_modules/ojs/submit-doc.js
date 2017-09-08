@@ -1,4 +1,3 @@
-import {ZipFidus} from "../exporter/native/zip"
 import {ShrinkFidus} from "../exporter/native/shrink"
 import {createSlug} from "../exporter/tools/file"
 import {addAlert, csrfToken} from "../common"
@@ -24,8 +23,6 @@ export class SendDocSubmission {
         this.lastname = lastname
         this.affiliation = affiliation
         this.webpage = webpage
-        this.shrunkBibDB = {}
-        this.usedImageIds = []
     }
 
     init() {
@@ -37,17 +34,12 @@ export class SendDocSubmission {
 
         shrinker.init().then(
             ({doc, shrunkImageDB, shrunkBibDB, httpIncludes}) => {
-                this.shrunkBibDB = shrunkBibDB
-                this.usedImageIds = Object.keys(shrunkImageDB)
-                let zipper = new ZipFidus(this.doc, shrunkImageDB, shrunkBibDB, httpIncludes)
-                return zipper.init()
+                this.uploadRevision(shrunkBibDB, shrunkImageDB)
             }
-        ).then(
-            blob => this.uploadRevision(blob)
         )
     }
 
-    uploadRevision(blob) {
+    uploadRevision(bibDB, imageDB) {
         let data = new window.FormData()
         data.append('journal_id', this.journalId)
         data.append('firstname', this.firstname)
@@ -56,10 +48,9 @@ export class SendDocSubmission {
         data.append('webpage', this.webpage)
         data.append('doc_id', this.doc.id)
         data.append('title', this.doc.title)
-        data.append('file', blob, createSlug(this.doc.title) + '.fidus')
         data.append('contents', JSON.stringify(this.doc.contents))
-        data.append('bibliography', JSON.stringify(this.shrunkBibDB))
-        data.append('image_ids', this.usedImageIds)
+        data.append('bibliography', JSON.stringify(bibDB))
+        data.append('image_ids', Object.keys(imageDB))
 
         jQuery.ajax({
             url: '/proxy/ojs/author_submit',

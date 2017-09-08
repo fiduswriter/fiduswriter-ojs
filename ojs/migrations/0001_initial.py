@@ -7,6 +7,13 @@ from django.db import migrations, models
 import django.db.models.deletion
 import ojs.models
 
+def submission_filename(instance, filename):
+    return '/'.join([
+        'submission',
+        str(instance.journal.id),
+        str(instance.submitter.id),
+        filename
+    ])
 
 class Migration(migrations.Migration):
 
@@ -48,7 +55,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ojs_jid', models.PositiveIntegerField(default=0)),
-                ('file_object', models.FileField(upload_to=ojs.models.submission_filename)),
+                ('file_object', models.FileField(upload_to=submission_filename)),
                 ('journal', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ojs.Journal')),
                 ('submitter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

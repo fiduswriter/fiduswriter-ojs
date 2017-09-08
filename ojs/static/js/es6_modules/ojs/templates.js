@@ -3,8 +3,7 @@ import {escapeText} from "../common"
 /** Dialog to add a note to a revision before saving. */
 
 export let firstSubmissionDialogTemplate = ({journals, first_name, last_name}) =>
-    `<div title="${gettext('Complete details and choose journal')}">
-        <p>${gettext('Please fill out the below form about the corresponding author.')}</p>
+    `<div title="${gettext('Complete corresponding author details and choose journal')}">
         <table class="fw-dialog-table fw-dialog-table-wide">
             <tbody>
                 <tr>
