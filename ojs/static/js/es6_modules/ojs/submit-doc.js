@@ -24,6 +24,8 @@ export class SendDocSubmission {
         this.lastname = lastname
         this.affiliation = affiliation
         this.webpage = webpage
+        this.shrunkBibDB = {}
+        this.usedImageIds = []
     }
 
     init() {
@@ -35,6 +37,8 @@ export class SendDocSubmission {
 
         shrinker.init().then(
             ({doc, shrunkImageDB, shrunkBibDB, httpIncludes}) => {
+                this.shrunkBibDB = shrunkBibDB
+                this.usedImageIds = Object.keys(shrunkImageDB)
                 let zipper = new ZipFidus(this.doc, shrunkImageDB, shrunkBibDB, httpIncludes)
                 return zipper.init()
             }
@@ -53,7 +57,9 @@ export class SendDocSubmission {
         data.append('doc_id', this.doc.id)
         data.append('title', this.doc.title)
         data.append('file', blob, createSlug(this.doc.title) + '.fidus')
-
+        data.append('contents', JSON.stringify(this.doc.contents))
+        data.append('bibliography', JSON.stringify(this.shrunkBibDB))
+        data.append('image_ids', this.usedImageIds)
 
         jQuery.ajax({
             url: '/proxy/ojs/author_submit',

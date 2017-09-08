@@ -8,7 +8,7 @@ from urllib import urlencode
 from .models import Journal, Submission, SubmissionRevision, Author, Reviewer
 from django.core.files.base import ContentFile
 from document.models import Document, AccessRight
-
+from usermedia.models import Image, DocumentImage
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
     @asynchronous
@@ -96,13 +96,36 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.revision.submission = self.submission
         self.revision.version = "1.0.0"
         version = "1.0.0"
-        # Connect a new, empty document to the submission.
+        # Connect a new document to the submission.
         title = self.get_argument('title')
+        contents = self.get_argument('contents')
+        bibliography = self.get_argument('bibliography')
+        image_ids = self.get_argument('image_ids').split(',')
         document = Document()
         journal = Journal.objects.get(id=journal_id)
         document.owner = journal.editor
         document.title = title
+        document.contents = contents
+        document.bibliography = bibliography
         document.save()
+        for id in image_ids:
+            image = Image.objects.filter(id=id)
+            if image.exists():
+                image = image[0]
+            else:
+                image = Image()
+                image.pk = id
+                image.uploader = journal.editor
+                f = open(os.path.join(
+                    settings.PROJECT_PATH, "base/static/img/error.png"
+                ))
+                image.image.save('error.png', File(f))
+                image.save()
+            DocumentImage.objects.create(
+                document=document,
+                image=image,
+                title=''
+            )
         self.revision.document = document
         self.revision.save()
 

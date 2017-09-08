@@ -19,16 +19,6 @@ urlpatterns = [
         name='open_revision_doc'
     ),
     url(
-        '^get_revision_file/(?P<revision_id>[0-9]+)/$',
-        views.get_revision_file,
-        name='get_revision_file'
-    ),
-    url(
-        '^import_doc/(?P<submission_id>[0-9]+)/(?P<version>[0-9\.]+)/$',
-        views.import_doc,
-        name='import_doc'
-    ),
-    url(
         '^get_login_token/$',
         views.get_login_token_js,
         name='get_login_token_js'

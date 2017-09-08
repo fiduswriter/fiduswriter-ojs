@@ -4,6 +4,7 @@ import {addAlert, csrfToken} from "../common"
 import {SaveCopy} from "../exporter/native"
 import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
 import {SendDocSubmission} from "./submit-doc"
+import {READ_ONLY_ROLES, COMMENT_ONLY_ROLES} from "../editor"
 
 // Adds functions for OJS to the editor
 export class EditorOJS {
@@ -19,7 +20,7 @@ export class EditorOJS {
                 type: "POST",
                 dataType: "json",
                 data: {
-                    doc_id: this.editor.doc.id
+                    doc_id: this.editor.docInfo.id
                 },
                 url: '/ojs/get_doc_info/',
                 crossDomain: false, // obviates need for sameOrigin test
@@ -43,7 +44,7 @@ export class EditorOJS {
     // first time. This doesn't happen if users enter directly. So we need to
     // redirect manually.
     checkDoc() {
-        if (this.editor.doc.version===0 && this.submission.status==='submitted') {
+        if (this.editor.docInfo.version===0 && this.submission.status==='submitted') {
             if (['read','read-without-comments'].includes(this.editor.docInfo.rights)) {
                 // Won't be able to update the document anyway.
                 window.alert(gettext('Document not yet ready. Please come back later.'))
@@ -62,41 +63,57 @@ export class EditorOJS {
         if (this.journals.length === 0) {
             // This installation does not have any journals setup. Abort.
             return Promise.resolve()
-        } else if (this.submission.status==='submitted' &! this.editor.docInfo.is_owner) {
-            // Add large buttons for reviewers and authors to resubmit to OJS.
-            jQuery('.editortoolbar').append(`
-                <div class="fw-button fw-light fw-large submit-ojs" title="${gettext("Submit to OJS")}">
-                    ${gettext("Send to journal")}
-                </div>
-            `);
-            jQuery('#file-menu').append(`
-                <li>
-                    <span class="fw-pulldown-item submit-ojs icon-search" title="${gettext("Submit the paper to journal")}">
-                        ${gettext("Send to journal")}
-                    </span>
-                </li>
-            `)
-        } else {
-            jQuery('#file-menu').append(`
-                <li>
-                    <span class="fw-pulldown-item submit-ojs icon-search" title="${gettext("submit the paper to ojs")}">
-                        ${gettext("Submit paper")}
-                    </span>
-                </li>
-            `)
         }
 
-        jQuery(document).on('mousedown', '.submit-ojs:not(.disabled)', () => {
-            if (this.submission.status === 'submitted') {
-                if (this.editor.docInfo.rights==='review') {
-                    this.reviewerDialog()
-                } else {
-                    this.resubmissionDialog()
+        this.editor.menu.toolbarModel.content.push(
+            {
+                id: 'submit-ojs',
+                type: 'button',
+                title: gettext('Submit to journal'),
+                icon: 'paper-plane',
+                action: editor => {
+                    if (this.submission.status === 'submitted') {
+                        if (this.editor.docInfo.rights==='review') {
+                            this.reviewerDialog()
+                        } else {
+                            this.resubmissionDialog()
+                        }
+                    } else {
+                        this.firstSubmissionDialog()
+                    }
+                },
+                disabled: editor => {
+                    if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights) || COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                        return true
+                    } else {
+                        return false
+                    }
                 }
-            } else {
-                this.firstSubmissionDialog()
             }
-
+        )
+        let fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id==='file')
+        fileMenu.content.push({
+            title: gettext('Submit to journal'),
+            icon: 'paper-plane',
+            tooltip: gettext('Submit to journal'),
+            action: editor => {
+                if (this.submission.status === 'submitted') {
+                    if (this.editor.docInfo.rights==='review') {
+                        this.reviewerDialog()
+                    } else {
+                        this.resubmissionDialog()
+                    }
+                } else {
+                    this.firstSubmissionDialog()
+                }
+            },
+            disabled: editor => {
+                if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights) || COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                    return true
+                } else {
+                    return false
+                }
+            }
         })
         return Promise.resolve()
     }
@@ -175,7 +192,7 @@ export class EditorOJS {
 
     submitResubmission() {
         let data = new window.FormData()
-        data.append('doc_id', this.editor.doc.id)
+        data.append('doc_id', this.editor.docInfo.id)
 
         jQuery.ajax({
             url: '/proxy/ojs/author_submit',
@@ -196,21 +213,17 @@ export class EditorOJS {
     }
 
     submitDoc(journalId, firstname, lastname, affiliation, webpage) {
-        return this.editor.save().then(
-            () => {
-                let submitter = new SendDocSubmission(
-                    this.editor.doc,
-                    this.editor.imageDB,
-                    this.editor.bibDB,
-                    journalId,
-                    firstname,
-                    lastname,
-                    affiliation,
-                    webpage
-                )
-                return submitter.init()
-            }
+        let submitter = new SendDocSubmission(
+            this.editor.getDoc(),
+            this.editor.mod.db.imageDB,
+            this.editor.mod.db.bibDB,
+            journalId,
+            firstname,
+            lastname,
+            affiliation,
+            webpage
         )
+        return submitter.init()
     }
 
     // The dialog for a document reviewer.
@@ -245,7 +258,7 @@ export class EditorOJS {
     // Send the opinion of the reviewer to OJS.
     submitReview() {
         let data = new window.FormData()
-        data.append('doc_id', this.editor.doc.id)
+        data.append('doc_id', this.editor.docInfo.id)
         let editorMessage = jQuery("#message-editor").val()
         let editorAuthorMessage = jQuery("#message-editor-author").val()
         let recommendation = jQuery("#recommendation").val()
