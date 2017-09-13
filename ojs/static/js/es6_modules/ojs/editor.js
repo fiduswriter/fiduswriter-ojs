@@ -33,30 +33,9 @@ export class EditorOJS {
                 }
             })
         }).then(
-            () => this.checkDoc()
-        ).then(
             () => this.setupUI()
         )
 
-    }
-
-    // The submission process does that we need to import revision docs the
-    // first time. This doesn't happen if users enter directly. So we need to
-    // redirect manually.
-    checkDoc() {
-        if (this.editor.docInfo.version===0 && this.submission.status==='submitted') {
-            if (['read','read-without-comments'].includes(this.editor.docInfo.rights)) {
-                // Won't be able to update the document anyway.
-                window.alert(gettext('Document not yet ready. Please come back later.'))
-                window.location.replace('/')
-            } else {
-                window.location.replace(
-                    '/ojs/import_doc/' + this.submission.submission_id +
-                    '/' + this.submission.version + '/'
-                )
-            }
-        }
-        return Promise.resolve()
     }
 
     setupUI() {
