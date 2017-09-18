@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-08 09:15+0200\n"
+"POT-Creation-Date: 2017-09-13 22:55+0000\n"
 "PO-Revision-Date: 2017-05-08 09:15+0200\n"
 "Last-Translator: Johannes Wilm <johannes@fiduswriter.org>\n"
 "Language-Team: German <johannes@fiduswriter.org>\n"
@@ -16,10 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: ojs/templates/ojs/import_document.html:9
-msgid "The all in one solution for collaborative academic writing."
-msgstr "Die Komplettlösung zum Erstellen wissenschaftlicher Texte"
 
 #: ojs/templates/ojs/register_journals.html:3
 #: ojs/templates/ojs/register_journals.html:23
@@ -60,3 +56,6 @@ msgstr ""
 #: ojs/templates/ojs/register_journals.html:35
 msgid "Query available journals"
 msgstr "Suche verfügbare Zeitschriften"
+
+#~ msgid "The all in one solution for collaborative academic writing."
+#~ msgstr "Die Komplettlösung zum Erstellen wissenschaftlicher Texte"

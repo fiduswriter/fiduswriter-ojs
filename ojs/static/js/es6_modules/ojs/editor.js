@@ -73,6 +73,7 @@ export class EditorOJS {
         let fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id==='file')
         fileMenu.content.push({
             title: gettext('Submit to journal'),
+            type: 'action',
             icon: 'paper-plane',
             tooltip: gettext('Submit to journal'),
             action: editor => {
