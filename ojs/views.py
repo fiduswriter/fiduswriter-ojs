@@ -146,33 +146,38 @@ def get_doc_info_js(request):
     status = 405
     response = {}
     if request.is_ajax() and request.method == 'POST':
-        document_id = request.POST.get('doc_id')
-        document = Document.objects.get(id=document_id)
-        if (
-            document.owner != request.user and
-            AccessRight.objects.filter(
-                    document=document,
-                    user=request.user
-            ).count() == 0
-        ):
-            # Access forbidden
-            return HttpResponse('Missing access rights', status=403)
-        # OJS submission related
-        response['submission'] = dict()
-        revisions = models.SubmissionRevision.objects.filter(
-            document_id=document_id
-        )
-        if len(revisions) > 0:
-            revision = revisions[0]
-            response['submission']['status'] = 'submitted'
-            response['submission']['submission_id'] = \
-                revision.submission.id
-            response['submission']['version'] = \
-                revision.version
-            response['submission']['journal_id'] = \
-                revision.submission.journal_id
+        document_id = int(request.POST.get('doc_id'))
+        if document_id == 0:
+            response['submission'] = {
+                'status': 'unsubmitted'
+            }
         else:
-            response['submission']['status'] = 'unsubmitted'
+            document = Document.objects.get(id=document_id)
+            if (
+                document.owner != request.user and
+                AccessRight.objects.filter(
+                        document=document,
+                        user=request.user
+                ).count() == 0
+            ):
+                # Access forbidden
+                return HttpResponse('Missing access rights', status=403)
+            # OJS submission related
+            response['submission'] = dict()
+            revisions = models.SubmissionRevision.objects.filter(
+                document_id=document_id
+            )
+            if len(revisions) > 0:
+                revision = revisions[0]
+                response['submission']['status'] = 'submitted'
+                response['submission']['submission_id'] = \
+                    revision.submission.id
+                response['submission']['version'] = \
+                    revision.version
+                response['submission']['journal_id'] = \
+                    revision.submission.journal_id
+            else:
+                response['submission']['status'] = 'unsubmitted'
         journals = []
         for journal in models.Journal.objects.all():
             journals.append({

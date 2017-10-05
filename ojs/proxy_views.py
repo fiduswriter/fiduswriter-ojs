@@ -91,7 +91,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         title = self.get_argument('title')
         contents = self.get_argument('contents')
         bibliography = self.get_argument('bibliography')
-        image_ids = self.get_argument('image_ids').split(',')
+        image_ids = list(
+            filter(None, self.get_argument('image_ids').split(','))
+        )
         document = Document()
         journal = Journal.objects.get(id=journal_id)
         document.owner = journal.editor
