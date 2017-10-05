@@ -79,10 +79,6 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.submission.submitter = self.user
         self.submission.journal_id = journal_id
         self.submission.save()
-        # Create two revisions:
-        # - 0: this is the submitted doc that should not be changed
-        # - 1: this is the submitted doc, but this version can be changed
-        # by an editor to become the first review doc.
         self.revision = SubmissionRevision()
         self.revision.submission = self.submission
         self.revision.version = "1.0.0"

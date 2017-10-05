@@ -1,6 +1,6 @@
 import {BibliographyDB} from "../bibliography/database"
 import {ImageDB} from "../images/database"
-import {addAlert, csrfToken} from "../common"
+import {addAlert, csrfToken, activateWait, deactivateWait} from "../common"
 import {SaveCopy} from "../exporter/native"
 import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
 import {SendDocSubmission} from "./submit-doc"
@@ -10,7 +10,9 @@ import {READ_ONLY_ROLES, COMMENT_ONLY_ROLES} from "../editor"
 export class EditorOJS {
     constructor(editor) {
         this.editor = editor
-        this.submission = false
+        this.submission = {
+            status: 'unknown'
+        }
         this.journals = false
     }
 
@@ -52,7 +54,7 @@ export class EditorOJS {
                 icon: 'paper-plane',
                 action: editor => {
                     if (this.submission.status === 'submitted') {
-                        if (this.editor.docInfo.rights==='review') {
+                        if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
                             this.reviewerDialog()
                         } else {
                             this.resubmissionDialog()
@@ -62,7 +64,18 @@ export class EditorOJS {
                     }
                 },
                 disabled: editor => {
-                    if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights) || COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                    if (
+                        READ_ONLY_ROLES.includes(editor.docInfo.access_rights) ||
+                        (
+                            COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights) &&
+                            this.submission.status !== 'submitted'
+                        ) ||
+                        (
+                            this.submission.status === 'submitted' &&
+                            editor.docInfo.access_rights === 'write' &&
+                            this.submission.version.slice(-1) === '0'
+                        )
+                    ) {
                         return true
                     } else {
                         return false
@@ -78,7 +91,7 @@ export class EditorOJS {
             tooltip: gettext('Submit to journal'),
             action: editor => {
                 if (this.submission.status === 'submitted') {
-                    if (this.editor.docInfo.rights==='review') {
+                    if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
                         this.reviewerDialog()
                     } else {
                         this.resubmissionDialog()
@@ -88,7 +101,18 @@ export class EditorOJS {
                 }
             },
             disabled: editor => {
-                if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights) || COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                if (
+                    READ_ONLY_ROLES.includes(editor.docInfo.access_rights) ||
+                    (
+                        COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights) &&
+                        this.submission.status !== 'submitted'
+                    ) ||
+                    (
+                        this.submission.status === 'submitted' &&
+                        editor.docInfo.access_rights === 'write' &&
+                        this.submission.version.slice(-1) === '0'
+                    )
+                ) {
                     return true
                 } else {
                     return false
@@ -246,6 +270,7 @@ export class EditorOJS {
             addAlert('error', gettext('Fill out all fields before submitting!'))
             return false
         }
+        activateWait()
         data.append('editor_message', editorMessage)
         data.append('editor_author_message', editorAuthorMessage)
         data.append('recommendation', recommendation)
@@ -260,12 +285,13 @@ export class EditorOJS {
             beforeSend: (xhr, settings) =>
                 xhr.setRequestHeader("X-CSRFToken", csrfToken),
             success: () => {
+                deactivateWait()
                 addAlert('success', gettext('Review submitted'))
                 window.setTimeout(() => window.location.reload(), 2000)
             },
             error: () => addAlert('error', gettext('Review could not be submitted.'))
         })
-        return true;
+        return true
     }
 
 }

@@ -387,9 +387,15 @@ def create_copy_js(request, submission_id):
     # Copy the document
     document = revision.document
     # This saves the document with a new pk
+    doc_images = document.documentimage_set.all()
     document.pk = None
     document.save()
-
+    for doc_image in doc_images:
+        DocumentImage.objects.create(
+            document=document,
+            image=doc_image.image,
+            title=doc_image.title
+        )
     # Copy revision
     new_version = request.POST.get('new_version')
     revision.pk = None
