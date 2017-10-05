@@ -12,7 +12,7 @@ from allauth.account.models import EmailAddress
 from . import models
 from . import token
 from document.models import Document, AccessRight, CAN_UPDATE_DOCUMENT
-
+from usermedia.models import DocumentImage
 
 # logs a user in
 def login_user(request, user):
