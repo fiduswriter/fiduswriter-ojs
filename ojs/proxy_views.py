@@ -175,7 +175,6 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             user=self.user,
             rights='read-without-comments'
         )
-
         self.write(response.body)
         self.finish()
 
