@@ -5,7 +5,7 @@ import {addAlert, csrfToken} from "../common"
 // Send an article submission to FW and OJS servers.
 
 export class SendDocSubmission {
-    constructor(
+    constructor({
         doc,
         imageDB,
         bibDB,
@@ -13,8 +13,9 @@ export class SendDocSubmission {
         firstname,
         lastname,
         affiliation,
-        webpage
-    ) {
+        authorUrl,
+        abstract
+    }) {
         this.doc = doc
         this.imageDB = imageDB
         this.bibDB = bibDB
@@ -22,7 +23,8 @@ export class SendDocSubmission {
         this.firstname = firstname
         this.lastname = lastname
         this.affiliation = affiliation
-        this.webpage = webpage
+        this.authorUrl = authorUrl
+        this.abstract = abstract
     }
 
     init() {
@@ -45,9 +47,10 @@ export class SendDocSubmission {
         data.append('firstname', this.firstname)
         data.append('lastname', this.lastname)
         data.append('affiliation', this.affiliation)
-        data.append('webpage', this.webpage)
+        data.append('author_url', this.authorUrl)
         data.append('doc_id', this.doc.id)
         data.append('title', this.doc.title)
+        data.append('abstract', this.abstract)
         data.append('contents', JSON.stringify(this.doc.contents))
         data.append('bibliography', JSON.stringify(bibDB))
         data.append('image_ids', Object.keys(imageDB))

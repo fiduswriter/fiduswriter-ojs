@@ -2,18 +2,49 @@ import {escapeText} from "../common"
 
 /** Dialog to add a note to a revision before saving. */
 
-export let firstSubmissionDialogTemplate = ({journals, first_name, last_name}) =>
-    `<div title="${gettext('Complete corresponding author details and choose journal')}">
+export let firstSubmissionDialogTemplate = ({journals, first_name, last_name, abstract}) =>
+    `<div title="${gettext('Complete missing information and choose journal')}">
+        <h3>${gettext('Submission information')}</h3>
         <table class="fw-dialog-table fw-dialog-table-wide">
             <tbody>
                 <tr>
-                    <th><h4 class="fw-tablerow-title">${gettext('First name')}</h4></th>
+                    <th><h4 class="fw-tablerow-title">${gettext('Journal')}</h4></th>
+                    <td class="entry-field">
+                    ${
+                        journals.map((journal, index) =>
+                            `<div class="fw-radio">
+                                <input type="radio" id="journal_${journal.id}" name="journalList" value="${journal.id}"
+                                    ${
+                                        index === 0 ?
+                                        'checked="checked"' :
+                                        ''
+                                    }
+                                >
+                                <label for="journal_${journal.id}">${escapeText(journal.name)}</label>
+                            </div>`
+                        ).join('')
+                    }
+                    </td>
+                </tr>
+                <tr>
+                    <th><h4 class="fw-tablerow-title">${gettext('Abstract')}</h4> *</th>
+                    <td class="entry-field">
+                        <textarea id="submission-abstract" rows="8" style="width:678px;resize:none;">${escapeText(abstract)}</textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>${gettext('Corresponding author')}</h3>
+        <table class="fw-dialog-table fw-dialog-table-wide">
+            <tbody>
+                <tr>
+                    <th><h4 class="fw-tablerow-title">${gettext('First name')}</h4> *</th>
                     <td class="entry-field">
                         <input type="text" id="submission-firstname" value="${escapeText(first_name)}">
                     </td>
                 </tr>
                 <tr>
-                    <th><h4 class="fw-tablerow-title">${gettext('Last name')}</h4></th>
+                    <th><h4 class="fw-tablerow-title">${gettext('Last name')}</h4> *</th>
                     <td class="entry-field">
                         <input type="text" id="submission-lastname" value="${escapeText(last_name)}"></td>
                 </tr>
@@ -23,24 +54,10 @@ export let firstSubmissionDialogTemplate = ({journals, first_name, last_name}) =
                 </tr>
                 <tr>
                     <th><h4 class="fw-tablerow-title">${gettext('Webpage')}</h4></th>
-                    <td class="entry-field"><input type="text" id="submission-webpage"></td>
+                    <td class="entry-field"><input type="text" id="submission-author-url"></td>
                 </tr>
             </tbody>
         </table>
-        ${
-            journals.map((journal, index) =>
-                `<div class="fw-radio">
-                    <input type="radio" id="journal_${journal.id}" name="journalList" value="${journal.id}"
-                        ${
-                            index === 0 ?
-                            'checked="checked"' :
-                            ''
-                        }
-                    >
-                    <label for="journal_${journal.id}">${escapeText(journal.name)}</label>
-                </div>`
-            ).join('')
-        }
     </div>`
 
 

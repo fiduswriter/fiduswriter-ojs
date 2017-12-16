@@ -85,6 +85,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         version = "1.0.0"
         # Connect a new document to the submission.
         title = self.get_argument('title')
+        abstract = self.get_argument('abstract')
         contents = self.get_argument('contents')
         bibliography = self.get_argument('bibliography')
         image_ids = list(
@@ -126,11 +127,12 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         post_data = {
             'username': self.user.username.encode('utf8'),
             'title': title.encode('utf8'),
+            'abstract': abstract.encode('utf8'),
             'first_name': self.get_argument('firstname').encode('utf8'),
             'last_name': self.get_argument('lastname').encode('utf8'),
             'email': self.user.email.encode('utf8'),
             'affiliation': self.get_argument('affiliation').encode('utf8'),
-            'author_url': self.get_argument('webpage').encode('utf8'),
+            'author_url': self.get_argument('author_url').encode('utf8'),
             'journal_id': journal.ojs_jid,
             'fidus_url': fidus_url,
             'fidus_id': self.submission.id,

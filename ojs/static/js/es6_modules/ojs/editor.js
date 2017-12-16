@@ -136,12 +136,13 @@ export class EditorOJS {
             let firstname = jQuery("#submission-firstname").val()
             let lastname = jQuery("#submission-lastname").val()
             let affiliation = jQuery("#submission-affiliation").val()
-            let webpage = jQuery("#submission-webpage").val()
-            if (firstname==="" || lastname==="" || affiliation==="" || webpage==="") {
-                addAlert('error', gettext('Fill out all fields before submitting!'))
+            let authorUrl = jQuery("#submission-author-url").val()
+            let abstract = jQuery("#submission-abstract").val()
+            if (firstname==="" || lastname==="" || abstract==="") {
+                addAlert('error', gettext('Firstname, lastname and abstract are obligatory fields!'))
                 return
             }
-            that.submitDoc(journalId, firstname, lastname, affiliation, webpage)
+            that.submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract})
             jQuery(this).dialog("close")
         }
 
@@ -149,13 +150,16 @@ export class EditorOJS {
             jQuery(this).dialog("close")
         }
 
+        let abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.type.name==='abstract')
+
         jQuery(firstSubmissionDialogTemplate({
             journals: this.journals,
             first_name: this.editor.user.first_name,
             last_name: this.editor.user.last_name,
+            abstract: abstractNode.attrs.hidden ? '' : abstractNode.textContent
         })).dialog({
             autoOpen: true,
-            height: (this.journals.length * 45) + 400,
+            height: (this.journals.length * 45) + 700,
             width: 940,
             modal: true,
             buttons: diaButtons,
@@ -216,17 +220,18 @@ export class EditorOJS {
         })
     }
 
-    submitDoc(journalId, firstname, lastname, affiliation, webpage) {
-        let submitter = new SendDocSubmission(
-            this.editor.getDoc(),
-            this.editor.mod.db.imageDB,
-            this.editor.mod.db.bibDB,
+    submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract}) {
+        let submitter = new SendDocSubmission({
+            doc: this.editor.getDoc(),
+            imageDB: this.editor.mod.db.imageDB,
+            bibDB: this.editor.mod.db.bibDB,
             journalId,
             firstname,
             lastname,
             affiliation,
-            webpage
-        )
+            authorUrl,
+            abstract
+        })
         return submitter.init()
     }
 
