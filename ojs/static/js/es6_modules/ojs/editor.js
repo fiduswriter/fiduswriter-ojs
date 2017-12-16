@@ -127,17 +127,12 @@ export class EditorOJS {
         let diaButtons = {}, that = this
 
         diaButtons[gettext("Submit")] = function() {
-            let journalId = jQuery("input[type='radio'][name='journalList']:checked").val()
-            if (!journalId) {
-                addAlert('error', gettext('Select a journal before submitting!'))
-                return
-            }
-            journalId = parseInt(journalId)
-            let firstname = jQuery("#submission-firstname").val()
-            let lastname = jQuery("#submission-lastname").val()
-            let affiliation = jQuery("#submission-affiliation").val()
-            let authorUrl = jQuery("#submission-author-url").val()
-            let abstract = jQuery("#submission-abstract").val()
+            let journalId = parseInt(jQuery("#submission-journal").val())
+            let firstname = jQuery("#submission-firstname").val().trim()
+            let lastname = jQuery("#submission-lastname").val().trim()
+            let affiliation = jQuery("#submission-affiliation").val().trim()
+            let authorUrl = jQuery("#submission-author-url").val().trim()
+            let abstract = jQuery("#submission-abstract").val().trim()
             if (firstname==="" || lastname==="" || abstract==="") {
                 addAlert('error', gettext('Firstname, lastname and abstract are obligatory fields!'))
                 return
@@ -159,8 +154,8 @@ export class EditorOJS {
             abstract: abstractNode.attrs.hidden ? '' : abstractNode.textContent
         })).dialog({
             autoOpen: true,
-            height: (this.journals.length * 45) + 700,
-            width: 940,
+            height: 700,
+            width: 800,
             modal: true,
             buttons: diaButtons,
             create: function() {

@@ -8,26 +8,24 @@ export let firstSubmissionDialogTemplate = ({journals, first_name, last_name, ab
         <table class="fw-dialog-table fw-dialog-table-wide">
             <tbody>
                 <tr>
-                    <th><h4 class="fw-tablerow-title">${gettext('Journal')}</h4></th>
+                    <th><h4 class="fw-tablerow-title">${gettext('Journal')} *</h4></th>
                     <td class="entry-field">
-                    ${
-                        journals.map((journal, index) =>
-                            `<div class="fw-radio">
-                                <input type="radio" id="journal_${journal.id}" name="journalList" value="${journal.id}"
-                                    ${
-                                        index === 0 ?
-                                        'checked="checked"' :
-                                        ''
-                                    }
-                                >
-                                <label for="journal_${journal.id}">${escapeText(journal.name)}</label>
-                            </div>`
-                        ).join('')
-                    }
+                        <div class="fw-select-container">
+                            <select id="submission-journal" class="fw-button fw-white fw-large">
+                            ${
+                                journals.map((journal, index) =>
+                                    `<option value="${journal.id}">
+                                        ${escapeText(journal.name)}
+                                    </option>`
+                                ).join('')
+                            }
+                            </select>
+                            <div class="fw-select-arrow fa fa-caret-down"></div>
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <th><h4 class="fw-tablerow-title">${gettext('Abstract')}</h4> *</th>
+                    <th><h4 class="fw-tablerow-title">${gettext('Abstract')} *</h4></th>
                     <td class="entry-field">
                         <textarea id="submission-abstract" rows="8" style="width:678px;resize:none;">${escapeText(abstract)}</textarea>
                     </td>
@@ -38,13 +36,13 @@ export let firstSubmissionDialogTemplate = ({journals, first_name, last_name, ab
         <table class="fw-dialog-table fw-dialog-table-wide">
             <tbody>
                 <tr>
-                    <th><h4 class="fw-tablerow-title">${gettext('First name')}</h4> *</th>
+                    <th><h4 class="fw-tablerow-title">${gettext('First name')} *</h4></th>
                     <td class="entry-field">
                         <input type="text" id="submission-firstname" value="${escapeText(first_name)}">
                     </td>
                 </tr>
                 <tr>
-                    <th><h4 class="fw-tablerow-title">${gettext('Last name')}</h4> *</th>
+                    <th><h4 class="fw-tablerow-title">${gettext('Last name')} *</h4></th>
                     <td class="entry-field">
                         <input type="text" id="submission-lastname" value="${escapeText(last_name)}"></td>
                 </tr>
