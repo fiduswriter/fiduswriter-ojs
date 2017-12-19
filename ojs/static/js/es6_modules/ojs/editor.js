@@ -54,10 +54,10 @@ export class EditorOJS {
                 icon: 'paper-plane',
                 action: editor => {
                     if (this.submission.status === 'submitted') {
-                        if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
-                            this.reviewerDialog()
-                        } else {
+                        if (this.submission.user_role === 'author') {
                             this.resubmissionDialog()
+                        } else if (this.submission.user_role === 'reviewer') {
+                            this.reviewerDialog()
                         }
                     } else {
                         this.firstSubmissionDialog()
@@ -74,6 +74,10 @@ export class EditorOJS {
                             this.submission.status === 'submitted' &&
                             editor.docInfo.access_rights === 'write' &&
                             this.submission.version.slice(-1) === '0'
+                        ) ||
+                        (
+                            this.submission.status === 'submitted' &&
+                            this.submission.user_role === 'editor'
                         )
                     ) {
                         return true

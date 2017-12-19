@@ -9,6 +9,11 @@ urlpatterns = [
         name='add_reviewer_js'
     ),
     url(
+        '^accept_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9\.]+)/$',
+        views.accept_reviewer_js,
+        name='accept_reviewer_js'
+    ),
+    url(
         '^remove_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9\.]+)/$',
         views.remove_reviewer_js,
         name='remove_reviewer_js'

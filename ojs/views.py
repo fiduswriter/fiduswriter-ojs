@@ -122,12 +122,11 @@ def open_revision_doc(request, submission_id, version):
         rev.document.owner != user and
         AccessRight.objects.filter(
                 document=rev.document,
-                user=user,
-                rights__in=CAN_UPDATE_DOCUMENT
+                user=user
         ).count() == 0
     ):
-        # The user to be logged in is neither the editor (owner of doc), a
-        # reviewer or the author. We prohibit access.
+        # The user to be logged in is neither the editor (owner of doc), nor
+        # has he access rights to the doc. We prohibit access.
 
         # Access forbidden
         return HttpResponse('Missing access rights', status=403)
@@ -169,6 +168,17 @@ def get_doc_info_js(request):
             )
             if len(revisions) > 0:
                 revision = revisions[0]
+                user_role = ''
+                if revision.reviewer_set.filter(
+                    user=request.user
+                ).count() > 0:
+                    user_role = 'reviewer'
+                if revision.submission.author_set.filter(
+                    user=request.user
+                ).count() > 0:
+                    user_role = 'author'
+                if revision.submission.journal.editor == request.user:
+                    user_role = 'editor'
                 response['submission']['status'] = 'submitted'
                 response['submission']['submission_id'] = \
                     revision.submission.id
@@ -176,6 +186,8 @@ def get_doc_info_js(request):
                     revision.version
                 response['submission']['journal_id'] = \
                     revision.submission.journal_id
+                response['submission']['user_role'] = \
+                    user_role
             else:
                 response['submission']['status'] = 'unsubmitted'
         journals = []
@@ -259,6 +271,60 @@ def get_or_create_user(email, username):
     return User.objects.create_user(username, email)
 
 
+# A reviewer has accepted a review. Give comment/review access to the reviewer.
+@csrf_exempt
+def accept_reviewer_js(request, submission_id, version):
+    response = {}
+    status = 200
+    if request.method != 'POST':
+        # Method not allowed
+        response['error'] = 'Expected post'
+        status = 405
+        return JsonResponse(response, status=status)
+    api_key = request.POST.get('key')
+    revision = models.SubmissionRevision.objects.get(
+        submission_id=submission_id,
+        version=version
+    )
+    journal_key = revision.submission.journal.ojs_key
+    if (journal_key != api_key):
+        # Access forbidden
+        response['error'] = 'Wrong key'
+        status = 403
+        return JsonResponse(response, status=status)
+
+    ojs_jid = int(request.POST.get('user_id'))
+    reviewers = models.Reviewer.objects.filter(
+        revision=revision,
+        ojs_jid=ojs_jid
+    )
+    if len(reviewers) == 0:
+        response['error'] = 'Unknown reviewer'
+        status = 403
+        return JsonResponse(response, status=status)
+    reviewer = reviewers[0]
+    # Make sure the connect document has reviewer access rights set for the
+    # user.
+    access_rights = AccessRight.objects.filter(
+        document=revision.document,
+        user=reviewer.user
+    )
+    if (len(access_rights)) > 0:
+        access_right = access_rights[0]
+    else:
+        access_right = AccessRight(
+            document=revision.document,
+            user=reviewer.user
+        )
+        status = 201
+    rights = 'review'
+    if request.POST.get('access_rights') == 'comment':
+        rights = 'comment'
+    access_right.rights = rights
+    access_right.save()
+    return JsonResponse(response, status=status)
+
+
 # Add a reviewer to the document connected to a SubmissionRevision as a
 # reviewer.
 # Also ensure that there is an Reviewer set up for the account to allow for
@@ -317,7 +383,7 @@ def add_reviewer_js(request, submission_id, version):
             user=reviewer.user
         )
         status = 201
-    access_right.rights = 'review'
+    access_right.rights = 'read-without-comments'
     access_right.save()
     return JsonResponse(response, status=status)
 
@@ -350,14 +416,16 @@ def remove_reviewer_js(request, submission_id, version):
         revision=revision,
         ojs_jid=ojs_jid
     )
-    if len(reviewers) > 0:
-        reviewer = reviewers[0]
-        AccessRight.objects.filter(
-            document=revision.document,
-            user=reviewer.user
-        ).delete()
-        reviewer.delete()
-
+    if len(reviewers) == 0:
+        response['error'] = 'Unknown reviewer'
+        status = 403
+        return JsonResponse(response, status=status)
+    reviewer = reviewers[0]
+    AccessRight.objects.filter(
+        document=revision.document,
+        user=reviewer.user
+    ).delete()
+    reviewer.delete()
     return JsonResponse(response, status=status)
 
 
