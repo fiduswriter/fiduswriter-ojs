@@ -144,7 +144,7 @@ def open_revision_doc(request, submission_id, version):
 def get_doc_info_js(request):
     status = 405
     response = {}
-    if request.is_ajax() and request.method == 'POST':
+    if request.method == 'POST':
         document_id = int(request.POST.get('doc_id'))
         if document_id == 0:
             response['submission'] = {
@@ -211,7 +211,7 @@ def get_doc_info_js(request):
 def get_user_js(request):
     status = 405
     response = {}
-    if request.is_ajax() and request.method == 'POST':
+    if request.method == 'POST':
         email = request.POST.get('email')
         try:
             email_address = EmailAddress.objects.get(
@@ -233,7 +233,7 @@ def get_user_js(request):
 def save_journal_js(request):
     status = 405
     response = {}
-    if request.is_ajax() and request.method == 'POST':
+    if request.method == 'POST':
         try:
             models.Journal.objects.create(
                 ojs_jid=request.POST.get('ojs_jid'),

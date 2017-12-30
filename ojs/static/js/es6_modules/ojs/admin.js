@@ -1,5 +1,5 @@
 import {noSpaceTmp, csrfToken, addAlert} from "../common"
-
+import {handleFetchErrors} from "./common"
 // Adds capabilities for admins to register journals
 
 export class AdminRegisterJournals {
@@ -40,16 +40,23 @@ export class AdminRegisterJournals {
             addAlert('error', gettext('Provide a URL for the OJS server and the key to access it.'))
             return
         }
-        jQuery.ajax({
-            type: "GET",
-            dataType: "json",
-            data: {url: this.ojsUrl, key: this.ojsKey},
-            url: '/proxy/ojs/journals',
-            success: result => {
-                let journals = result['journals']
+
+        fetch(`/proxy/ojs/journals?url=${encodeURIComponent(this.ojsUrl)}&key=${encodeURIComponent(this.ojsKey)}`, {
+            method: "GET",
+            credentials: 'same-origin',
+        }).then(
+            handleFetchErrors
+        ).then(
+            response => response.json()
+        ).then(
+            json => {
+                let journals = json['journals']
                     .sort((a, b) => parseInt(a.id) - parseInt(b.id))
                 let emailLookups = []
                 journals.forEach(journal => {
+                    if (!journal.contact_email) {
+                        return
+                    }
                     let emailLookup = this.getUser(journal.contact_email).then(
                         user => {
                             if (user) {
@@ -59,7 +66,7 @@ export class AdminRegisterJournals {
                     )
                     emailLookups.push(emailLookup)
                 })
-                Promise.all(emailLookups).then(() => {
+                return Promise.all(emailLookups).then(() => {
                     let journalHTML = journals
                         .map(journal =>
                         noSpaceTmp`
@@ -73,41 +80,32 @@ export class AdminRegisterJournals {
                                 <button data-id="${journal.id}" class="register-submit">${gettext('Register')}</button>
                             </div>`
                     ).join('')
-                    jQuery('#journal_form').html(journalHTML)
+                    document.getElementById('journal_form').innerHTML = journalHTML
                 })
-            },
-            error: () => {
-                addAlert('error', gettext('Could not connect to OJS server.'))
             }
-        })
+        ).catch(
+            () => addAlert('error', gettext('Could not connect to OJS server.'))
+        )
+
     }
 
     getUser(email) {
-        return new Promise((resolve, reject) => {
-            if (!email) {
-                resolve()
-                return
-            }
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                data: {email},
-                url: '/ojs/get_user/',
-                crossDomain: false, // obviates need for sameOrigin test
-                beforeSend: (xhr, settings) =>
-                    xhr.setRequestHeader("X-CSRFToken", csrfToken),
-                success: (response, status, jqXHR) => {
-                    if (jqXHR.status===200) {
-                        resolve(response)
-                    } else {
-                        resolve()
-                    }
-                },
-                error: () => {
-                    reject()
-                }
-            })
-        })
+        let body = new window.FormData()
+        body.append('email', email)
+        body.append('csrfmiddlewaretoken', csrfToken)
+
+        return fetch('/ojs/get_user/', {
+            method: "POST",
+            credentials: 'same-origin',
+            body
+        }).then(
+            handleFetchErrors
+        ).then(
+            response => response.json()
+        ).catch(
+            error => addAlert('info', gettext(`Cannot find Fidus Writer user corresponding to email: ${email}`))
+        )
+
     }
 
     saveJournal(ojs_jid) {
@@ -122,31 +120,33 @@ export class AdminRegisterJournals {
             addAlert('error', gettext('Editor needs to be the ID number of the editor user.'))
             return
         }
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            data: {
-                editor_id,
-                name,
-                ojs_jid,
-                ojs_key: this.ojsKey,
-                ojs_url: this.ojsUrl
-            },
-            url: '/ojs/save_journal/',
-            crossDomain: false, // obviates need for sameOrigin test
-            beforeSend: (xhr, settings) =>
-                xhr.setRequestHeader("X-CSRFToken", csrfToken),
-            success: (response, status, jqXHR) => {
-                if (jqXHR.status===201) {
+
+        let body = new window.FormData()
+        body.append('editor_id', editor_id)
+        body.append('name', name)
+        body.append('ojs_jid', ojs_jid)
+        body.append('ojs_key', this.ojsKey)
+        body.append('ojs_url', this.ojsUrl)
+        body.append('csrfmiddlewaretoken', csrfToken)
+
+        fetch('/ojs/save_journal/', {
+            method: "POST",
+            credentials: 'same-origin',
+            body
+        }).then(
+            handleFetchErrors
+        ).then(
+            response => {
+                if (response.status===201) {
                     addAlert('info', gettext('Journal saved.'))
                 } else {
                     addAlert('warning', gettext('Journal already present on server.'))
                 }
-                jQuery(`#journal_${ojs_jid}`).remove()
+                let journalEl = document.getElementById(`journal_${ojs_jid}`)
+                journalEl.parentElement.removeChild(journalEl)
             },
-            error: () => {
-                addAlert('error', gettext('Could not save journal. Please check form.'))
-            }
-        })
+            () => addAlert('error', gettext('Could not save journal. Please check form.'))
+        )
+
     }
 }

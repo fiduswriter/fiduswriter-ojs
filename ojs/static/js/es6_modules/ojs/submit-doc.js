@@ -1,7 +1,7 @@
 import {ShrinkFidus} from "../exporter/native/shrink"
 import {createSlug} from "../exporter/tools/file"
 import {addAlert, csrfToken} from "../common"
-
+import {handleFetchErrors} from "./common"
 // Send an article submission to FW and OJS servers.
 
 export class SendDocSubmission {
@@ -42,32 +42,30 @@ export class SendDocSubmission {
     }
 
     uploadRevision(bibDB, imageDB) {
-        let data = new window.FormData()
-        data.append('journal_id', this.journalId)
-        data.append('firstname', this.firstname)
-        data.append('lastname', this.lastname)
-        data.append('affiliation', this.affiliation)
-        data.append('author_url', this.authorUrl)
-        data.append('doc_id', this.doc.id)
-        data.append('title', this.doc.title)
-        data.append('abstract', this.abstract)
-        data.append('contents', JSON.stringify(this.doc.contents))
-        data.append('bibliography', JSON.stringify(bibDB))
-        data.append('image_ids', Object.keys(imageDB))
+        let body = new window.FormData()
+        body.append('journal_id', this.journalId)
+        body.append('firstname', this.firstname)
+        body.append('lastname', this.lastname)
+        body.append('affiliation', this.affiliation)
+        body.append('author_url', this.authorUrl)
+        body.append('doc_id', this.doc.id)
+        body.append('title', this.doc.title)
+        body.append('abstract', this.abstract)
+        body.append('contents', JSON.stringify(this.doc.contents))
+        body.append('bibliography', JSON.stringify(bibDB))
+        body.append('image_ids', Object.keys(imageDB))
 
-        jQuery.ajax({
-            url: '/proxy/ojs/author_submit',
-            data,
-            type: 'POST',
-            cache: false,
-            contentType: false,
-            processData: false,
-            crossDomain: false, // obviates need for sameOrigin test
-            beforeSend: (xhr, settings) =>
-                xhr.setRequestHeader("X-CSRFToken", csrfToken),
-            success: () => addAlert('success', gettext('Article submitted')),
-            error: () => addAlert('error', gettext('Article could not be submitted.'))
-        })
+        return fetch('/proxy/ojs/author_submit', {
+            method: "POST",
+            credentials: 'same-origin',
+            body
+        }).then(
+            handleFetchErrors
+        ).then(
+            () => addAlert('success', gettext('Article submitted'))
+        ).catch(
+            () => addAlert('error', gettext('Article could not be submitted.'))
+        )
     }
 
 }

@@ -1,6 +1,7 @@
 import {BibliographyDB} from "../bibliography/database"
 import {ImageDB} from "../images/database"
 import {addAlert, csrfToken, activateWait, deactivateWait} from "../common"
+import {handleFetchErrors} from "./common"
 import {SaveCopy} from "../exporter/native"
 import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
 import {SendDocSubmission} from "./submit-doc"
@@ -17,25 +18,26 @@ export class EditorOJS {
     }
 
     init() {
-        return new Promise(resolve => {
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                data: {
-                    doc_id: this.editor.docInfo.id
-                },
-                url: '/ojs/get_doc_info/',
-                crossDomain: false, // obviates need for sameOrigin test
-                beforeSend: (xhr, settings) =>
-                    xhr.setRequestHeader("X-CSRFToken", csrfToken),
-                success: response => {
-                    this.submission = response['submission']
-                    this.journals = response['journals']
-                    resolve()
-                }
-            })
+        let body = new window.FormData()
+        body.append('doc_id', this.editor.docInfo.id)
+        body.append('csrfmiddlewaretoken', csrfToken)
+
+        return fetch('/ojs/get_doc_info/', {
+            method: "POST",
+            credentials: 'same-origin',
+            body
         }).then(
-            () => this.setupUI()
+            handleFetchErrors
+        ).then(
+            response => response.json()
+        ).then(
+            json => {
+                this.submission = json['submission']
+                this.journals = json['journals']
+                this.setupUI()
+            }
+        ).catch(
+            () => addAlert('error', gettext('Could not obtain submission info.'))
         )
 
     }
@@ -198,25 +200,23 @@ export class EditorOJS {
     }
 
     submitResubmission() {
-        let data = new window.FormData()
-        data.append('doc_id', this.editor.docInfo.id)
+        let body = new window.FormData()
+        body.append('doc_id', this.editor.docInfo.id)
 
-        jQuery.ajax({
-            url: '/proxy/ojs/author_submit',
-            data,
-            type: 'POST',
-            cache: false,
-            contentType: false,
-            processData: false,
-            crossDomain: false, // obviates need for sameOrigin test
-            beforeSend: (xhr, settings) =>
-                xhr.setRequestHeader("X-CSRFToken", csrfToken),
-            success: () => {
+        fetch('/proxy/ojs/author_submit', {
+            method: "POST",
+            credentials: 'same-origin',
+            body
+        }).then(
+            handleFetchErrors
+        ).then(
+            () => {
                 addAlert('success', gettext('Resubmission successful'))
                 window.setTimeout(() => window.location.reload(), 2000)
-            },
-            error: () => addAlert('error', gettext('Review could not be submitted.'))
-        })
+            }
+        ).catch(
+            () => addAlert('error', gettext('Review could not be submitted.'))
+        )
     }
 
     submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract}) {
@@ -265,36 +265,35 @@ export class EditorOJS {
 
     // Send the opinion of the reviewer to OJS.
     submitReview() {
-        let data = new window.FormData()
-        data.append('doc_id', this.editor.docInfo.id)
-        let editorMessage = jQuery("#message-editor").val()
-        let editorAuthorMessage = jQuery("#message-editor-author").val()
-        let recommendation = jQuery("#recommendation").val()
+        let editorMessage = jQuery("#message-editor").val(),
+            editorAuthorMessage = jQuery("#message-editor-author").val(),
+            recommendation = jQuery("#recommendation").val()
         if (editorMessage === '' || editorAuthorMessage === '' || recommendation === '') {
             addAlert('error', gettext('Fill out all fields before submitting!'))
             return false
         }
+        let body = new window.FormData()
+        body.append('doc_id', this.editor.docInfo.id)
+        body.append('editor_message', editorMessage)
+        body.append('editor_author_message', editorAuthorMessage)
+        body.append('recommendation', recommendation)
         activateWait()
-        data.append('editor_message', editorMessage)
-        data.append('editor_author_message', editorAuthorMessage)
-        data.append('recommendation', recommendation)
-        jQuery.ajax({
-            url: '/proxy/ojs/reviewer_submit',
-            data,
-            type: 'POST',
-            cache: false,
-            contentType: false,
-            processData: false,
-            crossDomain: false, // obviates need for sameOrigin test
-            beforeSend: (xhr, settings) =>
-                xhr.setRequestHeader("X-CSRFToken", csrfToken),
-            success: () => {
+
+        fetch('/proxy/ojs/reviewer_submit', {
+            method: "POST",
+            credentials: 'same-origin',
+            body
+        }).then(
+            handleFetchErrors
+        ).then(
+            () => {
                 deactivateWait()
                 addAlert('success', gettext('Review submitted'))
                 window.setTimeout(() => window.location.reload(), 2000)
-            },
-            error: () => addAlert('error', gettext('Review could not be submitted.'))
-        })
+            }
+        ).catch(
+            () => addAlert('error', gettext('Review could not be submitted.'))
+        )
         return true
     }
 
