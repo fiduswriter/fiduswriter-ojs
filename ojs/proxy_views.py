@@ -11,6 +11,9 @@ from document.models import Document, AccessRight
 from usermedia.models import Image, DocumentImage
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
+    def write_error(self, status_code, **kwargs):
+         self.write(str(kwargs["exc_info"][1]))
+
     @asynchronous
     def get(self, relative_url):
         user = self.get_current_user()
@@ -38,7 +41,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     # server doesn't block the FW server connection.
     def on_get_response(self, response):
         if response.error:
-            raise HTTPError(500)
+            response.rethrow()
         self.write(response.body)
         self.finish()
 
@@ -160,7 +163,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         if response.error:
             self.revision.document.delete()
             self.revision.delete()
-            raise HTTPError(500)
+            response.rethrow()
         # Set the submission ID from the response from the OJS server.
         json = json_decode(response.body)
         self.submission.ojs_jid = json['submission_id']
@@ -211,7 +214,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     # server doesn't block the FW server connection.
     def on_author_resubmit_response(self, response):
         if response.error:
-            raise HTTPError(500)
+            response.rethrow()
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = AccessRight.objects.get(
@@ -264,7 +267,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     # server doesn't block the FW server connection.
     def on_reviewer_submit_response(self, response):
         if response.error:
-            raise HTTPError(500)
+            response.rethrow()
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = AccessRight.objects.get(
