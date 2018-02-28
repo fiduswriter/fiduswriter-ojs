@@ -4,7 +4,7 @@ import {addAlert, csrfToken, activateWait, deactivateWait} from "../common"
 import {handleFetchErrors} from "./common"
 import {SaveCopy} from "../exporter/native"
 import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
-import {SendDocSubmission} from "./submit-doc"
+import {SendDocSubmission} from "./submit_doc"
 import {READ_ONLY_ROLES, COMMENT_ONLY_ROLES} from "../editor"
 
 // Adds functions for OJS to the editor
