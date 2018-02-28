@@ -1,4 +1,4 @@
-import {AdminRegisterJournals} from "./es6_modules/ojs"
+import {AdminRegisterJournals} from "./modules/ojs"
 
 let theJournalRegister = new AdminRegisterJournals()
 
