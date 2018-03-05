@@ -20,7 +20,7 @@ export class AdminRegisterJournals {
         // DOM at a later stage.
         jQuery(document).on('click', '.related-lookup', function(e) {
             e.preventDefault()
-            var event = jQuery.Event('django:lookup-related')
+            let event = jQuery.Event('django:lookup-related')
             jQuery(this).trigger(event)
             if (!event.isDefaultPrevented()) {
                 window.showRelatedObjectLookupPopup(this)
