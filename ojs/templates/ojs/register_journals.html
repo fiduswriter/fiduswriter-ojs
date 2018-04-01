@@ -12,13 +12,11 @@
 <!-- JS error handling -->
 <script type="text/javascript" src="{% url 'js-error-handler-js' %}"></script>
 <!-- jQuery -->
-<script type="text/javascript" src="{% static "js/libs/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
+<script type="text/javascript" src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
 <!-- Font Awesome -->
 <link type="text/css" rel="stylesheet" href="{% static "css/font-awesome.css" %}" />
-<script type="text/javascript">
-    window.django = {jQuery: jQuery};
-</script>
-<script type="text/javascript" src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
 <script type="text/javascript" src="{% static "js/ojs_admin_register_journals.es5.js" %}"></script>
 {% endblock %}
 {% block content %}

@@ -1,5 +1,4 @@
-import {noSpaceTmp, csrfToken, addAlert} from "../common"
-import {handleFetchErrors} from "./common"
+import {noSpaceTmp, addAlert, getJson, postJson, postJsonStatus, findTarget} from "../common"
 // Adds capabilities for admins to register journals
 
 export class AdminRegisterJournals {
@@ -14,40 +13,42 @@ export class AdminRegisterJournals {
     }
 
     bind() {
-        jQuery(document).on('click', '#get_journals', () => this.getJournals())
-        // The following is slightly modified from the binding function in the
-        // admin interface to allow for lookups in fields that are added to the
-        // DOM at a later stage.
-        jQuery(document).on('click', '.related-lookup', function(e) {
-            e.preventDefault()
-            let event = jQuery.Event('django:lookup-related')
-            jQuery(this).trigger(event)
-            if (!event.isDefaultPrevented()) {
-                window.showRelatedObjectLookupPopup(this)
+        document.addEventListener('click', event => {
+            let el = {}
+            switch (true) {
+                case findTarget(event, '#get_journals', el):
+                    this.getJournals()
+                    break
+                case findTarget(event, '.related-lookup', el):
+                    // The following is slightly modified from the binding function in the
+                    // admin interface to allow for lookups in fields that are added to the
+                    // DOM at a later stage.
+                    let nEvent = django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
+                    django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
+                    if (!nEvent.isDefaultPrevented()) {
+                        window.showRelatedObjectLookupPopup(this)
+                    }
+                    break
+                case findTarget(event, '.register-submit', el):
+                    let journalId = el.target.dataset.id
+                    this.saveJournal(journalId)
+                    break
+                default:
+                    break
             }
-        })
-        let that = this
-        jQuery(document).on('click', '.register-submit', function(event) {
-            let journalId = jQuery(this).attr('data-id')
-            that.saveJournal(journalId)
         })
     }
 
     getJournals() {
-        this.ojsUrl = jQuery('#ojs_url').val()
-        this.ojsKey = jQuery('#ojs_key').val()
+        this.ojsUrl = document.getElementById('ojs_url').value
+        this.ojsKey = document.getElementById('ojs_key').value
         if (this.ojsUrl.length === 0 || this.ojsKey.length === 0) {
             addAlert('error', gettext('Provide a URL for the OJS server and the key to access it.'))
             return
         }
-
-        fetch(`/proxy/ojs/journals?url=${encodeURIComponent(this.ojsUrl)}&key=${encodeURIComponent(this.ojsKey)}`, {
-            method: "GET",
-            credentials: 'same-origin',
-        }).then(
-            handleFetchErrors
-        ).then(
-            response => response.json()
+        getJson(
+            '/proxy/ojs/journals',
+            {url: this.ojsUrl, key: this.ojsKey}
         ).then(
             json => {
                 let journals = json['journals']
@@ -84,33 +85,30 @@ export class AdminRegisterJournals {
                 })
             }
         ).catch(
-            () => addAlert('error', gettext('Could not connect to OJS server.'))
+            error => {
+                addAlert('error', gettext('Could not connect to OJS server.'))
+                throw(error)
+            }
         )
 
     }
 
     getUser(email) {
-        let body = new window.FormData()
-        body.append('email', email)
-        body.append('csrfmiddlewaretoken', csrfToken)
-
-        return fetch('/ojs/get_user/', {
-            method: "POST",
-            credentials: 'same-origin',
-            body
-        }).then(
-            handleFetchErrors
-        ).then(
-            response => response.json()
+        return postJson(
+            '/ojs/get_user/',
+            {email}
         ).catch(
-            error => addAlert('info', gettext(`Cannot find Fidus Writer user corresponding to email: ${email}`))
+            error => {
+                addAlert('info', gettext(`Cannot find Fidus Writer user corresponding to email: ${email}`))
+                throw(error)
+            }
         )
 
     }
 
     saveJournal(ojs_jid) {
-        let name = jQuery(`#journal_name_${ojs_jid}`).val()
-        let editor = jQuery(`#editor_${ojs_jid}`).val()
+        let name = document.getElementById(`journal_name_${ojs_jid}`).value
+        let editor = document.getElementById(`editor_${ojs_jid}`).value
         if (name.length === 0 || editor.length === 0) {
             addAlert('error', gettext('Editor and journal name need to be filled out.'))
             return
@@ -121,31 +119,30 @@ export class AdminRegisterJournals {
             return
         }
 
-        let body = new window.FormData()
-        body.append('editor_id', editor_id)
-        body.append('name', name)
-        body.append('ojs_jid', ojs_jid)
-        body.append('ojs_key', this.ojsKey)
-        body.append('ojs_url', this.ojsUrl)
-        body.append('csrfmiddlewaretoken', csrfToken)
-
-        fetch('/ojs/save_journal/', {
-            method: "POST",
-            credentials: 'same-origin',
-            body
-        }).then(
-            handleFetchErrors
+        postJsonStatus(
+            '/ojs/save_journal/',
+            {
+                editor_id,
+                name,
+                ojs_jid,
+                ojs_key: this.ojsKey,
+                ojs_url: this.ojsUrl
+            }
         ).then(
-            response => {
-                if (response.status===201) {
+            ({status}) => {
+                if (status===201) {
                     addAlert('info', gettext('Journal saved.'))
                 } else {
                     addAlert('warning', gettext('Journal already present on server.'))
                 }
                 let journalEl = document.getElementById(`journal_${ojs_jid}`)
                 journalEl.parentElement.removeChild(journalEl)
-            },
-            () => addAlert('error', gettext('Could not save journal. Please check form.'))
+            }
+        ).catch(
+            error => {
+                addAlert('error', gettext('Could not save journal. Please check form.'))
+                throw(error)
+            }
         )
 
     }
