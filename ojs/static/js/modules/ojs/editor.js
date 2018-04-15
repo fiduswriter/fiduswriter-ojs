@@ -24,7 +24,7 @@ export class EditorOJS {
                 doc_id: this.editor.docInfo.id
             }
         ).then(
-            json => {
+            ({json}) => {
                 this.submission = json['submission']
                 this.journals = json['journals']
                 this.setupUI()

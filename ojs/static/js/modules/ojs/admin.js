@@ -1,4 +1,4 @@
-import {noSpaceTmp, addAlert, getJson, postJson, postJsonStatus, findTarget} from "../common"
+import {noSpaceTmp, addAlert, getJson, postJson, post, findTarget} from "../common"
 // Adds capabilities for admins to register journals
 
 export class AdminRegisterJournals {
@@ -102,6 +102,8 @@ export class AdminRegisterJournals {
                 addAlert('info', gettext(`Cannot find Fidus Writer user corresponding to email: ${email}`))
                 throw(error)
             }
+        ).then(
+            ({json}) => {return json}
         )
 
     }
@@ -119,7 +121,7 @@ export class AdminRegisterJournals {
             return
         }
 
-        postJsonStatus(
+        post(
             '/ojs/save_journal/',
             {
                 editor_id,
@@ -129,8 +131,8 @@ export class AdminRegisterJournals {
                 ojs_url: this.ojsUrl
             }
         ).then(
-            ({status}) => {
-                if (status===201) {
+            response => {
+                if (response.status===201) {
                     addAlert('info', gettext('Journal saved.'))
                 } else {
                     addAlert('warning', gettext('Journal already present on server.'))
