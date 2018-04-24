@@ -32,25 +32,25 @@ def find_user(
     user_id,
     is_editor
 ):
-    authors = models.Author.objects.filter(
+    author = models.Author.objects.filter(
         submission_id=submission_id,
         ojs_jid=user_id
-    )
-    if len(authors) > 0:
+    ).first()
+    if author:
         # It's an author
-        return authors[0].user
-    revisions = models.SubmissionRevision.objects.filter(
+        return author.user
+    revision = models.SubmissionRevision.objects.filter(
         submission_id=submission_id,
         version=version
-    )
-    if len(revisions) > 0:
-        revision_id = revisions[0].id
-        reviewers = models.Reviewer.objects.filter(
+    ).first()
+    if revision:
+        revision_id = revision.id
+        reviewer = models.Reviewer.objects.filter(
             revision_id=revision_id,
             ojs_jid=user_id
-        )
-        if len(reviewers) > 0:
-            return reviewers[0].user
+        ).first()
+        if reviewer:
+            return reviewer.user
     if is_editor:
         journal = models.Journal.objects.get(
             id=journal_id
@@ -163,11 +163,10 @@ def get_doc_info_js(request):
                 return HttpResponse('Missing access rights', status=403)
             # OJS submission related
             response['submission'] = dict()
-            revisions = models.SubmissionRevision.objects.filter(
+            revision = models.SubmissionRevision.objects.filter(
                 document_id=document_id
-            )
-            if len(revisions) > 0:
-                revision = revisions[0]
+            ).first()
+            if revision:
                 user_role = ''
                 if revision.reviewer_set.filter(
                     user=request.user
@@ -259,13 +258,13 @@ def save_journal_js(request):
 # NOTE: An evil OJS editor can get access to accounts that he does not have
 # email access for this way.
 def get_or_create_user(email, username):
-    users_with_email = User.objects.filter(email=email)
-    if len(users_with_email) > 0:
-        return users_with_email[0]
+    user_with_email = User.objects.filter(email=email).first()
+    if user_with_email:
+        return user_with_email
     # try to find an unused username, starting with the username used in OJS
     counter = 0
     usernamebase = username
-    while len(User.objects.filter(username=username)) > 0:
+    while User.objects.filter(username=username).first():
         username = usernamebase + str(counter)
         counter += 1
     return User.objects.create_user(username, email)
@@ -294,24 +293,21 @@ def accept_reviewer_js(request, submission_id, version):
         return JsonResponse(response, status=status)
 
     ojs_jid = int(request.POST.get('user_id'))
-    reviewers = models.Reviewer.objects.filter(
+    reviewer = models.Reviewer.objects.filter(
         revision=revision,
         ojs_jid=ojs_jid
-    )
-    if len(reviewers) == 0:
+    ).first()
+    if reviewer is None:
         response['error'] = 'Unknown reviewer'
         status = 403
         return JsonResponse(response, status=status)
-    reviewer = reviewers[0]
     # Make sure the connect document has reviewer access rights set for the
     # user.
-    access_rights = AccessRight.objects.filter(
+    access_right = AccessRight.objects.filter(
         document=revision.document,
         user=reviewer.user
-    )
-    if (len(access_rights)) > 0:
-        access_right = access_rights[0]
-    else:
+    ).first()
+    if access_right is None:
         access_right = AccessRight(
             document=revision.document,
             user=reviewer.user
@@ -353,13 +349,11 @@ def add_reviewer_js(request, submission_id, version):
     ojs_jid = int(request.POST.get('user_id'))
 
     # Make sure there is an Reviewer/user registered for the reviewer.
-    reviewers = models.Reviewer.objects.filter(
+    reviewer = models.Reviewer.objects.filter(
         revision=revision,
         ojs_jid=ojs_jid
-    )
-    if len(reviewers) > 0:
-        reviewer = reviewers[0]
-    else:
+    ).first()
+    if reviewer is None:
         email = request.POST.get('email')
         username = request.POST.get('username')
         user = get_or_create_user(email, username)
@@ -371,13 +365,11 @@ def add_reviewer_js(request, submission_id, version):
         status = 201
     # Make sure the connect document has reviewer access rights set for the
     # user.
-    access_rights = AccessRight.objects.filter(
+    access_right = AccessRight.objects.filter(
         document=revision.document,
         user=reviewer.user
-    )
-    if (len(access_rights)) > 0:
-        access_right = access_rights[0]
-    else:
+    ).first()
+    if access_right is None:
         access_right = AccessRight(
             document=revision.document,
             user=reviewer.user
@@ -412,15 +404,14 @@ def remove_reviewer_js(request, submission_id, version):
     ojs_jid = int(request.POST.get('user_id'))
     # Delete reviewer access rights set for the corresponding user,
     # if there are any. Thereafter delete the Reviewer.
-    reviewers = models.Reviewer.objects.filter(
+    reviewer = models.Reviewer.objects.filter(
         revision=revision,
         ojs_jid=ojs_jid
-    )
-    if len(reviewers) == 0:
+    ).first()
+    if reviewer is None:
         response['error'] = 'Unknown reviewer'
         status = 403
         return JsonResponse(response, status=status)
-    reviewer = reviewers[0]
     AccessRight.objects.filter(
         document=revision.document,
         user=reviewer.user
