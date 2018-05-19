@@ -1,6 +1,5 @@
 from tornado.web import RequestHandler, asynchronous, HTTPError
-from tornado.httpclient import AsyncHTTPClient
-from tornado.httpclient import HTTPRequest
+from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import url_concat
 from tornado.escape import json_decode
 from base.django_handler_mixin import DjangoHandlerMixin
@@ -66,14 +65,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     def author_submit(self):
         # Submitting a new submission revision.
         document_id = self.get_argument('doc_id')
-        revisions = SubmissionRevision.objects.filter(
+        revision = SubmissionRevision.objects.filter(
             document_id=document_id
-        )
-        if len(revisions) == 0:
-            self.author_first_submit()
-        else:
-            self.revision = revisions[0]
+        ).first()
+        if revision:
+            self.revision = revision
             self.author_resubmit()
+        else:
+            self.author_first_submit()
 
     def author_first_submit(self):
         # The document is not part of an existing submission.
@@ -102,10 +101,8 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         document.bibliography = bibliography
         document.save()
         for id in image_ids:
-            image = Image.objects.filter(id=id)
-            if image.exists():
-                image = image[0]
-            else:
+            image = Image.objects.filter(id=id).first()
+            if image is None:
                 image = Image()
                 image.pk = id
                 image.uploader = journal.editor
@@ -229,15 +226,15 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     def reviewer_submit(self):
         # Submitting a new submission revision.
         document_id = self.get_argument('doc_id')
-        reviewers = Reviewer.objects.filter(
+        reviewer = Reviewer.objects.filter(
             revision__document_id=document_id,
             user=self.user
-        )
-        if len(reviewers) == 0:
+        ).first()
+        if reviewer is None:
             # Trying to submit review without access rights.
             self.set_status(401)
             self.finish()
-        self.reviewer = reviewers[0]
+        self.reviewer = reviewer
         post_data = {
             'submission_id': self.reviewer.revision.submission.ojs_jid,
             'version': self.reviewer.revision.version,

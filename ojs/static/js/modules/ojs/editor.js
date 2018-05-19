@@ -1,10 +1,9 @@
 import {BibliographyDB} from "../bibliography/database"
 import {ImageDB} from "../images/database"
-import {addAlert, csrfToken, activateWait, deactivateWait} from "../common"
-import {handleFetchErrors} from "./common"
+import {addAlert, activateWait, deactivateWait, postJson, post, Dialog} from "../common"
 import {SaveCopy} from "../exporter/native"
 import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
-import {SendDocSubmission} from "./submit-doc"
+import {SendDocSubmission} from "./submit_doc"
 import {READ_ONLY_ROLES, COMMENT_ONLY_ROLES} from "../editor"
 
 // Adds functions for OJS to the editor
@@ -18,26 +17,23 @@ export class EditorOJS {
     }
 
     init() {
-        let body = new window.FormData()
-        body.append('doc_id', this.editor.docInfo.id)
-        body.append('csrfmiddlewaretoken', csrfToken)
 
-        return fetch('/ojs/get_doc_info/', {
-            method: "POST",
-            credentials: 'same-origin',
-            body
-        }).then(
-            handleFetchErrors
+        postJson(
+            '/ojs/get_doc_info/',
+            {
+                doc_id: this.editor.docInfo.id
+            }
         ).then(
-            response => response.json()
-        ).then(
-            json => {
+            ({json}) => {
                 this.submission = json['submission']
                 this.journals = json['journals']
                 this.setupUI()
             }
         ).catch(
-            () => addAlert('error', gettext('Could not obtain submission info.'))
+            error => {
+                addAlert('error', gettext('Could not obtain submission info.'))
+                throw(error)
+            }
         )
 
     }
@@ -130,92 +126,93 @@ export class EditorOJS {
 
     // Dialog for an article that has no submisison status. Includes selection of journal.
     firstSubmissionDialog() {
-        let diaButtons = {}, that = this
 
-        diaButtons[gettext("Submit")] = function() {
-            let journalId = parseInt(jQuery("#submission-journal").val())
-            let firstname = jQuery("#submission-firstname").val().trim()
-            let lastname = jQuery("#submission-lastname").val().trim()
-            let affiliation = jQuery("#submission-affiliation").val().trim()
-            let authorUrl = jQuery("#submission-author-url").val().trim()
-            let abstract = jQuery("#submission-abstract").val().trim()
-            if (firstname==="" || lastname==="" || abstract==="") {
-                addAlert('error', gettext('Firstname, lastname and abstract are obligatory fields!'))
-                return
+        let dialog
+
+        let buttons = [
+            {
+                text: gettext("Submit"),
+                classes: "fw-dark",
+                click: () => {
+                    let journalId = parseInt(document.getElementById("submission-journal").value)
+                    let firstname = document.getElementById("submission-firstname").value.trim()
+                    let lastname = document.getElementById("submission-lastname").value.trim()
+                    let affiliation = document.getElementById("submission-affiliation").value.trim()
+                    let authorUrl = document.getElementById("submission-author-url").value.trim()
+                    let abstract = document.getElementById("submission-abstract").value.trim()
+                    if (firstname==="" || lastname==="" || abstract==="") {
+                        addAlert('error', gettext('Firstname, lastname and abstract are obligatory fields!'))
+                        return
+                    }
+                    this.submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract})
+                    dialog.close()
+                }
+            },
+            {
+                type: 'cancel'
             }
-            that.submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract})
-            jQuery(this).dialog("close")
-        }
-
-        diaButtons[gettext("Cancel")] = function() {
-            jQuery(this).dialog("close")
-        }
+        ]
 
         let abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.type.name==='abstract')
 
-        jQuery(firstSubmissionDialogTemplate({
-            journals: this.journals,
-            first_name: this.editor.user.first_name,
-            last_name: this.editor.user.last_name,
-            abstract: abstractNode.attrs.hidden ? '' : abstractNode.textContent
-        })).dialog({
-            autoOpen: true,
-            height: 700,
+        dialog = new Dialog({
+            height: 560,
             width: 800,
-            modal: true,
-            buttons: diaButtons,
-            create: function() {
-                let theDialog = jQuery(this).closest(".ui-dialog")
-                theDialog.find(".ui-button:first-child").addClass("fw-button fw-dark")
-                theDialog.find(".ui-button:last").addClass("fw-button fw-orange")
-            }
+            buttons,
+            title: gettext('Complete missing information and choose journal'),
+            body: firstSubmissionDialogTemplate({
+                journals: this.journals,
+                first_name: this.editor.user.first_name,
+                last_name: this.editor.user.last_name,
+                abstract: abstractNode.attrs.hidden ? '' : abstractNode.textContent
+            })
         })
+        dialog.open()
     }
 
     /* Dialog for submission of all subsequent revisions */
     resubmissionDialog() {
-        let buttons = [], dialog
-        buttons.push({
-            text: gettext('Cancel'),
-            click: () => {
-                dialog.dialog('close')
+        let dialog
+        let buttons = [
+            {
+                text: gettext('Send'),
+                click: () => {
+                    this.submitResubmission()
+                    dialog.close()
+                },
+                classes: 'fw-dark'
             },
-            class: 'fw-button fw-orange'
-        })
-        buttons.push({
-            text: gettext('Send'),
-            click: () => {
-                this.submitResubmission()
-                dialog.dialog('close')
-            },
-            class: 'fw-button fw-dark'
-        })
-        dialog = jQuery(resubmissionDialogTemplate()).dialog({
-            autoOpen: true,
-            height: 100,
+            {
+                type: 'cancel'
+            }
+        ]
+        dialog = new Dialog({
+            height: 50,
             width: 300,
-            modal: true,
-            buttons
+            buttons,
+            title: gettext('Resubmit'),
+            body: resubmissionDialogTemplate()
         })
+        dialog.open()
     }
 
     submitResubmission() {
-        let body = new window.FormData()
-        body.append('doc_id', this.editor.docInfo.id)
 
-        fetch('/proxy/ojs/author_submit', {
-            method: "POST",
-            credentials: 'same-origin',
-            body
-        }).then(
-            handleFetchErrors
+        post(
+            '/proxy/ojs/author_submit',
+            {
+                doc_id: this.editor.docInfo.id
+            }
         ).then(
             () => {
                 addAlert('success', gettext('Resubmission successful'))
                 window.setTimeout(() => window.location.reload(), 2000)
             }
         ).catch(
-            () => addAlert('error', gettext('Review could not be submitted.'))
+            error => {
+                addAlert('error', gettext('Review could not be submitted.'))
+                throw(error)
+            }
         )
     }
 
@@ -236,55 +233,55 @@ export class EditorOJS {
 
     // The dialog for a document reviewer.
     reviewerDialog() {
-        let buttons = [], dialog
-        buttons.push({
-            text: gettext('Cancel'),
-            click: () => {
-                dialog.dialog('close')
+        let dialog
+        let buttons = [
+            {
+                text: gettext('Send'),
+                click: () => {
+                    if (this.submitReview()) {
+                        dialog.close()
+                    }
+                },
+                classes: 'fw-dark'
             },
-            class: 'fw-button fw-orange'
-        })
-        buttons.push({
-            text: gettext('Send'),
-            click: () => {
-                if (this.submitReview()) {
-                    dialog.dialog('close')
-                }
-            },
-            class: 'fw-button fw-dark'
-        })
-        jQuery("#review-message").remove()
-        dialog = jQuery(reviewSubmitDialogTemplate()).dialog({
-            autoOpen: true,
-            height: 490,
+            {
+                type: 'cancel'
+            }
+        ]
+        let reviewMessageEl = document.getElementById('review-message')
+        if (reviewMessageEl) {
+            reviewMessageEl.parentElement.removeChild(reviewMessageEl)
+        }
+
+        dialog = new Dialog({
+            height: 350,
             width: 350,
-            modal: true,
+            id: "review-message",
+            title: gettext('Leave your messages for editor and authors'),
+            body: reviewSubmitDialogTemplate(),
             buttons
         })
+        dialog.open()
     }
 
     // Send the opinion of the reviewer to OJS.
     submitReview() {
-        let editorMessage = jQuery("#message-editor").val(),
-            editorAuthorMessage = jQuery("#message-editor-author").val(),
-            recommendation = jQuery("#recommendation").val()
-        if (editorMessage === '' || editorAuthorMessage === '' || recommendation === '') {
+        let editor_message = document.getElementById("message-editor").value,
+            editor_author_message = document.getElementById("message-editor-author").value,
+            recommendation = document.getElementById("recommendation").value
+        if (editor_message === '' || editor_author_message === '' || recommendation === '') {
             addAlert('error', gettext('Fill out all fields before submitting!'))
             return false
         }
-        let body = new window.FormData()
-        body.append('doc_id', this.editor.docInfo.id)
-        body.append('editor_message', editorMessage)
-        body.append('editor_author_message', editorAuthorMessage)
-        body.append('recommendation', recommendation)
         activateWait()
-
-        fetch('/proxy/ojs/reviewer_submit', {
-            method: "POST",
-            credentials: 'same-origin',
-            body
-        }).then(
-            handleFetchErrors
+        post(
+            '/proxy/ojs/reviewer_submit',
+            {
+                doc_id: this.editor.docInfo.id,
+                editor_message,
+                editor_author_message,
+                recommendation
+            }
         ).then(
             () => {
                 deactivateWait()
@@ -292,7 +289,10 @@ export class EditorOJS {
                 window.setTimeout(() => window.location.reload(), 2000)
             }
         ).catch(
-            () => addAlert('error', gettext('Review could not be submitted.'))
+            error => {
+                addAlert('error', gettext('Review could not be submitted.'))
+                throw(error)
+            }
         )
         return true
     }

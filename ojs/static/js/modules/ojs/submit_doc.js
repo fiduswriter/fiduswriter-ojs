@@ -1,7 +1,6 @@
 import {ShrinkFidus} from "../exporter/native/shrink"
 import {createSlug} from "../exporter/tools/file"
-import {addAlert, csrfToken} from "../common"
-import {handleFetchErrors} from "./common"
+import {addAlert, post} from "../common"
 // Send an article submission to FW and OJS servers.
 
 export class SendDocSubmission {
@@ -42,29 +41,28 @@ export class SendDocSubmission {
     }
 
     uploadRevision(bibDB, imageDB) {
-        let body = new window.FormData()
-        body.append('journal_id', this.journalId)
-        body.append('firstname', this.firstname)
-        body.append('lastname', this.lastname)
-        body.append('affiliation', this.affiliation)
-        body.append('author_url', this.authorUrl)
-        body.append('doc_id', this.doc.id)
-        body.append('title', this.doc.title)
-        body.append('abstract', this.abstract)
-        body.append('contents', JSON.stringify(this.doc.contents))
-        body.append('bibliography', JSON.stringify(bibDB))
-        body.append('image_ids', Object.keys(imageDB))
-
-        return fetch('/proxy/ojs/author_submit', {
-            method: "POST",
-            credentials: 'same-origin',
-            body
-        }).then(
-            handleFetchErrors
+        post(
+            '/proxy/ojs/author_submit',
+            {
+                journal_id: this.journalId,
+                firstname: this.firstname,
+                lastname: this.lastname,
+                affiliation: this.affiliation,
+                author_url: this.authorUrl,
+                doc_id: this.doc.id,
+                title: this.doc.title,
+                abstract: this.abstract,
+                contents: JSON.stringify(this.doc.contents),
+                bibliography: JSON.stringify(bibDB),
+                image_ids: Object.keys(imageDB)
+            }
         ).then(
             () => addAlert('success', gettext('Article submitted'))
         ).catch(
-            () => addAlert('error', gettext('Article could not be submitted.'))
+            error => {
+                addAlert('error', gettext('Article could not be submitted.'))
+                throw(error)
+            }
         )
     }
 
