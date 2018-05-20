@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from tornado.web import RequestHandler, asynchronous, HTTPError
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import url_concat

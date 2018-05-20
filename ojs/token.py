@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from time import time
 from django.utils import six
 from django.utils.http import int_to_base36, base36_to_int
