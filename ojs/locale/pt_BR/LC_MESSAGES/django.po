@@ -1,13 +1,13 @@
-# German Translation, fiduswriter-OJS plugin
+# Brazilian Translation, fiduswriter-OJS plugin
 # Copyright (C) 2017 Johannes Wilm
 # This file is distributed under the same license as the fiduswriter-ojs package.
 # Johannes Wilm <johannes@fiduswriter.org>, 2017.
-#
+# Translated by Job Diógenes Ribeiro Borges
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 22:55+0000\n"
+"POT-Creation-Date: 2018-09-13 22:55+0000\n"
 "PO-Revision-Date: 2017-05-08 09:15+0200\n"
 "Last-Translator: Johannes Wilm <johannes@fiduswriter.org>\n"
 "Language-Team: German <johannes@fiduswriter.org>\n"
