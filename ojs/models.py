@@ -1,6 +1,3 @@
-from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -8,7 +5,6 @@ from document.models import Document
 
 
 # A Journal registered with a particular OJS installation
-@python_2_unicode_compatible
 class Journal(models.Model):
     ojs_url = models.CharField(max_length=512)
     ojs_key = models.CharField(max_length=512)
@@ -16,7 +12,7 @@ class Journal(models.Model):
     name = models.CharField(max_length=512)
     editor = models.ForeignKey(User)
 
-    class Meta:
+    class Meta(object):
         unique_together = (("ojs_url", "ojs_jid"),)
 
     def __str__(self):
@@ -24,7 +20,6 @@ class Journal(models.Model):
 
 
 # A submission registered with OJS
-@python_2_unicode_compatible
 class Submission(models.Model):
     submitter = models.ForeignKey(User)
     journal = models.ForeignKey(Journal)
@@ -40,13 +35,12 @@ class Submission(models.Model):
 
 # An author registered with OJS and also registered here
 # Authors are the same for an entire submission.
-@python_2_unicode_compatible
 class Author(models.Model):
     user = models.ForeignKey(User)
     submission = models.ForeignKey(Submission)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
-    class Meta:
+    class Meta(object):
         unique_together = (("submission", "ojs_jid"))
 
     def __str__(self):
@@ -57,7 +51,6 @@ class Author(models.Model):
 
 
 # Within each submission, there is a new revision for each revision
-@python_2_unicode_compatible
 class SubmissionRevision(models.Model):
     submission = models.ForeignKey(Submission)
     # version = stage ID + "." + round + "." + (0 for reviewer or 5 for author)
@@ -81,13 +74,12 @@ class SubmissionRevision(models.Model):
 
 # A reviewer registered with OJS and also registered here
 # Reviewers can differ from revision to revision.
-@python_2_unicode_compatible
 class Reviewer(models.Model):
     user = models.ForeignKey(User)
     revision = models.ForeignKey(SubmissionRevision)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
-    class Meta:
+    class Meta(object):
         unique_together = (("revision", "ojs_jid"))
 
     def __str__(self):

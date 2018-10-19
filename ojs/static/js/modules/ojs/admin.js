@@ -14,7 +14,7 @@ export class AdminRegisterJournals {
 
     bind() {
         document.addEventListener('click', event => {
-            let el = {}
+            const el = {}
             switch (true) {
                 case findTarget(event, '#get_journals', el):
                     this.getJournals()
@@ -23,14 +23,14 @@ export class AdminRegisterJournals {
                     // The following is slightly modified from the binding function in the
                     // admin interface to allow for lookups in fields that are added to the
                     // DOM at a later stage.
-                    let nEvent = django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
+                    const nEvent = django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
                     django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
                     if (!nEvent.isDefaultPrevented()) {
                         window.showRelatedObjectLookupPopup(this)
                     }
                     break
                 case findTarget(event, '.register-submit', el):
-                    let journalId = el.target.dataset.id
+                    const journalId = el.target.dataset.id
                     this.saveJournal(journalId)
                     break
                 default:
@@ -51,14 +51,14 @@ export class AdminRegisterJournals {
             {url: this.ojsUrl, key: this.ojsKey}
         ).then(
             json => {
-                let journals = json['journals']
+                const journals = json['journals']
                     .sort((a, b) => parseInt(a.id) - parseInt(b.id))
-                let emailLookups = []
+                const emailLookups = []
                 journals.forEach(journal => {
                     if (!journal.contact_email) {
                         return
                     }
-                    let emailLookup = this.getUser(journal.contact_email).then(
+                    const emailLookup = this.getUser(journal.contact_email).then(
                         user => {
                             if (user) {
                                 Object.assign(journal, user)
@@ -68,7 +68,7 @@ export class AdminRegisterJournals {
                     emailLookups.push(emailLookup)
                 })
                 return Promise.all(emailLookups).then(() => {
-                    let journalHTML = journals
+                    const journalHTML = journals
                         .map(journal =>
                         noSpaceTmp`
                             <div id="journal_${journal.id}">
@@ -109,13 +109,13 @@ export class AdminRegisterJournals {
     }
 
     saveJournal(ojs_jid) {
-        let name = document.getElementById(`journal_name_${ojs_jid}`).value
-        let editor = document.getElementById(`editor_${ojs_jid}`).value
+        const name = document.getElementById(`journal_name_${ojs_jid}`).value
+        const editor = document.getElementById(`editor_${ojs_jid}`).value
         if (name.length === 0 || editor.length === 0) {
             addAlert('error', gettext('Editor and journal name need to be filled out.'))
             return
         }
-        let editor_id = parseInt(editor)
+        const editor_id = parseInt(editor)
         if (isNaN(editor_id)) {
             addAlert('error', gettext('Editor needs to be the ID number of the editor user.'))
             return
@@ -137,7 +137,7 @@ export class AdminRegisterJournals {
                 } else {
                     addAlert('warning', gettext('Journal already present on server.'))
                 }
-                let journalEl = document.getElementById(`journal_${ojs_jid}`)
+                const journalEl = document.getElementById(`journal_${ojs_jid}`)
                 journalEl.parentElement.removeChild(journalEl)
             }
         ).catch(

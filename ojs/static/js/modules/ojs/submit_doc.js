@@ -27,7 +27,7 @@ export class SendDocSubmission {
     }
 
     init() {
-        let shrinker = new ShrinkFidus(
+        const shrinker = new ShrinkFidus(
             this.doc,
             this.imageDB,
             this.bibDB

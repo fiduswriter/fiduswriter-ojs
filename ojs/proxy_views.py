@@ -1,10 +1,9 @@
-from __future__ import unicode_literals
 from tornado.web import RequestHandler, asynchronous, HTTPError
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import url_concat
 from tornado.escape import json_decode
 from base.django_handler_mixin import DjangoHandlerMixin
-from urllib import urlencode
+from urllib.parse import urlencode
 from .models import Journal, Submission, SubmissionRevision, Author, Reviewer
 from django.core.files.base import ContentFile
 from document.models import Document, AccessRight
@@ -17,7 +16,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     @asynchronous
     def get(self, relative_url):
         user = self.get_current_user()
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             self.set_status(401)
             return
         if relative_url == 'journals':
@@ -48,7 +47,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     @asynchronous
     def post(self, relative_url):
         self.user = self.get_current_user()
-        if not self.user.is_authenticated():
+        if not self.user.is_authenticated:
             self.set_status(401)
             self.finish()
             return
@@ -92,7 +91,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         contents = self.get_argument('contents')
         bibliography = self.get_argument('bibliography')
         image_ids = list(
-            filter(None, self.get_argument('image_ids').split(','))
+            [_f for _f in self.get_argument('image_ids').split(',') if _f]
         )
         document = Document()
         journal = Journal.objects.get(id=journal_id)

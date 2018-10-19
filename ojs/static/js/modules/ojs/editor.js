@@ -85,7 +85,7 @@ export class EditorOJS {
                 }
             }
         )
-        let fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id==='file')
+        const fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id==='file')
         fileMenu.content.push({
             title: gettext('Submit to journal'),
             type: 'action',
@@ -127,19 +127,17 @@ export class EditorOJS {
     // Dialog for an article that has no submisison status. Includes selection of journal.
     firstSubmissionDialog() {
 
-        let dialog
-
-        let buttons = [
+        const buttons = [
             {
                 text: gettext("Submit"),
                 classes: "fw-dark",
                 click: () => {
-                    let journalId = parseInt(document.getElementById("submission-journal").value)
-                    let firstname = document.getElementById("submission-firstname").value.trim()
-                    let lastname = document.getElementById("submission-lastname").value.trim()
-                    let affiliation = document.getElementById("submission-affiliation").value.trim()
-                    let authorUrl = document.getElementById("submission-author-url").value.trim()
-                    let abstract = document.getElementById("submission-abstract").value.trim()
+                    const journalId = parseInt(document.getElementById("submission-journal").value)
+                    const firstname = document.getElementById("submission-firstname").value.trim()
+                    const lastname = document.getElementById("submission-lastname").value.trim()
+                    const affiliation = document.getElementById("submission-affiliation").value.trim()
+                    const authorUrl = document.getElementById("submission-author-url").value.trim()
+                    const abstract = document.getElementById("submission-abstract").value.trim()
                     if (firstname==="" || lastname==="" || abstract==="") {
                         addAlert('error', gettext('Firstname, lastname and abstract are obligatory fields!'))
                         return
@@ -153,9 +151,9 @@ export class EditorOJS {
             }
         ]
 
-        let abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.type.name==='abstract')
+        const abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.type.name==='abstract')
 
-        dialog = new Dialog({
+        const dialog = new Dialog({
             height: 560,
             width: 800,
             buttons,
@@ -172,27 +170,26 @@ export class EditorOJS {
 
     /* Dialog for submission of all subsequent revisions */
     resubmissionDialog() {
-        let dialog
-        let buttons = [
-            {
-                text: gettext('Send'),
-                click: () => {
-                    this.submitResubmission()
-                    dialog.close()
+        const buttons = [
+                {
+                    text: gettext('Send'),
+                    click: () => {
+                        this.submitResubmission()
+                        dialog.close()
+                    },
+                    classes: 'fw-dark'
                 },
-                classes: 'fw-dark'
-            },
-            {
-                type: 'cancel'
-            }
-        ]
-        dialog = new Dialog({
-            height: 50,
-            width: 300,
-            buttons,
-            title: gettext('Resubmit'),
-            body: resubmissionDialogTemplate()
-        })
+                {
+                    type: 'cancel'
+                }
+            ],
+            dialog = new Dialog({
+                height: 50,
+                width: 300,
+                buttons,
+                title: gettext('Resubmit'),
+                body: resubmissionDialogTemplate()
+            })
         dialog.open()
     }
 
@@ -217,7 +214,7 @@ export class EditorOJS {
     }
 
     submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract}) {
-        let submitter = new SendDocSubmission({
+        const submitter = new SendDocSubmission({
             doc: this.editor.getDoc(),
             imageDB: this.editor.mod.db.imageDB,
             bibDB: this.editor.mod.db.bibDB,
@@ -233,40 +230,39 @@ export class EditorOJS {
 
     // The dialog for a document reviewer.
     reviewerDialog() {
-        let dialog
-        let buttons = [
-            {
-                text: gettext('Send'),
-                click: () => {
-                    if (this.submitReview()) {
-                        dialog.close()
-                    }
+        const buttons = [
+                {
+                    text: gettext('Send'),
+                    click: () => {
+                        if (this.submitReview()) {
+                            dialog.close()
+                        }
+                    },
+                    classes: 'fw-dark'
                 },
-                classes: 'fw-dark'
-            },
-            {
-                type: 'cancel'
-            }
-        ]
-        let reviewMessageEl = document.getElementById('review-message')
+                {
+                    type: 'cancel'
+                }
+            ],
+            reviewMessageEl = document.getElementById('review-message'),
+            dialog = new Dialog({
+                height: 350,
+                width: 350,
+                id: "review-message",
+                title: gettext('Leave your messages for editor and authors'),
+                body: reviewSubmitDialogTemplate(),
+                buttons
+            })
         if (reviewMessageEl) {
             reviewMessageEl.parentElement.removeChild(reviewMessageEl)
         }
 
-        dialog = new Dialog({
-            height: 350,
-            width: 350,
-            id: "review-message",
-            title: gettext('Leave your messages for editor and authors'),
-            body: reviewSubmitDialogTemplate(),
-            buttons
-        })
         dialog.open()
     }
 
     // Send the opinion of the reviewer to OJS.
     submitReview() {
-        let editor_message = document.getElementById("message-editor").value,
+        const editor_message = document.getElementById("message-editor").value,
             editor_author_message = document.getElementById("message-editor-author").value,
             recommendation = document.getElementById("recommendation").value
         if (editor_message === '' || editor_author_message === '' || recommendation === '') {

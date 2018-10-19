@@ -1,6 +1,6 @@
 import {AdminRegisterJournals} from "./modules/ojs"
 
-let theJournalRegister = new AdminRegisterJournals()
+const theJournalRegister = new AdminRegisterJournals()
 
 theJournalRegister.init()
 

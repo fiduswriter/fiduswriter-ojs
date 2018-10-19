@@ -1,6 +1,4 @@
-from __future__ import unicode_literals
 from time import time
-from django.utils import six
 from django.utils.http import int_to_base36, base36_to_int
 from django.utils.crypto import constant_time_compare, salted_hmac
 
@@ -17,7 +15,7 @@ def create_token(user, journal_key):
 
 def calculate_token(user, journal_key, timestamp):
     ts_b36 = int_to_base36(timestamp)
-    value = (six.text_type(user.pk) + user.password + six.text_type(timestamp))
+    value = (str(user.pk) + user.password + str(timestamp))
     hash = salted_hmac(journal_key, value).hexdigest()[::2]
     return "%s-%s-%s" % (user.id, ts_b36, hash)
 
