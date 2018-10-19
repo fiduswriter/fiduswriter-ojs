@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import render
+from django.urls import path
 
 from . import models
 
@@ -29,17 +30,19 @@ admin.site.register(models.Reviewer, ReviewerAdmin)
 
 
 class JournalAdmin(admin.ModelAdmin):
-    pass
+    def get_urls(self):
+        urls = super().get_urls()
+        extra_urls = [
+            path(
+                'register_journal/',
+                self.admin_site.admin_view(self.register_journal_view)
+            )
+        ]
+        urls = extra_urls + urls
+        return urls
+
+    def register_journal_view(self, request):
+        response = {}
+        return render(request, 'ojs/register_journals.html', response)
 
 admin.site.register(models.Journal, JournalAdmin)
-
-
-def register_journal_view(request, *args, **kwargs):
-    response = {}
-    return render(request, 'ojs/register_journals.html', response)
-
-admin.site.register_view(
-    'register_journal/',
-    'Register journal',
-    view=register_journal_view
-)
