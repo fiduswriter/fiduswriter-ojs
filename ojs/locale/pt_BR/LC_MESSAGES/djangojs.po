@@ -1,0 +1,162 @@
+# German Translation, fiduswriter-OJS plugin
+# Copyright (C) 2017 Johannes Wilm
+# This file is distributed under the same license as the fiduswriter-ojs package.
+# Johannes Wilm <johannes@fiduswriter.org>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-08 09:15+0200\n"
+"PO-Revision-Date: 2017-05-08 09:15+0200\n"
+"Last-Translator: Johannes Wilm <johannes@fiduswriter.org>\n"
+"Language-Team: German <johannes@fiduswriter.org>\n"
+"Language: DE \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ojs/static/js/es6_modules/ojs/admin.js:40
+msgid "Provide a URL for the OJS server and the key to access it."
+msgstr "Gebe eine URL für einen OJS Server und den entsprechenden Key an."
+
+#: ojs/static/js/es6_modules/ojs/admin.js:117
+msgid "Editor and journal name need to be filled out."
+msgstr "Editor und Journal Name sind Pflichtfelder."
+
+#: ojs/static/js/es6_modules/ojs/admin.js:122
+msgid "Editor needs to be the ID number of the editor user."
+msgstr "Editor muss die ID Nummer des Editor Users sein."
+
+#: ojs/static/js/es6_modules/ojs/admin.js:141
+msgid "Journal saved."
+msgstr "Zeitschrift gespeichert."
+
+#: ojs/static/js/es6_modules/ojs/admin.js:143
+msgid "Journal already present on server."
+msgstr "Zeitschrift schon auf dem Server vorhanden."
+
+#: ojs/static/js/es6_modules/ojs/admin.js:148
+msgid "Could not save journal. Please check form."
+msgstr "Konnte die Zeitschrift nicht abspeichern. Bitte untersuche das Formular."
+
+#: ojs/static/js/es6_modules/ojs/editor.js:49
+msgid "Document not yet ready. Please come back later."
+msgstr "Dokument noch nicht klar. Bitte komme später wieder."
+
+#: ojs/static/js/es6_modules/ojs/editor.js:69
+msgid "Send to journal"
+msgstr "Sende an Zeitschrift"
+
+#: ojs/static/js/es6_modules/ojs/editor.js:191
+msgid "Resubmission successful"
+msgstr "Erneute Einreichung erfolgreich"
+
+#: ojs/static/js/es6_modules/ojs/editor.js:194
+#: ojs/static/js/es6_modules/ojs/editor.js:273
+msgid "Review could not be submitted."
+msgstr "Review konnte nicht eingereicht werden."
+
+#: ojs/static/js/es6_modules/ojs/editor.js:220
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: ojs/static/js/es6_modules/ojs/editor.js:227
+msgid "Send"
+msgstr "Schicken"
+
+#: ojs/static/js/es6_modules/ojs/editor.js:253
+msgid "Fill out all fields before submitting!"
+msgstr "Fülle alle Felder vor dem einschicken aus!"
+
+#: ojs/static/js/es6_modules/ojs/editor.js:270
+msgid "Review submitted"
+msgstr "Review eingeschickt"
+
+#: ojs/static/js/es6_modules/ojs/submit-doc.js:69
+msgid "Article submitted"
+msgstr "Artikel eingeschickt"
+
+#: ojs/static/js/es6_modules/ojs/submit-doc.js:70
+msgid "Article could not be submitted."
+msgstr "Artikel konnte nicht eingeschickt werden."
+
+#: ojs/static/js/es6_modules/ojs/templates.js:4
+msgid "Complete details and choose journal"
+msgstr "Vervollständige die Detalien und wähle Zeitschrift aus"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:8
+msgid "First name"
+msgstr "Vorname"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:12
+msgid "Last name"
+msgstr "Nachname"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:16
+msgid "Affiliation"
+msgstr "Institution"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:20
+msgid "Webpage"
+msgstr "Webseite"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:35
+msgid "Resubmit"
+msgstr "Erneut einschicken"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:36
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr ""
+"Durch das Drücken des Einschicken-knopfes wird die Neueinreichung an die Zeitschrift geschickt"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:37
+#: ojs/static/js/es6_modules/ojs/templates.js:58
+msgid "Be aware that this action cannot be undone!"
+msgstr "Vorsicht, denn diese Handlung kann nicht rückgängig gemacht werden!"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:43
+msgid "Leave your messages for editor and authors"
+msgstr "Hinterlasse deine Nachricht für den Editor und die Autoren"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:44
+msgid "Message for editor"
+msgstr "Nachricht an den Editor"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:46
+msgid "Message for editor and authors"
+msgstr "Nachricht an den Editor und die Autoren"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:48
+msgid "Recommendation"
+msgstr "Empfehlung"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:50
+msgid "Choose One"
+msgstr "Wähle Eine"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:51
+msgid "Accept Submission"
+msgstr "Akzeptiere Einreichung"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:52
+msgid "Revisions Required"
+msgstr "Überarbeitung nötig"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:53
+msgid "Resubmit for Review"
+msgstr "Neueinreichung für Review"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:54
+msgid "Resubmit Elsewhere"
+msgstr "Woanders Einreichen"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:55
+msgid "Decline Submission"
+msgstr "Einreichung Ablehnen"
+
+#: ojs/static/js/es6_modules/ojs/templates.js:56
+msgid "See Comments"
+msgstr "Siehe Kommentare"
