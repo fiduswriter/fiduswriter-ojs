@@ -1,4 +1,4 @@
-import {AdminRegisterJournals} from "./modules/ojs"
+import {AdminRegisterJournals} from "./modules/ojs/admin"
 
 const theJournalRegister = new AdminRegisterJournals()
 

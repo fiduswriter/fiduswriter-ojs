@@ -2,12 +2,16 @@ from tornado.web import RequestHandler, asynchronous, HTTPError
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import url_concat
 from tornado.escape import json_decode
+from tornado.ioloop import IOLoop
 from base.django_handler_mixin import DjangoHandlerMixin
 from urllib.parse import urlencode
 from .models import Journal, Submission, SubmissionRevision, Author, Reviewer
 from django.core.files.base import ContentFile
+from django.conf import settings
+
 from document.models import Document, AccessRight
 from usermedia.models import Image, DocumentImage
+from os import path
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
     def write_error(self, status_code, **kwargs):
@@ -53,6 +57,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             return
         self.plugin_path = \
             '/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/'
+        self.submission_attempts = 0
         if relative_url == 'author_submit':
             self.author_submit()
         elif relative_url == 'reviewer_submit':
@@ -90,9 +95,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         abstract = self.get_argument('abstract')
         contents = self.get_argument('contents')
         bibliography = self.get_argument('bibliography')
-        image_ids = list(
-            [_f for _f in self.get_argument('image_ids').split(',') if _f]
-        )
+        image_ids = self.get_arguments('image_ids[]')
         document = Document()
         journal = Journal.objects.get(id=journal_id)
         document.owner = journal.editor
@@ -106,7 +109,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 image = Image()
                 image.pk = id
                 image.uploader = journal.editor
-                f = open(os.path.join(
+                f = open(path.join(
                     settings.PROJECT_PATH, "base/static/img/error.png"
                 ))
                 image.image.save('error.png', File(f))
@@ -149,7 +152,8 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 url_concat(url, {'key': key}),
                 'POST',
                 None,
-                body
+                body,
+                request_timeout=40.0
             ),
             callback=self.on_author_first_submit_response
         )
@@ -160,6 +164,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         if response.error:
             self.revision.document.delete()
             self.revision.delete()
+            code = response.code
+            if code >= 500 and code < 600 and self.submission_attempts < 10:
+                self.submission_attempts += 1
+                # We wait 3 seconds and try again. Maybe the OJS server has
+                # issues.
+                ioloop = IOLoop.current()
+                ioloop.call_later(delay=3, callback=self.author_first_submit)
+                return
             response.rethrow()
         # Set the submission ID from the response from the OJS server.
         json = json_decode(response.body)
@@ -202,7 +214,8 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 url_concat(url, {'key': key}),
                 'POST',
                 None,
-                body
+                body,
+                request_timeout=40.0
             ),
             callback=self.on_author_resubmit_response
         )
@@ -211,6 +224,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     # server doesn't block the FW server connection.
     def on_author_resubmit_response(self, response):
         if response.error:
+            code = response.code
+            if code >= 500 and code < 600 and self.submission_attempts < 10:
+                self.submission_attempts += 1
+                # We wait 3 seconds and try again. Maybe the OJS server has
+                # issues.
+                ioloop = IOLoop.current()
+                ioloop.call_later(delay=3, callback=self.author_resubmit)
+                return
             response.rethrow()
         # submission was successful, so we replace the user's write access
         # rights with read rights.
@@ -255,7 +276,8 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 url_concat(url, {'key': key}),
                 'POST',
                 None,
-                body
+                body,
+                request_timeout=40.0
             ),
             callback=self.on_reviewer_submit_response
         )
@@ -264,6 +286,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     # server doesn't block the FW server connection.
     def on_reviewer_submit_response(self, response):
         if response.error:
+            code = response.code
+            if code >= 500 and code < 600 and self.submission_attempts < 10:
+                self.submission_attempts += 1
+                # We wait 3 seconds and try again. Maybe the OJS server has
+                # issues.
+                ioloop = IOLoop.current()
+                ioloop.call_later(delay=3, callback=self.reviewer_submit)
+                return
             response.rethrow()
         # submission was successful, so we replace the user's write access
         # rights with read rights.

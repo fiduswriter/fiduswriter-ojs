@@ -25,9 +25,6 @@ export class AdminRegisterJournals {
                     // DOM at a later stage.
                     const nEvent = django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
                     django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
-                    if (!nEvent.isDefaultPrevented()) {
-                        window.showRelatedObjectLookupPopup(this)
-                    }
                     break
                 case findTarget(event, '.register-submit', el):
                     const journalId = el.target.dataset.id
@@ -51,6 +48,7 @@ export class AdminRegisterJournals {
             {url: this.ojsUrl, key: this.ojsKey}
         ).then(
             json => {
+                console.log({json})
                 const journals = json['journals']
                     .sort((a, b) => parseInt(a.id) - parseInt(b.id))
                 const emailLookups = []
@@ -63,6 +61,11 @@ export class AdminRegisterJournals {
                             if (user) {
                                 Object.assign(journal, user)
                             }
+                        }
+                    ).catch(
+                        error => {
+                            addAlert('info', gettext(`Cannot find Fidus Writer user corresponding to email: ${journal.contact_email}`))
+                            //throw(error)
                         }
                     )
                     emailLookups.push(emailLookup)
@@ -97,15 +100,9 @@ export class AdminRegisterJournals {
         return postJson(
             '/ojs/get_user/',
             {email}
-        ).catch(
-            error => {
-                addAlert('info', gettext(`Cannot find Fidus Writer user corresponding to email: ${email}`))
-                throw(error)
-            }
         ).then(
             ({json}) => {return json}
         )
-
     }
 
     saveJournal(ojs_jid) {

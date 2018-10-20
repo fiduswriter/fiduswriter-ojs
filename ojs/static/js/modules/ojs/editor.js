@@ -17,7 +17,6 @@ export class EditorOJS {
     }
 
     init() {
-
         postJson(
             '/ojs/get_doc_info/',
             {
@@ -85,6 +84,10 @@ export class EditorOJS {
                 }
             }
         )
+        if (this.editor.menu.toolbarViews) {
+            // If the toolbar view has been rendered, update it. Only the one that is applicable will update the DOM.
+            this.editor.menu.toolbarViews.forEach(view => view.update())
+        }
         const fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id==='file')
         fileMenu.content.push({
             title: gettext('Submit to journal'),
@@ -184,7 +187,6 @@ export class EditorOJS {
                 }
             ],
             dialog = new Dialog({
-                height: 50,
                 width: 300,
                 buttons,
                 title: gettext('Resubmit'),

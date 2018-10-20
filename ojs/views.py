@@ -211,16 +211,14 @@ def get_user_js(request):
     status = 405
     response = {}
     if request.method == 'POST':
+        status = 200
         email = request.POST.get('email')
-        try:
-            email_address = EmailAddress.objects.get(
-                email=email
-            )
+        email_address = EmailAddress.objects.filter(
+            email=email
+        ).first()
+        if email_address:
             response['user_id'] = email_address.user.id
             response['user_name'] = email_address.user.username
-            status = 200
-        except EmailAddress.DoesNotExist:
-            status = 204
     return JsonResponse(
         response,
         status=status
