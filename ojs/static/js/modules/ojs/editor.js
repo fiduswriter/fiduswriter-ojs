@@ -1,7 +1,4 @@
-import {BibliographyDB} from "../bibliography/database"
-import {ImageDB} from "../images/database"
 import {addAlert, activateWait, deactivateWait, postJson, post, Dialog} from "../common"
-import {SaveCopy} from "../exporter/native"
 import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
 import {SendDocSubmission} from "./submit_doc"
 import {READ_ONLY_ROLES, COMMENT_ONLY_ROLES} from "../editor"
@@ -31,7 +28,7 @@ export class EditorOJS {
         ).catch(
             error => {
                 addAlert('error', gettext('Could not obtain submission info.'))
-                throw(error)
+                throw (error)
             }
         )
 
@@ -49,7 +46,7 @@ export class EditorOJS {
                 type: 'button',
                 title: gettext('Submit to journal'),
                 icon: 'paper-plane',
-                action: editor => {
+                action: _editor => {
                     if (this.submission.status === 'submitted') {
                         if (this.submission.user_role === 'author') {
                             this.resubmissionDialog()
@@ -210,7 +207,7 @@ export class EditorOJS {
         ).catch(
             error => {
                 addAlert('error', gettext('Review could not be submitted.'))
-                throw(error)
+                throw (error)
             }
         )
     }
@@ -289,7 +286,7 @@ export class EditorOJS {
         ).catch(
             error => {
                 addAlert('error', gettext('Review could not be submitted.'))
-                throw(error)
+                throw (error)
             }
         )
         return true

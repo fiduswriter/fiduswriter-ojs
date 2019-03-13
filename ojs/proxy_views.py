@@ -1,21 +1,23 @@
-from tornado.web import RequestHandler, asynchronous, HTTPError
+from os import path
+from tornado.web import RequestHandler, asynchronous
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import url_concat
 from tornado.escape import json_decode
 from tornado.ioloop import IOLoop
 from base.django_handler_mixin import DjangoHandlerMixin
 from urllib.parse import urlencode
-from .models import Journal, Submission, SubmissionRevision, Author, Reviewer
-from django.core.files.base import ContentFile
 from django.conf import settings
+from django.core.files import File
 
 from document.models import Document, AccessRight
 from usermedia.models import Image, DocumentImage
-from os import path
+
+from .models import Journal, Submission, SubmissionRevision, Author, Reviewer
+
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
     def write_error(self, status_code, **kwargs):
-         self.write(str(kwargs["exc_info"][1]))
+        self.write(str(kwargs["exc_info"][1]))
 
     @asynchronous
     def get(self, relative_url):

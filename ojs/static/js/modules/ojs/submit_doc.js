@@ -1,5 +1,4 @@
 import {ShrinkFidus} from "../exporter/native/shrink"
-import {createSlug} from "../exporter/tools/file"
 import {addAlert, post} from "../common"
 // Send an article submission to FW and OJS servers.
 
@@ -34,7 +33,7 @@ export class SendDocSubmission {
         )
 
         shrinker.init().then(
-            ({doc, shrunkImageDB, shrunkBibDB, httpIncludes}) => {
+            ({shrunkImageDB, shrunkBibDB}) => {
                 this.uploadRevision(shrunkBibDB, shrunkImageDB)
             }
         )
@@ -61,7 +60,7 @@ export class SendDocSubmission {
         ).catch(
             error => {
                 addAlert('error', gettext('Article could not be submitted.'))
-                throw(error)
+                throw (error)
             }
         )
     }

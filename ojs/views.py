@@ -2,7 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import login
@@ -11,8 +11,9 @@ from allauth.account.models import EmailAddress
 
 from . import models
 from . import token
-from document.models import Document, AccessRight, CAN_UPDATE_DOCUMENT
+from document.models import Document, AccessRight
 from usermedia.models import DocumentImage
+
 
 # logs a user in
 def login_user(request, user):

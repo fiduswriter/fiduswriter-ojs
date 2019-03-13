@@ -19,17 +19,19 @@ export class AdminRegisterJournals {
                 case findTarget(event, '#get_journals', el):
                     this.getJournals()
                     break
-                case findTarget(event, '.related-lookup', el):
+                case findTarget(event, '.related-lookup', el): {
                     // The following is slightly modified from the binding function in the
                     // admin interface to allow for lookups in fields that are added to the
                     // DOM at a later stage.
-                    const nEvent = django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
-                    django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
+                    const nEvent = window.django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
+                    window.django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
                     break
-                case findTarget(event, '.register-submit', el):
+                }
+                case findTarget(event, '.register-submit', el): {
                     const journalId = el.target.dataset.id
                     this.saveJournal(journalId)
                     break
+                }
                 default:
                     break
             }
@@ -48,7 +50,6 @@ export class AdminRegisterJournals {
             {url: this.ojsUrl, key: this.ojsKey}
         ).then(
             json => {
-                console.log({json})
                 const journals = json['journals']
                     .sort((a, b) => parseInt(a.id) - parseInt(b.id))
                 const emailLookups = []
@@ -63,9 +64,8 @@ export class AdminRegisterJournals {
                             }
                         }
                     ).catch(
-                        error => {
+                        _error => {
                             addAlert('info', gettext(`Cannot find Fidus Writer user corresponding to email: ${journal.contact_email}`))
-                            //throw(error)
                         }
                     )
                     emailLookups.push(emailLookup)
@@ -90,7 +90,7 @@ export class AdminRegisterJournals {
         ).catch(
             error => {
                 addAlert('error', gettext('Could not connect to OJS server.'))
-                throw(error)
+                throw (error)
             }
         )
 
@@ -140,7 +140,7 @@ export class AdminRegisterJournals {
         ).catch(
             error => {
                 addAlert('error', gettext('Could not save journal. Please check form.'))
-                throw(error)
+                throw (error)
             }
         )
 

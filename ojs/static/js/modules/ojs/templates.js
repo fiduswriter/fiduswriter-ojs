@@ -12,7 +12,7 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
                     <div class="fw-select-container">
                         <select id="submission-journal" class="fw-button fw-white fw-large">
                         ${
-                            journals.map((journal, index) =>
+                            journals.map(journal =>
                                 `<option value="${journal.id}">
                                     ${escapeText(journal.name)}
                                 </option>`
