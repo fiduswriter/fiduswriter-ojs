@@ -10,7 +10,7 @@ This plugin has to be combined with the `OJS-FidusWriter plugin <https://github.
 NOTE
 ----
 
-**This needs to be tested with Fidus Writer 3.7 before release.**
+**This needs to be tested with Fidus Writer 3.7 and an OJS installation before release.**
 
 Installation
 ------------
