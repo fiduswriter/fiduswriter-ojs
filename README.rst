@@ -7,9 +7,13 @@ with Open Journal Systems (OJS).
 This plugin has to be combined with the `OJS-FidusWriter plugin <https://github.com/fiduswriter/ojs-fiduswriter>`_ for OJS.
 
 
+NOTE
+----
+
+**This needs to be tested with Fidus Writer 3.7 before release.**
 
 Installation
------------
+------------
 
 1. Install Fidus Writer if you haven't done so already.
 
@@ -43,6 +47,6 @@ Installation
 Credits
 -----------
 
-This plugin has been developed by the `Opening Scholarly Communications in the Social Sciences (OSCOSS) <http://www.gesis.org/?id=10714>`_ project, financed by the German Research Foundation (DFG) and executed by the University of Bonn and GESIS – Leibniz Institute for the Social Sciences. 
+This plugin has been developed by the `Opening Scholarly Communications in the Social Sciences (OSCOSS) <http://www.gesis.org/?id=10714>`_ project, financed by the German Research Foundation (DFG) and executed by the University of Bonn and GESIS – Leibniz Institute for the Social Sciences.
 
 Lead Developers: `Fakhri Momeni <https://github.com/momenifi>`_ and `Johannes Wilm <https://github.com/johanneswilm>`_

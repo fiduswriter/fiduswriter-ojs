@@ -15,7 +15,7 @@ export class EditorOJS {
 
     init() {
         postJson(
-            '/ojs/get_doc_info/',
+            '/api/ojs/get_doc_info/',
             {
                 doc_id: this.editor.docInfo.id
             }

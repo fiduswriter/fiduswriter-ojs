@@ -66,7 +66,7 @@ def find_user(
 # side. It then logs the user in using the login token on the client side. This
 # way, the api key is not exposed to the client.
 @csrf_exempt
-def get_login_token_js(request):
+def get_login_token(request):
     response = {}
     if request.method != 'GET':
         # Method not allowed
@@ -142,7 +142,7 @@ def open_revision_doc(request, submission_id, version):
 # be submitted to. This information is used as a starting point to decide what
 # OJS-related UI elements to add on the editor page.
 @login_required
-def get_doc_info_js(request):
+def get_doc_info(request):
     status = 405
     response = {}
     if request.method == 'POST':
@@ -208,7 +208,7 @@ def get_doc_info_js(request):
 
 # Get a user based on an email address. Used for registration of journal.
 @staff_member_required
-def get_user_js(request):
+def get_user(request):
     status = 405
     response = {}
     if request.method == 'POST':
@@ -228,7 +228,7 @@ def get_user_js(request):
 
 # Save a journal. Used on custom admin page.
 @staff_member_required
-def save_journal_js(request):
+def save_journal(request):
     status = 405
     response = {}
     if request.method == 'POST':
@@ -271,7 +271,7 @@ def get_or_create_user(email, username):
 
 # A reviewer has accepted a review. Give comment/review access to the reviewer.
 @csrf_exempt
-def accept_reviewer_js(request, submission_id, version):
+def accept_reviewer(request, submission_id, version):
     response = {}
     status = 200
     if request.method != 'POST':
@@ -325,7 +325,7 @@ def accept_reviewer_js(request, submission_id, version):
 # Also ensure that there is an Reviewer set up for the account to allow for
 # password-less login from OJS.
 @csrf_exempt
-def add_reviewer_js(request, submission_id, version):
+def add_reviewer(request, submission_id, version):
     response = {}
     status = 200
     if request.method != 'POST':
@@ -380,7 +380,7 @@ def add_reviewer_js(request, submission_id, version):
 
 
 @csrf_exempt
-def remove_reviewer_js(request, submission_id, version):
+def remove_reviewer(request, submission_id, version):
     response = {}
     status = 200
     if request.method != 'POST':
@@ -420,7 +420,7 @@ def remove_reviewer_js(request, submission_id, version):
 
 
 @csrf_exempt
-def create_copy_js(request, submission_id):
+def create_copy(request, submission_id):
     response = {}
     status = 200
     if request.method != 'POST':

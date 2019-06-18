@@ -47,7 +47,7 @@ class JournalAdmin(admin.ModelAdmin):
 
     def register_journal_view(self, request):
         response = {}
-        return render(request, 'ojs/register_journals.html', response)
+        return render(request, 'admin/ojs/register_journals.html', response)
 
 
 admin.site.register(models.Journal, JournalAdmin)
