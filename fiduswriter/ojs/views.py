@@ -151,6 +151,7 @@ def get_doc_info(request):
             response['submission'] = {
                 'status': 'unsubmitted'
             }
+            template_id = int(request.POST.get('template_id'))
         else:
             document = Document.objects.get(id=document_id)
             if (
@@ -162,6 +163,7 @@ def get_doc_info(request):
             ):
                 # Access forbidden
                 return HttpResponse('Missing access rights', status=403)
+            template_id = document.template_id
             # OJS submission related
             response['submission'] = dict()
             revision = models.SubmissionRevision.objects.filter(
@@ -191,7 +193,7 @@ def get_doc_info(request):
             else:
                 response['submission']['status'] = 'unsubmitted'
         journals = []
-        for journal in models.Journal.objects.all():
+        for journal in models.Journal.objects.filter(templates=template_id):
             journals.append({
                 'id': journal.id,
                 'name': journal.name,

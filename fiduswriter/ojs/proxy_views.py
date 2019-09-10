@@ -76,6 +76,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     async def author_first_submit(self):
         # The document is not part of an existing submission.
         journal_id = self.get_argument('journal_id')
+        journal = Journal.objects.get(id=journal_id)
+        template_id = self.get_argument('template_id')
+        template = Journal.templates.filter(id=template_id).first()
+        if not template:
+            # Template is not available for Journal.
+            self.set_status(401)
+            self.finish()
+            return
         self.submission = Submission()
         self.submission.submitter = self.user
         self.submission.journal_id = journal_id
@@ -91,8 +99,8 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         bibliography = self.get_argument('bibliography')
         image_ids = self.get_arguments('image_ids[]')
         document = Document()
-        journal = Journal.objects.get(id=journal_id)
         document.owner = journal.editor
+        document.template_id = template_id
         document.title = title
         document.contents = contents
         document.bibliography = bibliography

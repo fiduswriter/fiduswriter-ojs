@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 
-from document.models import Document
+from document.models import Document, DocumentTemplate
 
 
 # A Journal registered with a particular OJS installation
@@ -10,6 +10,7 @@ class Journal(models.Model):
     ojs_url = models.CharField(max_length=512)
     ojs_key = models.CharField(max_length=512)
     ojs_jid = models.PositiveIntegerField()  # _jid as _id is foreign key
+    templates = models.ManyToManyField(DocumentTemplate)
     name = models.CharField(max_length=512)
     editor = models.ForeignKey(User, on_delete=CASCADE)
 

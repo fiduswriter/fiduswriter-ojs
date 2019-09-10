@@ -5,6 +5,7 @@ import {addAlert, post} from "../common"
 export class SendDocSubmission {
     constructor({
         doc,
+        templateId,
         imageDB,
         bibDB,
         journalId,
@@ -23,6 +24,7 @@ export class SendDocSubmission {
         this.affiliation = affiliation
         this.authorUrl = authorUrl
         this.abstract = abstract
+        this.templateId = templateId
     }
 
     init() {
@@ -48,6 +50,7 @@ export class SendDocSubmission {
                 lastname: this.lastname,
                 affiliation: this.affiliation,
                 author_url: this.authorUrl,
+                template_id: this.templateId,
                 doc_id: this.doc.id,
                 title: this.doc.title,
                 abstract: this.abstract,
