@@ -12,7 +12,7 @@ NOTE
 Installation
 ------------
 
-1. Wihtin a Python virtual environment, install Fidus Writer with the plugin like this:
+1. Within a Python virtual environment, install Fidus Writer with the plugin like this:
 
     pip install fiduswriter[ojs]
 

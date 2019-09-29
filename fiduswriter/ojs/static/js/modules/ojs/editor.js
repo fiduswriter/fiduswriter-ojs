@@ -111,7 +111,8 @@ export class EditorOJS {
         ]
 
         const abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata==='abstract')
-
+        const authorsNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata==='authors')
+        const authorNode = authorsNode && authorsNode.childCount ? authorsNode.firstChild : false
         const dialog = new Dialog({
             height: 460,
             width: 800,
@@ -119,8 +120,9 @@ export class EditorOJS {
             title: gettext('Complete missing information and choose journal'),
             body: firstSubmissionDialogTemplate({
                 journals: this.journals,
-                first_name: this.editor.user.first_name,
-                last_name: this.editor.user.last_name,
+                first_name: authorNode ? authorNode.attrs.firstname : this.editor.user.first_name,
+                last_name: authorNode ? authorNode.attrs.lastname : this.editor.user.last_name,
+                affiliation: authorNode ? authorNode.attrs.institution : '',
                 abstract: !abstractNode || abstractNode.attrs.hidden ? '' : abstractNode.textContent
             })
         })

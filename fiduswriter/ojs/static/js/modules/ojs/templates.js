@@ -2,7 +2,7 @@ import {escapeText} from "../common"
 
 /** Dialog to add a note to a revision before saving. */
 
-export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, abstract}) =>
+export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, affiliation, abstract}) =>
     `<h3>${gettext('Submission information')}</h3>
     <table class="fw-dialog-table fw-dialog-table-wide">
         <tbody>
@@ -47,7 +47,7 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('Affiliation')}</h4></th>
-                <td class="entry-field"><input type="text" id="submission-affiliation"></td>
+                <td class="entry-field"><input type="text" id="submission-affiliation" value="${escapeText(affiliation)}"></td>
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('Webpage')}</h4></th>

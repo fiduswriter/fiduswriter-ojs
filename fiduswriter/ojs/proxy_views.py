@@ -46,7 +46,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.write(response.body)
         self.finish()
 
-    def post(self, relative_url):
+    async def post(self, relative_url):
         self.user = self.get_current_user()
         if not self.user.is_authenticated:
             self.set_status(401)
@@ -63,22 +63,22 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             ).first()
             if revision:
                 self.revision = revision
-                self.author_resubmit()
+                await self.author_resubmit()
             else:
-                self.author_first_submit()
+                await self.author_first_submit()
         elif relative_url == 'reviewer_submit':
-            self.reviewer_submit()
+            await self.reviewer_submit()
         else:
             self.set_status(401)
-            self.finish()
-            return
+        self.finish()
+        return
 
     async def author_first_submit(self):
         # The document is not part of an existing submission.
         journal_id = self.get_argument('journal_id')
         journal = Journal.objects.get(id=journal_id)
         template_id = self.get_argument('template_id')
-        template = Journal.templates.filter(id=template_id).first()
+        template = journal.templates.filter(id=template_id).first()
         if not template:
             # Template is not available for Journal.
             self.set_status(401)
@@ -189,7 +189,6 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             rights='read-without-comments'
         )
         self.write(response.body)
-        self.finish()
 
     async def author_resubmit(self):
         submission = self.revision.submission
@@ -238,7 +237,6 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         right.rights = 'read'
         right.save()
         self.write(response.body)
-        self.finish()
 
     async def reviewer_submit(self):
         # Submitting a new submission revision.
@@ -274,8 +272,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 None,
                 body,
                 request_timeout=40.0
-            ),
-            callback=self.on_reviewer_submit_response
+            )
         )
         # The response is asynchronous so that the getting of the data from the
         # OJS server doesn't block the FW server connection.
@@ -298,4 +295,3 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         right.rights = 'read'
         right.save()
         self.write(response.body)
-        self.finish()
