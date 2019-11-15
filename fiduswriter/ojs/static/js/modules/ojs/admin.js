@@ -98,7 +98,7 @@ export class AdminRegisterJournals {
 
     getUser(email) {
         return postJson(
-            '/ojs/get_user/',
+            '/api/ojs/get_user/',
             {email}
         ).then(
             ({json}) => {return json}
@@ -119,7 +119,7 @@ export class AdminRegisterJournals {
         }
 
         post(
-            '/ojs/save_journal/',
+            '/api/ojs/save_journal/',
             {
                 editor_id,
                 name,

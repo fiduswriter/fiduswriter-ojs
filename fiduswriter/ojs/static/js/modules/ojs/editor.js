@@ -14,11 +14,16 @@ export class EditorOJS {
     }
 
     init() {
+        const docData = {
+            doc_id: this.editor.docInfo.id
+        }
+        if (this.editor.docInfo.templateId) {
+          // Document has not been initialized yet, but we have the template id
+          docData.template_id = this.editor.docInfo.templateId
+        }
         postJson(
-            '/ojs/get_doc_info/',
-            {
-                doc_id: this.editor.docInfo.id
-            }
+            '/api/ojs/get_doc_info/',
+            docData
         ).then(
             ({json}) => {
                 this.submission = json['submission']
@@ -40,56 +45,10 @@ export class EditorOJS {
             return Promise.resolve()
         }
 
-        this.editor.menu.toolbarModel.content.push(
-            {
-                id: 'submit-ojs',
-                type: 'button',
-                title: gettext('Submit to journal'),
-                icon: 'paper-plane',
-                action: _editor => {
-                    if (this.submission.status === 'submitted') {
-                        if (this.submission.user_role === 'author') {
-                            this.resubmissionDialog()
-                        } else if (this.submission.user_role === 'reviewer') {
-                            this.reviewerDialog()
-                        }
-                    } else {
-                        this.firstSubmissionDialog()
-                    }
-                },
-                disabled: editor => {
-                    if (
-                        READ_ONLY_ROLES.includes(editor.docInfo.access_rights) ||
-                        (
-                            COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights) &&
-                            this.submission.status !== 'submitted'
-                        ) ||
-                        (
-                            this.submission.status === 'submitted' &&
-                            editor.docInfo.access_rights === 'write' &&
-                            this.submission.version.slice(-1) === '0'
-                        ) ||
-                        (
-                            this.submission.status === 'submitted' &&
-                            this.submission.user_role === 'editor'
-                        )
-                    ) {
-                        return true
-                    } else {
-                        return false
-                    }
-                }
-            }
-        )
-        if (this.editor.menu.toolbarViews) {
-            // If the toolbar view has been rendered, update it. Only the one that is applicable will update the DOM.
-            this.editor.menu.toolbarViews.forEach(view => view.update())
-        }
         const fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id==='file')
         fileMenu.content.push({
             title: gettext('Submit to journal'),
             type: 'action',
-            icon: 'paper-plane',
             tooltip: gettext('Submit to journal'),
             action: editor => {
                 if (this.submission.status === 'submitted') {
@@ -152,7 +111,8 @@ export class EditorOJS {
         ]
 
         const abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata==='abstract')
-
+        const authorsNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata==='authors')
+        const authorNode = authorsNode && authorsNode.childCount ? authorsNode.firstChild : false
         const dialog = new Dialog({
             height: 460,
             width: 800,
@@ -160,8 +120,9 @@ export class EditorOJS {
             title: gettext('Complete missing information and choose journal'),
             body: firstSubmissionDialogTemplate({
                 journals: this.journals,
-                first_name: this.editor.user.first_name,
-                last_name: this.editor.user.last_name,
+                first_name: authorNode ? authorNode.attrs.firstname : this.editor.user.first_name,
+                last_name: authorNode ? authorNode.attrs.lastname : this.editor.user.last_name,
+                affiliation: authorNode ? authorNode.attrs.institution : '',
                 abstract: !abstractNode || abstractNode.attrs.hidden ? '' : abstractNode.textContent
             })
         })
@@ -215,6 +176,7 @@ export class EditorOJS {
     submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract}) {
         const submitter = new SendDocSubmission({
             doc: this.editor.getDoc(),
+            templateId: this.editor.docInfo.template.id,
             imageDB: this.editor.mod.db.imageDB,
             bibDB: this.editor.mod.db.bibDB,
             journalId,
