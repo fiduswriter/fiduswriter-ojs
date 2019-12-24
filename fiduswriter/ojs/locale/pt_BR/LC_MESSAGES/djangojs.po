@@ -1,216 +1,189 @@
-# German Translation, fiduswriter-OJS plugin
-# Copyright (C) 2017 Johannes Wilm
-# This file is distributed under the same license as the fiduswriter-ojs package.
-# Johannes Wilm <johannes@fiduswriter.org>, 2017.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-16 21:51+0000\n"
-"PO-Revision-Date: 2017-05-08 09:15+0200\n"
-"Last-Translator: Johannes Wilm <johannes@fiduswriter.org>\n"
-"Language-Team: German <johannes@fiduswriter.org>\n"
-"Language: DE \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS\n"
+"Language: pt-br\n"
 
 #: ojs/static/js/modules/ojs/admin.js:65
 msgid "Provide a URL for the OJS server and the key to access it."
-msgstr "Gebe eine URL für einen OJS Server und den entsprechenden Key an."
+msgstr "Forneça um URL para o servidor OJS e a chave para acessá-lo."
 
 #: ojs/static/js/modules/ojs/admin.js:85
 msgid "Cannot find Fidus Writer user corresponding to email: "
-msgstr ""
+msgstr "Não é possível encontrar o usuário do Fidus Writer correspondente ao email: "
 
 #: ojs/static/js/modules/ojs/admin.js:90
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: ojs/static/js/modules/ojs/admin.js:90
 msgid "Register"
-msgstr ""
+msgstr "Cadastre-se"
 
 #: ojs/static/js/modules/ojs/admin.js:94
 msgid "Could not connect to OJS server."
-msgstr ""
+msgstr "Não foi possível conectar ao servidor OJS."
 
 #: ojs/static/js/modules/ojs/admin.js:114
 msgid "Editor and journal name need to be filled out."
-msgstr "Editor und Journal Name sind Pflichtfelder."
+msgstr "O nome do editor e da revista precisa ser preenchido."
 
 #: ojs/static/js/modules/ojs/admin.js:121
 msgid "Editor needs to be the ID number of the editor user."
-msgstr "Editor muss die ID Nummer des Editor Users sein."
+msgstr "O editor precisa ser o número ID do usuário do editor."
 
 #: ojs/static/js/modules/ojs/admin.js:133
 msgid "Journal saved."
-msgstr "Zeitschrift gespeichert."
+msgstr "Revista salva."
 
 #: ojs/static/js/modules/ojs/admin.js:135
 msgid "Journal already present on server."
-msgstr "Zeitschrift schon auf dem Server vorhanden."
+msgstr "A revista já está presente no servidor"
 
 #: ojs/static/js/modules/ojs/admin.js:141
 msgid "Could not save journal. Please check form."
-msgstr ""
-"Konnte die Zeitschrift nicht abspeichern. Bitte untersuche das Formular."
+msgstr "Não foi possível salvar a revista. Por favor, verifique o formulário."
 
 #: ojs/static/js/modules/ojs/editor.js:32
 msgid "Could not obtain submission info."
-msgstr ""
+msgstr "Não foi possível obter as informações do envio."
 
 #: ojs/static/js/modules/ojs/editor.js:45
 #: ojs/static/js/modules/ojs/editor.js:47
-#, fuzzy
-#| msgid "Send to journal"
 msgid "Submit to journal"
-msgstr "Sende an Zeitschrift"
+msgstr "Enviar para a revista"
 
 #: ojs/static/js/modules/ojs/editor.js:73
-#, fuzzy
-#| msgid "Resubmit"
 msgid "Submit"
-msgstr "Erneut einschicken"
+msgstr "Enviar"
 
 #: ojs/static/js/modules/ojs/editor.js:84
 msgid "Firstname, lastname and abstract are obligatory fields!"
-msgstr ""
+msgstr "Nome, sobrenome e resumo são campos obrigatórios!"
 
 #: ojs/static/js/modules/ojs/editor.js:108
-#, fuzzy
-#| msgid "Complete details and choose journal"
 msgid "Complete missing information and choose journal"
-msgstr "Vervollständige die Detalien und wähle Zeitschrift aus"
+msgstr "Preencha as informações ausentes e escolha a revista"
 
 #: ojs/static/js/modules/ojs/editor.js:124
 #: ojs/static/js/modules/ojs/editor.js:180
 msgid "Send"
-msgstr "Schicken"
+msgstr "Enviar"
 
 #: ojs/static/js/modules/ojs/editor.js:136
 msgid "Resubmit"
-msgstr "Erneut einschicken"
+msgstr "Reenviar"
 
 #: ojs/static/js/modules/ojs/editor.js:146
 msgid "Resubmission successful"
-msgstr "Erneute Einreichung erfolgreich"
+msgstr "Reenvio com êxito"
 
 #: ojs/static/js/modules/ojs/editor.js:149
 #: ojs/static/js/modules/ojs/editor.js:229
 msgid "Review could not be submitted."
-msgstr "Review konnte nicht eingereicht werden."
+msgstr "Não foi possível enviar a revisão."
 
 #: ojs/static/js/modules/ojs/editor.js:195
 msgid "Leave your messages for editor and authors"
-msgstr "Hinterlasse deine Nachricht für den Editor und die Autoren"
+msgstr "Deixe suas mensagens para o editor e os autores"
 
 #: ojs/static/js/modules/ojs/editor.js:214
 msgid "Fill out all fields before submitting!"
-msgstr "Fülle alle Felder vor dem einschicken aus!"
+msgstr "Preencha todos os campos antes de enviar!"
 
 #: ojs/static/js/modules/ojs/editor.js:226
 msgid "Review submitted"
-msgstr "Review eingeschickt"
+msgstr "Revisão enviada"
 
 #: ojs/static/js/modules/ojs/submit_doc.js:63
 msgid "Article submitted"
-msgstr "Artikel eingeschickt"
+msgstr "Artigo enviado"
 
 #: ojs/static/js/modules/ojs/submit_doc.js:64
 msgid "Article could not be submitted."
-msgstr "Artikel konnte nicht eingeschickt werden."
+msgstr "Não foi possível enviar o artigo."
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Submission information"
-msgstr ""
+msgstr "Informações de envio"
 
 #: ojs/static/js/modules/ojs/templates.js:10
-#, fuzzy
-#| msgid "Journal saved."
 msgid "Journal"
-msgstr "Zeitschrift gespeichert."
+msgstr "Revista"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Abstract"
-msgstr ""
+msgstr "Resumo"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Corresponding author"
-msgstr ""
+msgstr "Autor correspondente"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "First name"
-msgstr "Vorname"
+msgstr "Nome"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Last name"
-msgstr "Nachname"
+msgstr "Sobrenome"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Affiliation"
-msgstr "Institution"
+msgstr "Afiliação"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Webpage"
-msgstr "Webseite"
+msgstr "Página web"
 
 #: ojs/static/js/modules/ojs/templates.js:11
-msgid ""
-"By pressing the submit button your resubmission will be sent to the journal"
-msgstr ""
-"Durch das Drücken des Einschicken-knopfes wird die Neueinreichung an die "
-"Zeitschrift geschickt"
+msgid "By pressing the submit button your resubmission will be sent to the journal"
+msgstr "Ao pressionar o botão enviar seu  será enviado para a revista"
 
 #: ojs/static/js/modules/ojs/templates.js:11
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Be aware that this action cannot be undone!"
-msgstr "Vorsicht, denn diese Handlung kann nicht rückgängig gemacht werden!"
+msgstr "Esteja ciente de que esta ação não pode ser desfeita!"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Message for editor"
-msgstr "Nachricht an den Editor"
+msgstr "Mensagem para o editor"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Message for editor and authors"
-msgstr "Nachricht an den Editor und die Autoren"
+msgstr "Mensagem para o editor e os autores"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Recommendation"
-msgstr "Empfehlung"
+msgstr "Recomendação"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Choose One"
-msgstr "Wähle Eine"
+msgstr "Escolha um"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Accept Submission"
-msgstr "Akzeptiere Einreichung"
+msgstr "Aceitar envio"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Revisions Required"
-msgstr "Überarbeitung nötig"
+msgstr "Revisões necessárias"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Resubmit for Review"
-msgstr "Neueinreichung für Review"
+msgstr "Reenviar para revisão"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Resubmit Elsewhere"
-msgstr "Woanders Einreichen"
+msgstr "Reenviar em outro lugar"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Decline Submission"
-msgstr "Einreichung Ablehnen"
+msgstr "Declinar envio"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
-msgstr "Siehe Kommentare"
+msgstr "Ver comentários"
 
-#~ msgid "Document not yet ready. Please come back later."
-#~ msgstr "Dokument noch nicht klar. Bitte komme später wieder."
-
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"
