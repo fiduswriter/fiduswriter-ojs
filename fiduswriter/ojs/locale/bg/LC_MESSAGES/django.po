@@ -1,55 +1,45 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-16 21:51+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS backend\n"
+"Language: bg\n"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
-#, python-format
 msgid "Add %(name)s"
-msgstr ""
+msgstr "Добавете %(name)s"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
 #: ojs/templates/admin/ojs/register_journals.html:4
 #: ojs/templates/admin/ojs/register_journals.html:24
 msgid "Register journals"
-msgstr ""
+msgstr "Регистрирайте списания"
 
 #: ojs/templates/admin/ojs/register_journals.html:26
-msgid ""
-"\n"
-"            Register the journals from a particular OJS instance. Insert "
-"first the\n"
-"            URL and Key of the OJS installation. Decide then for each "
-"journal you\n"
-"            want to connect with Fidus Writer which user should be "
-"registered as\n"
+msgid "\n"
+"            Register the journals from a particular OJS instance. Insert first the\n"
+"            URL and Key of the OJS installation. Decide then for each journal you\n"
+"            want to connect with Fidus Writer which user should be registered as\n"
 "            their editor.\n"
 "            "
-msgstr ""
+msgstr "\n"
+"            Регистрирайте списанията от конкретен случай на OJS. Вмъкнете първо\n"
+"            URL адрес и ключ на инсталацията OJS. Вземете решение за всеки журнал, който сте\n"
+"            искате да се свържете с Fidus Writer, който потребител трябва да бъде регистриран като\n"
+"            техният редактор.\n"
+"                        "
 
 #: ojs/templates/admin/ojs/register_journals.html:34
 msgid "URL"
-msgstr ""
+msgstr "Адрес"
 
 #: ojs/templates/admin/ojs/register_journals.html:35
 msgid "Key"
-msgstr ""
+msgstr "ключ"
 
 #: ojs/templates/admin/ojs/register_journals.html:36
 msgid "Query available journals"
-msgstr ""
+msgstr "Поискайте наличните списания"
+
