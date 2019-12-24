@@ -1,199 +1,189 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-16 21:51+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS\n"
+"Language: bg\n"
+
 #: ojs/static/js/modules/ojs/admin.js:65
 msgid "Provide a URL for the OJS server and the key to access it."
-msgstr ""
+msgstr "Въведете URL за OJS сървъра и ключа за достъп до него."
 
 #: ojs/static/js/modules/ojs/admin.js:85
 msgid "Cannot find Fidus Writer user corresponding to email: "
-msgstr ""
+msgstr "Не мога да намеря потребител на Fidus Writer, отговарящ на имейла: "
 
 #: ojs/static/js/modules/ojs/admin.js:90
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
 #: ojs/static/js/modules/ojs/admin.js:90
 msgid "Register"
-msgstr ""
+msgstr "Регистрирам"
 
 #: ojs/static/js/modules/ojs/admin.js:94
 msgid "Could not connect to OJS server."
-msgstr ""
+msgstr "Не можа да се свърже със OJS сървъра."
 
 #: ojs/static/js/modules/ojs/admin.js:114
 msgid "Editor and journal name need to be filled out."
-msgstr ""
+msgstr "Името на редактора и списанието трябва да бъде попълнено."
 
 #: ojs/static/js/modules/ojs/admin.js:121
 msgid "Editor needs to be the ID number of the editor user."
-msgstr ""
+msgstr "Редакторът трябва да бъде идентификационният номер на потребителя на редактора."
 
 #: ojs/static/js/modules/ojs/admin.js:133
 msgid "Journal saved."
-msgstr ""
+msgstr "Журналът е запазен."
 
 #: ojs/static/js/modules/ojs/admin.js:135
 msgid "Journal already present on server."
-msgstr ""
+msgstr "Журнал вече присъства на сървъра."
 
 #: ojs/static/js/modules/ojs/admin.js:141
 msgid "Could not save journal. Please check form."
-msgstr ""
+msgstr "Журналът не можа да бъде запазен. Моля, проверете формата."
 
 #: ojs/static/js/modules/ojs/editor.js:32
 msgid "Could not obtain submission info."
-msgstr ""
+msgstr "Не можа да се получи информация за изпращането."
 
 #: ojs/static/js/modules/ojs/editor.js:45
 #: ojs/static/js/modules/ojs/editor.js:47
 msgid "Submit to journal"
-msgstr ""
+msgstr "Изпращане в дневника"
 
 #: ojs/static/js/modules/ojs/editor.js:73
 msgid "Submit"
-msgstr ""
+msgstr "Изпращане"
 
 #: ojs/static/js/modules/ojs/editor.js:84
 msgid "Firstname, lastname and abstract are obligatory fields!"
-msgstr ""
+msgstr "Име, фамилия и резюме са задължителни полета!"
 
 #: ojs/static/js/modules/ojs/editor.js:108
 msgid "Complete missing information and choose journal"
-msgstr ""
+msgstr "Попълнете липсващата информация и изберете дневник"
 
 #: ojs/static/js/modules/ojs/editor.js:124
 #: ojs/static/js/modules/ojs/editor.js:180
 msgid "Send"
-msgstr ""
+msgstr "Изпрати"
 
 #: ojs/static/js/modules/ojs/editor.js:136
 msgid "Resubmit"
-msgstr ""
+msgstr "Повторно изпращане на"
 
 #: ojs/static/js/modules/ojs/editor.js:146
 msgid "Resubmission successful"
-msgstr ""
+msgstr "Повторното подаване е успешно"
 
 #: ojs/static/js/modules/ojs/editor.js:149
 #: ojs/static/js/modules/ojs/editor.js:229
 msgid "Review could not be submitted."
-msgstr ""
+msgstr "Прегледът не можа да бъде изпратен."
 
 #: ojs/static/js/modules/ojs/editor.js:195
 msgid "Leave your messages for editor and authors"
-msgstr ""
+msgstr "Оставете съобщенията си за редактор и автори"
 
 #: ojs/static/js/modules/ojs/editor.js:214
 msgid "Fill out all fields before submitting!"
-msgstr ""
+msgstr "Попълнете всички полета преди да изпратите!"
 
 #: ojs/static/js/modules/ojs/editor.js:226
 msgid "Review submitted"
-msgstr ""
+msgstr "Прегледът бе изпратен"
 
 #: ojs/static/js/modules/ojs/submit_doc.js:63
 msgid "Article submitted"
-msgstr ""
+msgstr "Изпратена статия"
 
 #: ojs/static/js/modules/ojs/submit_doc.js:64
 msgid "Article could not be submitted."
-msgstr ""
+msgstr "Статия не може да бъде изпратена."
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Submission information"
-msgstr ""
+msgstr "Информация за подаване"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Journal"
-msgstr ""
+msgstr "списание"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Abstract"
-msgstr ""
+msgstr "абстрактен"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Corresponding author"
-msgstr ""
+msgstr "Автора за кореспонденция"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "First name"
-msgstr ""
+msgstr "Първо име"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Last name"
-msgstr ""
+msgstr "Фамилия"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Affiliation"
-msgstr ""
+msgstr "присъединяване"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Webpage"
-msgstr ""
+msgstr "Уеб страница"
 
 #: ojs/static/js/modules/ojs/templates.js:11
-msgid ""
-"By pressing the submit button your resubmission will be sent to the journal"
-msgstr ""
+msgid "By pressing the submit button your resubmission will be sent to the journal"
+msgstr "С натискане на бутона за изпращане изпратете повторно подаване до дневника"
 
 #: ojs/static/js/modules/ojs/templates.js:11
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Be aware that this action cannot be undone!"
-msgstr ""
+msgstr "Имайте предвид, че това действие не може да бъде отменено!"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Message for editor"
-msgstr ""
+msgstr "Съобщение за редактор"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Message for editor and authors"
-msgstr ""
+msgstr "Съобщение за редактор и автори"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Recommendation"
-msgstr ""
+msgstr "Препоръка"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Choose One"
-msgstr ""
+msgstr "Избери едно"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Accept Submission"
-msgstr ""
+msgstr "Приемете Изпращането"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Revisions Required"
-msgstr ""
+msgstr "Необходими ревизии"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Resubmit for Review"
-msgstr ""
+msgstr "Изпратете отново за преглед"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Resubmit Elsewhere"
-msgstr ""
+msgstr "Подайте отново на друго място"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Decline Submission"
-msgstr ""
+msgstr "Отклоняване на подаването"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
-msgstr ""
+msgstr "Вижте коментари"
+
