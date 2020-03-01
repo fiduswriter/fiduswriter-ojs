@@ -1,19 +1,23 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: Fidus Writer OJS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-25 10:16+0000\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
-"Project-Id-Version: Fidus Writer OJS\n"
-"Language: pt-br\n"
 
 #: ojs/static/js/modules/ojs/admin.js:65
 msgid "Provide a URL for the OJS server and the key to access it."
-msgstr "Forneça um URL para o servidor OJS e a chave para acessá-lo."
+msgstr "Proporcione una URL para el servidor OJS y la llave para acceder a él."
 
 #: ojs/static/js/modules/ojs/admin.js:85
 msgid "Cannot find Fidus Writer user corresponding to email: "
-msgstr "Não é possível encontrar o usuário do Fidus Writer correspondente ao email: "
+msgstr ""
+"No se puede encontrar el usuario de Fidus Writer correspondiente al correo "
+"electrónico: "
 
 #: ojs/static/js/modules/ojs/admin.js:90
 msgid "Editor"
@@ -21,40 +25,40 @@ msgstr "Editor"
 
 #: ojs/static/js/modules/ojs/admin.js:90
 msgid "Register"
-msgstr "Cadastre-se"
+msgstr "Registrar"
 
 #: ojs/static/js/modules/ojs/admin.js:94
 msgid "Could not connect to OJS server."
-msgstr "Não foi possível conectar ao servidor OJS."
+msgstr "No se pudo conectar con el servidor OJS."
 
 #: ojs/static/js/modules/ojs/admin.js:114
 msgid "Editor and journal name need to be filled out."
-msgstr "O nome do editor e da revista precisa ser preenchido."
+msgstr "El nombre del editor y la revista deben completarse."
 
 #: ojs/static/js/modules/ojs/admin.js:121
 msgid "Editor needs to be the ID number of the editor user."
-msgstr "O editor precisa ser o número ID do usuário do editor."
+msgstr "El editor debe ser el número ID del usuario del editor."
 
 #: ojs/static/js/modules/ojs/admin.js:133
 msgid "Journal saved."
-msgstr "Revista salva."
+msgstr "Revista guardado."
 
 #: ojs/static/js/modules/ojs/admin.js:135
 msgid "Journal already present on server."
-msgstr "A revista já está presente no servidor"
+msgstr "La revista ya existe en el servidor."
 
 #: ojs/static/js/modules/ojs/admin.js:141
 msgid "Could not save journal. Please check form."
-msgstr "Não foi possível salvar a revista. Por favor, verifique o formulário."
+msgstr "No se pudo guardar la revista. Por favor revise el formulario."
 
 #: ojs/static/js/modules/ojs/editor.js:32
 msgid "Could not obtain submission info."
-msgstr "Não foi possível obter as informações do envio."
+msgstr "No se pudo obtener la información de envío."
 
 #: ojs/static/js/modules/ojs/editor.js:45
 #: ojs/static/js/modules/ojs/editor.js:47
 msgid "Submit to journal"
-msgstr "Enviar para a revista"
+msgstr "Enviar a la revista"
 
 #: ojs/static/js/modules/ojs/editor.js:73
 msgid "Submit"
@@ -62,11 +66,11 @@ msgstr "Enviar"
 
 #: ojs/static/js/modules/ojs/editor.js:84
 msgid "Firstname, lastname and abstract are obligatory fields!"
-msgstr "Nome, sobrenome e resumo são campos obrigatórios!"
+msgstr "¡Nombre, apellido y resumen son campos obligatorios!"
 
 #: ojs/static/js/modules/ojs/editor.js:108
 msgid "Complete missing information and choose journal"
-msgstr "Preencha as informações ausentes e escolha a revista"
+msgstr "Complete la información faltante y elija la  revista"
 
 #: ojs/static/js/modules/ojs/editor.js:124
 #: ojs/static/js/modules/ojs/editor.js:180
@@ -79,36 +83,36 @@ msgstr "Reenviar"
 
 #: ojs/static/js/modules/ojs/editor.js:146
 msgid "Resubmission successful"
-msgstr "Reenvio com êxito"
+msgstr "Reenvío exitoso"
 
 #: ojs/static/js/modules/ojs/editor.js:149
 #: ojs/static/js/modules/ojs/editor.js:229
 msgid "Review could not be submitted."
-msgstr "Não foi possível enviar a revisão."
+msgstr "No se pudo enviar la revisión."
 
 #: ojs/static/js/modules/ojs/editor.js:195
 msgid "Leave your messages for editor and authors"
-msgstr "Deixe suas mensagens para o editor e os autores"
+msgstr "Deja tus mensajes para el editor y los autores"
 
 #: ojs/static/js/modules/ojs/editor.js:214
 msgid "Fill out all fields before submitting!"
-msgstr "Preencha todos os campos antes de enviar!"
+msgstr "¡Complete todos los campos antes de enviar!"
 
 #: ojs/static/js/modules/ojs/editor.js:226
 msgid "Review submitted"
-msgstr "Revisão enviada"
+msgstr "Revisión enviada"
 
 #: ojs/static/js/modules/ojs/submit_doc.js:63
 msgid "Article submitted"
-msgstr "Artigo enviado"
+msgstr "Artículo enviado"
 
 #: ojs/static/js/modules/ojs/submit_doc.js:64
 msgid "Article could not be submitted."
-msgstr "Não foi possível enviar o artigo."
+msgstr "No se pudo enviar el artículo."
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Submission information"
-msgstr "Informações de envio"
+msgstr "Información de envío"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Journal"
@@ -116,73 +120,74 @@ msgstr "Revista"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Abstract"
-msgstr "Resumo"
+msgstr "Resumen"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Corresponding author"
-msgstr "Autor correspondente"
+msgstr "Autor correspondiente"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "First name"
-msgstr "Nome"
+msgstr "Nombre"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Last name"
-msgstr "Sobrenome"
+msgstr "Apellido"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Affiliation"
-msgstr "Afiliação"
+msgstr "Afiliación"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Webpage"
 msgstr "Página web"
 
 #: ojs/static/js/modules/ojs/templates.js:11
-msgid "By pressing the submit button your resubmission will be sent to the journal"
-msgstr "Ao pressionar o botão enviar seu  será enviado para a revista"
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr "Al presionar el botón de enviar su reenvío será enviado a la revista"
 
 #: ojs/static/js/modules/ojs/templates.js:11
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Be aware that this action cannot be undone!"
-msgstr "Esteja ciente de que esta ação não pode ser desfeita!"
+msgstr "¡Tenga en cuenta que esta acción no se puede deshacer!"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Message for editor"
-msgstr "Mensagem para o editor"
+msgstr "Mensaje para el editor"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Message for editor and authors"
-msgstr "Mensagem para o editor e os autores"
+msgstr "Mensaje para el editor y los autores"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Recommendation"
-msgstr "Recomendação"
+msgstr "Recomendación"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Choose One"
-msgstr "Escolha um"
+msgstr "Elige uno"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Accept Submission"
-msgstr "Aceitar envio"
+msgstr "Aceptar envío"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Revisions Required"
-msgstr "Revisões necessárias"
+msgstr "Revisiones requeridas"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Resubmit for Review"
-msgstr "Reenviar para revisão"
+msgstr "Reenviar para revisión"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Resubmit Elsewhere"
-msgstr "Reenviar em outro lugar"
+msgstr "Reenviar a otro lugar"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Decline Submission"
-msgstr "Declinar envio"
+msgstr "Rechazar envío"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
-msgstr "Ver comentários"
+msgstr "Ver comentarios"

@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.db import IntegrityError
 from allauth.account.models import EmailAddress
+from django.views.decorators.http import require_POST, require_GET
 
 from . import models
 from . import token
@@ -66,12 +67,9 @@ def find_user(
 # side. It then logs the user in using the login token on the client side. This
 # way, the api key is not exposed to the client.
 @csrf_exempt
+@require_GET
 def get_login_token(request):
     response = {}
-    if request.method != 'GET':
-        # Method not allowed
-        response['error'] = 'Expected GET'
-        return JsonResponse(response, status=405)
     api_key = request.GET.get('key')
     submission_id = request.GET.get('fidus_id')
     submission = models.Submission.objects.get(id=submission_id)
@@ -102,10 +100,8 @@ def get_login_token(request):
 # Open a revision doc. This is where the reviewers/editor arrive when trying to
 # enter the submission doc on OJS.
 @csrf_exempt
+@require_POST
 def open_revision_doc(request, submission_id, version):
-    if request.method != 'POST':
-        # Method not allowed
-        return HttpResponse('Expected post', status=405)
     login_token = request.POST.get('token')
     user_id = int(login_token.split("-")[0])
     user = User.objects.get(id=user_id)
@@ -142,66 +138,65 @@ def open_revision_doc(request, submission_id, version):
 # be submitted to. This information is used as a starting point to decide what
 # OJS-related UI elements to add on the editor page.
 @login_required
+@require_POST
 def get_doc_info(request):
-    status = 405
     response = {}
-    if request.method == 'POST':
-        document_id = int(request.POST.get('doc_id'))
-        if document_id == 0:
-            response['submission'] = {
-                'status': 'unsubmitted'
-            }
-            template_id = int(request.POST.get('template_id'))
+    document_id = int(request.POST.get('doc_id'))
+    if document_id == 0:
+        response['submission'] = {
+            'status': 'unsubmitted'
+        }
+        template_id = int(request.POST.get('template_id'))
+    else:
+        document = Document.objects.get(id=document_id)
+        if (
+            document.owner != request.user and
+            AccessRight.objects.filter(
+                    document=document,
+                    user=request.user
+            ).count() == 0
+        ):
+            # Access forbidden
+            return HttpResponse('Missing access rights', status=403)
+        template_id = document.template_id
+        # OJS submission related
+        response['submission'] = dict()
+        revision = models.SubmissionRevision.objects.filter(
+            document_id=document_id
+        ).first()
+        if revision:
+            user_role = ''
+            if revision.reviewer_set.filter(
+                user=request.user
+            ).count() > 0:
+                user_role = 'reviewer'
+            if revision.submission.author_set.filter(
+                user=request.user
+            ).count() > 0:
+                user_role = 'author'
+            if revision.submission.journal.editor == request.user:
+                user_role = 'editor'
+            response['submission']['status'] = 'submitted'
+            response['submission']['submission_id'] = \
+                revision.submission.id
+            response['submission']['version'] = \
+                revision.version
+            response['submission']['journal_id'] = \
+                revision.submission.journal_id
+            response['submission']['user_role'] = \
+                user_role
         else:
-            document = Document.objects.get(id=document_id)
-            if (
-                document.owner != request.user and
-                AccessRight.objects.filter(
-                        document=document,
-                        user=request.user
-                ).count() == 0
-            ):
-                # Access forbidden
-                return HttpResponse('Missing access rights', status=403)
-            template_id = document.template_id
-            # OJS submission related
-            response['submission'] = dict()
-            revision = models.SubmissionRevision.objects.filter(
-                document_id=document_id
-            ).first()
-            if revision:
-                user_role = ''
-                if revision.reviewer_set.filter(
-                    user=request.user
-                ).count() > 0:
-                    user_role = 'reviewer'
-                if revision.submission.author_set.filter(
-                    user=request.user
-                ).count() > 0:
-                    user_role = 'author'
-                if revision.submission.journal.editor == request.user:
-                    user_role = 'editor'
-                response['submission']['status'] = 'submitted'
-                response['submission']['submission_id'] = \
-                    revision.submission.id
-                response['submission']['version'] = \
-                    revision.version
-                response['submission']['journal_id'] = \
-                    revision.submission.journal_id
-                response['submission']['user_role'] = \
-                    user_role
-            else:
-                response['submission']['status'] = 'unsubmitted'
-        journals = []
-        for journal in models.Journal.objects.filter(templates=template_id):
-            journals.append({
-                'id': journal.id,
-                'name': journal.name,
-                'editor_id': journal.editor_id,
-                'ojs_jid': journal.ojs_jid
-            })
-        response['journals'] = journals
-        status = 200
+            response['submission']['status'] = 'unsubmitted'
+    journals = []
+    for journal in models.Journal.objects.filter(templates=template_id):
+        journals.append({
+            'id': journal.id,
+            'name': journal.name,
+            'editor_id': journal.editor_id,
+            'ojs_jid': journal.ojs_jid
+        })
+    response['journals'] = journals
+    status = 200
     return JsonResponse(
         response,
         status=status
@@ -210,18 +205,17 @@ def get_doc_info(request):
 
 # Get a user based on an email address. Used for registration of journal.
 @staff_member_required
+@require_POST
 def get_user(request):
-    status = 405
     response = {}
-    if request.method == 'POST':
-        status = 200
-        email = request.POST.get('email')
-        email_address = EmailAddress.objects.filter(
-            email=email
-        ).first()
-        if email_address:
-            response['user_id'] = email_address.user.id
-            response['user_name'] = email_address.user.username
+    status = 200
+    email = request.POST.get('email')
+    email_address = EmailAddress.objects.filter(
+        email=email
+    ).first()
+    if email_address:
+        response['user_id'] = email_address.user.id
+        response['user_name'] = email_address.user.username
     return JsonResponse(
         response,
         status=status
@@ -230,21 +224,20 @@ def get_user(request):
 
 # Save a journal. Used on custom admin page.
 @staff_member_required
+@require_POST
 def save_journal(request):
-    status = 405
     response = {}
-    if request.method == 'POST':
-        try:
-            models.Journal.objects.create(
-                ojs_jid=request.POST.get('ojs_jid'),
-                ojs_key=request.POST.get('ojs_key'),
-                ojs_url=request.POST.get('ojs_url'),
-                name=request.POST.get('name'),
-                editor_id=request.POST.get('editor_id'),
-            )
-            status = 201
-        except IntegrityError:
-            status = 200
+    try:
+        models.Journal.objects.create(
+            ojs_jid=request.POST.get('ojs_jid'),
+            ojs_key=request.POST.get('ojs_key'),
+            ojs_url=request.POST.get('ojs_url'),
+            name=request.POST.get('name'),
+            editor_id=request.POST.get('editor_id'),
+        )
+        status = 201
+    except IntegrityError:
+        status = 200
     return JsonResponse(
         response,
         status=status
@@ -273,14 +266,10 @@ def get_or_create_user(email, username):
 
 # A reviewer has accepted a review. Give comment/review access to the reviewer.
 @csrf_exempt
+@require_POST
 def accept_reviewer(request, submission_id, version):
     response = {}
     status = 200
-    if request.method != 'POST':
-        # Method not allowed
-        response['error'] = 'Expected post'
-        status = 405
-        return JsonResponse(response, status=status)
     api_key = request.POST.get('key')
     revision = models.SubmissionRevision.objects.get(
         submission_id=submission_id,
@@ -327,14 +316,10 @@ def accept_reviewer(request, submission_id, version):
 # Also ensure that there is an Reviewer set up for the account to allow for
 # password-less login from OJS.
 @csrf_exempt
+@require_POST
 def add_reviewer(request, submission_id, version):
     response = {}
     status = 200
-    if request.method != 'POST':
-        # Method not allowed
-        response['error'] = 'Expected post'
-        status = 405
-        return JsonResponse(response, status=status)
     api_key = request.POST.get('key')
     revision = models.SubmissionRevision.objects.get(
         submission_id=submission_id,
@@ -382,14 +367,10 @@ def add_reviewer(request, submission_id, version):
 
 
 @csrf_exempt
+@require_POST
 def remove_reviewer(request, submission_id, version):
     response = {}
     status = 200
-    if request.method != 'POST':
-        # Method not allowed
-        response['error'] = 'Expected post'
-        status = 405
-        return JsonResponse(response, status=status)
     api_key = request.POST.get('key')
     revision = models.SubmissionRevision.objects.get(
         submission_id=submission_id,
@@ -422,15 +403,10 @@ def remove_reviewer(request, submission_id, version):
 
 
 @csrf_exempt
+@require_POST
 def create_copy(request, submission_id):
     response = {}
     status = 200
-    if request.method != 'POST':
-        # Method not allowed
-        response['error'] = 'Expected post'
-        status = 405
-        return JsonResponse(response, status=status)
-
     api_key = request.POST.get('key')
     old_version = request.POST.get('old_version')
     revision = models.SubmissionRevision.objects.get(

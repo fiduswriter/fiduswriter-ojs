@@ -5,24 +5,27 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
+"Project-Id-Version: Fidus Writer OJS backend\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 22:55+0000\n"
-"PO-Revision-Date: 2017-05-08 09:15+0200\n"
-"Last-Translator: Johannes Wilm <johannes@fiduswriter.org>\n"
-"Language-Team: German <johannes@fiduswriter.org>\n"
-"Language: DE \n"
+"POT-Creation-Date: 2019-12-25 10:16+0000\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: POEditor.com\n"
 
-#: ojs/templates/ojs/register_journals.html:3
-#: ojs/templates/ojs/register_journals.html:23
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
+#, python-format
+msgid "Add %(name)s"
+msgstr "Füge %(name)s hinzu"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
+#: ojs/templates/admin/ojs/register_journals.html:4
+#: ojs/templates/admin/ojs/register_journals.html:24
 msgid "Register journals"
 msgstr "Registriere Zeitschriften"
 
-#: ojs/templates/ojs/register_journals.html:25
+#: ojs/templates/admin/ojs/register_journals.html:26
 msgid ""
 "\n"
 "            Register the journals from a particular OJS instance. Insert "

@@ -1,28 +1,32 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Fidus Writer OJS Spanish translation
+# Copyright (C) 2020 Ana Carolina Vera Resquin
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Ana Carolina Vera Resquin <ani.tavr77@gmail.com>, 2019.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Fidus Writer OJS backend\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 22:55+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2020-03-01 23:01+0000\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: ojs/templates/ojs/register_journals.html:3
-#: ojs/templates/ojs/register_journals.html:23
+"X-Generator: POEditor.com\n"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
+#, python-format
+msgid "Add %(name)s"
+msgstr "Añadir %(name)s"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
+#: ojs/templates/admin/ojs/register_journals.html:4
+#: ojs/templates/admin/ojs/register_journals.html:24
 msgid "Register journals"
 msgstr ""
 
-#: ojs/templates/ojs/register_journals.html:25
+#: ojs/templates/admin/ojs/register_journals.html:26
 msgid ""
 "\n"
 "            Register the journals from a particular OJS instance. Insert "
@@ -34,15 +38,24 @@ msgid ""
 "            their editor.\n"
 "            "
 msgstr ""
+"\n"
+"            Registrar las revistas de una instancia particular de OJS. "
+"Insertar primero el\n"
+"            URL y la clave de la instalación de OJS. A continuación, decide "
+"que revista\n"
+"            deseas conectar con Fidus Writer y qué usuario debe estar "
+"registrado como\n"
+"            su editor.\n"
+"                        "
 
-#: ojs/templates/ojs/register_journals.html:33
+#: ojs/templates/admin/ojs/register_journals.html:34
 msgid "URL"
 msgstr ""
 
-#: ojs/templates/ojs/register_journals.html:34
+#: ojs/templates/admin/ojs/register_journals.html:35
 msgid "Key"
 msgstr ""
 
-#: ojs/templates/ojs/register_journals.html:35
+#: ojs/templates/admin/ojs/register_journals.html:36
 msgid "Query available journals"
-msgstr ""
+msgstr "Consultar revistas disponibles"
