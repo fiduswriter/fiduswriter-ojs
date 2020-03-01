@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fidus Writer OJS backend\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-25 10:16+0000\n"
+"POT-Creation-Date: 2020-03-01 23:15+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,15 +48,15 @@ msgstr ""
 "registriert\n"
 "            werden soll."
 
-#: ojs/templates/ojs/register_journals.html:33
+#: ojs/templates/admin/ojs/register_journals.html:34
 msgid "URL"
 msgstr ""
 
-#: ojs/templates/ojs/register_journals.html:34
+#: ojs/templates/admin/ojs/register_journals.html:35
 msgid "Key"
 msgstr ""
 
-#: ojs/templates/ojs/register_journals.html:35
+#: ojs/templates/admin/ojs/register_journals.html:36
 msgid "Query available journals"
 msgstr "Suche verfügbare Zeitschriften"
 
