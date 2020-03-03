@@ -1,21 +1,13 @@
-# German Translation, fiduswriter-OJS plugin
-# Copyright (C) 2017 Johannes Wilm
-# This file is distributed under the same license as the fiduswriter-ojs package.
-# Johannes Wilm <johannes@fiduswriter.org>, 2017.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: Fidus Writer OJS backend\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-01 23:15+0000\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS backend\n"
+"Language: de\n"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
-#, python-format
 msgid "Add %(name)s"
 msgstr "Füge %(name)s hinzu"
 
@@ -26,39 +18,28 @@ msgid "Register journals"
 msgstr "Registriere Zeitschriften"
 
 #: ojs/templates/admin/ojs/register_journals.html:26
-msgid ""
-"\n"
-"            Register the journals from a particular OJS instance. Insert "
-"first the\n"
-"            URL and Key of the OJS installation. Decide then for each "
-"journal you\n"
-"            want to connect with Fidus Writer which user should be "
-"registered as\n"
+msgid "\n"
+"            Register the journals from a particular OJS instance. Insert first the\n"
+"            URL and Key of the OJS installation. Decide then for each journal you\n"
+"            want to connect with Fidus Writer which user should be registered as\n"
 "            their editor.\n"
 "            "
-msgstr ""
-"\n"
-"            Registriere die Zeitschriften einer bestimmten OJS Instanz. "
-"Setze erst die\n"
-"            URL und den Key einer bestimmten OJS Instanz in die "
-"entsprechenden Felder\n"
-"            Wähle dann die Zeitschriften aus die du mit Fidus Writer "
-"verbinden willst\n"
-"            und welcher Fidus Writer User als Editor für das Journal "
-"registriert\n"
+msgstr "\n"
+"            Registriere die Zeitschriften einer bestimmten OJS Instanz. Setze erst die\n"
+"            URL und den Key einer bestimmten OJS Instanz in die entsprechenden Felder\n"
+"            Wähle dann die Zeitschriften aus die du mit Fidus Writer verbinden willst\n"
+"            und welcher Fidus Writer User als Editor für das Journal registriert\n"
 "            werden soll."
 
 #: ojs/templates/admin/ojs/register_journals.html:34
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ojs/templates/admin/ojs/register_journals.html:35
 msgid "Key"
-msgstr ""
+msgstr "Key"
 
 #: ojs/templates/admin/ojs/register_journals.html:36
 msgid "Query available journals"
 msgstr "Suche verfügbare Zeitschriften"
 
-#~ msgid "The all in one solution for collaborative academic writing."
-#~ msgstr "Die Komplettlösung zum Erstellen wissenschaftlicher Texte"

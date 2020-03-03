@@ -1,21 +1,11 @@
-# German Translation, fiduswriter-OJS plugin
-# Copyright (C) 2017 Johannes Wilm
-# This file is distributed under the same license as the fiduswriter-ojs package.
-# Johannes Wilm <johannes@fiduswriter.org>, 2017.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-01 23:16+0000\n"
-"PO-Revision-Date: 2017-05-08 09:15+0200\n"
-"Last-Translator: Johannes Wilm <johannes@fiduswriter.org>\n"
-"Language-Team: German <johannes@fiduswriter.org>\n"
-"Language: DE \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS\n"
+"Language: de\n"
 
 #: ojs/static/js/modules/ojs/admin.js:65
 msgid "Provide a URL for the OJS server and the key to access it."
@@ -23,9 +13,7 @@ msgstr "Gebe eine URL für einen OJS Server und den entsprechenden Key an."
 
 #: ojs/static/js/modules/ojs/admin.js:85
 msgid "Cannot find Fidus Writer user corresponding to email: "
-msgstr ""
-"Fidus Writer-Benutzer, der der E-Mail entspricht, kann nicht gefunden "
-"werden: "
+msgstr "Fidus Writer-Benutzer, der der E-Mail entspricht, kann nicht gefunden werden: "
 
 #: ojs/static/js/modules/ojs/admin.js:90
 msgid "Editor"
@@ -57,35 +45,28 @@ msgstr "Zeitschrift schon auf dem Server vorhanden."
 
 #: ojs/static/js/modules/ojs/admin.js:141
 msgid "Could not save journal. Please check form."
-msgstr ""
-"Konnte die Zeitschrift nicht abspeichern. Bitte untersuche das Formular."
+msgstr "Konnte die Zeitschrift nicht abspeichern. Bitte untersuche das Formular."
 
 #: ojs/static/js/modules/ojs/editor.js:32
 msgid "Could not obtain submission info."
-msgstr ""
+msgstr "Übermittlungsinformationen konnten nicht abgerufen werden."
 
 #: ojs/static/js/modules/ojs/editor.js:45
 #: ojs/static/js/modules/ojs/editor.js:47
-#, fuzzy
-#| msgid "Send to journal"
 msgid "Submit to journal"
-msgstr "Sende an Zeitschrift"
+msgstr "Sende an Journal"
 
 #: ojs/static/js/modules/ojs/editor.js:73
-#, fuzzy
-#| msgid "Resubmit"
 msgid "Submit"
-msgstr "Erneut einschicken"
+msgstr "Einschicken"
 
 #: ojs/static/js/modules/ojs/editor.js:84
 msgid "Firstname, lastname and abstract are obligatory fields!"
-msgstr ""
+msgstr "Vorname, Nachname und Zusammenfassung sind Pflichtfelder!"
 
 #: ojs/static/js/modules/ojs/editor.js:108
-#, fuzzy
-#| msgid "Complete details and choose journal"
 msgid "Complete missing information and choose journal"
-msgstr "Vervollständige die Detalien und wähle Zeitschrift aus"
+msgstr "Vervollständige die Detalien und wähle Journal aus"
 
 #: ojs/static/js/modules/ojs/editor.js:124
 #: ojs/static/js/modules/ojs/editor.js:180
@@ -127,21 +108,19 @@ msgstr "Artikel konnte nicht eingeschickt werden."
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Submission information"
-msgstr ""
+msgstr "Einreichungsinformationen"
 
 #: ojs/static/js/modules/ojs/templates.js:10
-#, fuzzy
-#| msgid "Journal saved."
 msgid "Journal"
-msgstr "Zeitschrift gespeichert."
+msgstr "Journal"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Abstract"
-msgstr ""
+msgstr "Zusammenfassung"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "Corresponding author"
-msgstr ""
+msgstr "Korrespondierender Autor"
 
 #: ojs/static/js/modules/ojs/templates.js:10
 msgid "First name"
@@ -160,11 +139,8 @@ msgid "Webpage"
 msgstr "Webseite"
 
 #: ojs/static/js/modules/ojs/templates.js:11
-msgid ""
-"By pressing the submit button your resubmission will be sent to the journal"
-msgstr ""
-"Durch das Drücken des Einschicken-knopfes wird die Neueinreichung an die "
-"Zeitschrift geschickt"
+msgid "By pressing the submit button your resubmission will be sent to the journal"
+msgstr "Durch das Drücken des Einschicken-knopfes wird die Neueinreichung an die Zeitschrift geschickt"
 
 #: ojs/static/js/modules/ojs/templates.js:11
 #: ojs/static/js/modules/ojs/templates.js:12
@@ -210,9 +186,3 @@ msgstr "Einreichung Ablehnen"
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
 msgstr "Siehe Kommentare"
-
-#~ msgid "Document not yet ready. Please come back later."
-#~ msgstr "Dokument noch nicht klar. Bitte komme später wieder."
-
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"

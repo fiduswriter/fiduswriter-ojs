@@ -1,22 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Fidus Writer OJS backend\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-01 23:15+0000\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS backend\n"
+"Language: fr\n"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
-#, python-format
 msgid "Add %(name)s"
 msgstr "Ajouter %(name)s"
 
@@ -24,38 +15,31 @@ msgstr "Ajouter %(name)s"
 #: ojs/templates/admin/ojs/register_journals.html:4
 #: ojs/templates/admin/ojs/register_journals.html:24
 msgid "Register journals"
-msgstr ""
+msgstr "Enregistrer des revues"
 
 #: ojs/templates/admin/ojs/register_journals.html:26
-msgid ""
-"\n"
-"            Register the journals from a particular OJS instance. Insert "
-"first the\n"
-"            URL and Key of the OJS installation. Decide then for each "
-"journal you\n"
-"            want to connect with Fidus Writer which user should be "
-"registered as\n"
+msgid "\n"
+"            Register the journals from a particular OJS instance. Insert first the\n"
+"            URL and Key of the OJS installation. Decide then for each journal you\n"
+"            want to connect with Fidus Writer which user should be registered as\n"
 "            their editor.\n"
 "            "
-msgstr ""
-"\n"
-"            Enregistrez les journaux d'une instance OJS particulière. "
-"Insérez d'abord le\n"
-"            URL et clé de l'installation OJS. Décidez ensuite pour chaque "
-"journal que vous\n"
-"            souhaitez vous connecter à Fidus Writer quel utilisateur doit "
-"être enregistré en tant que\n"
+msgstr "\n"
+"            Enregistrez les journaux d'une instance OJS particulière. Insérez d'abord le\n"
+"            URL et clé de l'installation OJS. Décidez ensuite pour chaque journal que vous\n"
+"            souhaitez vous connecter à Fidus Writer quel utilisateur doit être enregistré en tant que\n"
 "            leur éditeur.\n"
 "                        "
 
 #: ojs/templates/admin/ojs/register_journals.html:34
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ojs/templates/admin/ojs/register_journals.html:35
 msgid "Key"
-msgstr ""
+msgstr "Clé"
 
 #: ojs/templates/admin/ojs/register_journals.html:36
 msgid "Query available journals"
 msgstr "Recherchez les journaux disponibles"
+
