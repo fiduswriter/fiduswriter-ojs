@@ -81,7 +81,7 @@ export class AdminRegisterJournals {
                                 <input type="text" class="vForeignKeyRawIdAdminField" value="${journal.user_id ? journal.user_id : ''}" id="editor_${journal.id}">
                                 <a href="/admin/auth/user/?_to_field=id" class="related-lookup" id="lookup_editor_${journal.id}" title="Lookup"></a>&nbsp;
                                 <strong>${journal.user_name ? journal.user_name : ''}</strong>
-                                <button data-id="${journal.id}" class="register-submit">${gettext('Register')}</button>
+                                <button data-id="${journal.id}" class="button register-submit">${gettext('Register')}</button>
                             </div>`
                     ).join('')
                     document.getElementById('journal_form').innerHTML = journalHTML

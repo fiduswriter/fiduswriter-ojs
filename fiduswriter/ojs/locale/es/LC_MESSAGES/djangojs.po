@@ -186,4 +186,3 @@ msgstr "Rechazar envío"
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
 msgstr "Ver comentarios"
-

@@ -32,6 +32,8 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         plugin_path = \
             '/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/'
         url = base_url + plugin_path + relative_url
+        print('URL')
+        print(url)
         http = AsyncHTTPClient()
         response = await http.fetch(
             HTTPRequest(
@@ -39,8 +41,8 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 'GET'
             )
         )
-        # The response is asynchronous so that the getting of the data from the OJS
-        # server doesn't block the FW server connection.
+        # The response is asynchronous so that the getting of the data from the
+        # OJS server doesn't block the FW server connection.
         if response.error:
             response.rethrow()
         self.write(response.body)

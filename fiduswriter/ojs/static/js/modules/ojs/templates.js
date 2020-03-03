@@ -8,7 +8,7 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
         <tbody>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('Journal')} *</h4></th>
-                <td class="entry-field">
+                <td>
                     <div class="fw-select-container">
                         <select id="submission-journal" class="fw-button fw-white fw-large">
                         ${

@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('document', '0023_auto_20170122_0525'),
+        ('document', '0001_squashed_20200219'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
