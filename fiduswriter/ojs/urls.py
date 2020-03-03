@@ -4,22 +4,22 @@ from . import views
 
 urlpatterns = [
     url(
-        '^add_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9\.]+)/$',
+        '^add_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9.]+)/$',
         views.add_reviewer,
         name='add_reviewer'
     ),
     url(
-        '^accept_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9\.]+)/$',
+        '^accept_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9.]+)/$',
         views.accept_reviewer,
         name='accept_reviewer'
     ),
     url(
-        '^remove_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9\.]+)/$',
+        '^remove_reviewer/(?P<submission_id>[0-9]+)/(?P<version>[0-9.]+)/$',
         views.remove_reviewer,
         name='remove_reviewer'
     ),
     url(
-        '^revision/(?P<submission_id>[0-9]+)/(?P<version>[0-9\.]+)/$',
+        '^revision/(?P<submission_id>[0-9]+)/(?P<version>[0-9.]+)/$',
         views.open_revision_doc,
         name='open_revision_doc'
     ),

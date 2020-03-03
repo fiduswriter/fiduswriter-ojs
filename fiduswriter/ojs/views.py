@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST, require_GET
 
 from . import models
 from . import token
-from document.models import Document, AccessRight
+from document.models import Document, AccessRight, DocumentTemplate
 from usermedia.models import DocumentImage
 
 
@@ -228,13 +228,16 @@ def get_user(request):
 def save_journal(request):
     response = {}
     try:
-        models.Journal.objects.create(
+        journal = models.Journal.objects.create(
             ojs_jid=request.POST.get('ojs_jid'),
             ojs_key=request.POST.get('ojs_key'),
             ojs_url=request.POST.get('ojs_url'),
             name=request.POST.get('name'),
             editor_id=request.POST.get('editor_id'),
         )
+        dts = DocumentTemplate.objects.filter(user=None)
+        for dt in dts:
+            journal.templates.add(dt)
         status = 201
     except IntegrityError:
         status = 200
