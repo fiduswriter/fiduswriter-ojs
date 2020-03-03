@@ -186,3 +186,4 @@ msgstr "Einreichung Ablehnen"
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
 msgstr "Siehe Kommentare"
+
