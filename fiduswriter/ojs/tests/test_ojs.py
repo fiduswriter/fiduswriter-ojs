@@ -16,9 +16,33 @@ from selenium.common.exceptions import StaleElementReferenceException
 from testing.testcases import LiveTornadoTestCase
 from testing.selenium_helper import SeleniumHelper
 
+from ojs import models
+
 
 # From https://realpython.com/testing-third-party-apis-with-mock-servers/
 class MockServerRequestHandler(BaseHTTPRequestHandler):
+    submission_id = 15
+    author_id = 8979
+    ojs_key = "OJS_KEY"
+    journals = [
+        {
+            'id': 4,
+            'name': 'Journal of Progress',
+            'contact_email': 'contact@progress.com',
+            'contact_name': 'John B. Future',
+            'url_relative_path': 'future/',
+            'description': 'A future journal'
+        },
+        {
+            'id': 5,
+            'name': 'Journal of the Past',
+            'contact_email': 'contact@goodolddays.com',
+            'contact_name': 'Remember Falls',
+            'url_relative_path': 'past/',
+            'description': 'A historic journal'
+        },
+    ]
+
     def do_POST(self):
         if not (
             '/index.php/index/gateway'
@@ -30,7 +54,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         url_parts = self.path.split('/FidusWriterGatewayPlugin/')[1].split('?')
         relative_url = url_parts[0]
         query = url_parts[1]
-        if 'key=OJS_KEY' not in query:
+        if ('key=' + self.ojs_key) not in query:
             self.send_response(requests.codes.not_found)
             self.end_headers()
             return
@@ -58,9 +82,17 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
                 self.wfile.write(json.dumps({
-                    'submission_id': 15,
-                    'user_id': 8979
+                    'submission_id': self.submission_id,
+                    'user_id': self.author_id
                 }).encode(encoding='utf_8'))
+                return
+            elif all(i in form for i in (
+                "submission_id",
+                "version"
+            )):
+                self.send_response(requests.codes.ok)
+                self.end_headers()
+                return
         elif relative_url == 'reviewerSubmit':
             if all(i in form for i in (
                 "submission_id",
@@ -72,9 +104,9 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
             )):
                 self.send_response(requests.codes.ok)
                 self.end_headers()
-        else:
-            self.send_response(requests.codes.not_found)
-            self.end_headers()
+                return
+        self.send_response(requests.codes.not_found)
+        self.end_headers()
         return
 
     def do_GET(self):
@@ -88,7 +120,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
         url_parts = self.path.split('/FidusWriterGatewayPlugin/')[1].split('?')
         relative_url = url_parts[0]
         query = url_parts[1]
-        if 'key=OJS_KEY' not in query:
+        if ('key=' + self.ojs_key) not in query:
             self.send_response(requests.codes.not_found)
             self.end_headers()
             return
@@ -97,24 +129,7 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({
-                'journals': [
-                    {
-                        'id': 4,
-                        'name': 'Journal of Progress',
-                        'contact_email': 'contact@progress.com',
-                        'contact_name': 'John B. Future',
-                        'url_relative_path': 'future/',
-                        'description': 'A future journal'
-                    },
-                    {
-                        'id': 5,
-                        'name': 'Journal of the Past',
-                        'contact_email': 'contact@goodolddays.com',
-                        'contact_name': 'Remember Falls',
-                        'url_relative_path': 'past/',
-                        'description': 'A historic journal'
-                    },
-                ],
+                'journals': self.journals,
             }).encode(encoding='utf_8'))
         else:
             self.send_response(requests.codes.not_found)
@@ -248,7 +263,6 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             By.CSS_SELECTOR,
             'button[data-id="5"]'
         ).click()
-        # Register journals with templates
         # Log in as user to submit an article
         self.login_user(self.user1, self.driver, self.client)
         self.driver.get(urljoin(self.base_url, "/"))
@@ -292,6 +306,8 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         ).send_keys(
             "An abstract title"
         ).perform()
+        time.sleep(1)
+        # We submit the article to journal
         self.driver.find_element_by_xpath(
             '//*[@id="header-navigation"]/div[1]/span'
         ).click()
@@ -320,3 +336,181 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             '//*[normalize-space()="Submit"]'
         ).click()
         self.assertSuccessAlert("Article submitted")
+        # Let OJS create a copy of the document (invisible to the original
+        # author).
+        submission_id = models.Submission.objects.last().id
+        response = self.client.post(
+            '/api/ojs/create_copy/{}/'.format(submission_id),
+            {
+                'key': 'OJS_KEY',
+                'old_version': '1.0.0',
+                'new_version': '3.0.0',
+            }
+        )
+        self.assertEqual(
+            response.status_code,
+            201
+        )
+        # Let OJS assign a new reviewer to the submitted article and give
+        # access
+        response = self.client.post(
+            '/api/ojs/add_reviewer/{}/3.0.0/'.format(submission_id),
+            {
+                'key': 'OJS_KEY',
+                'user_id': 9263,
+                'email': 'reviewer1@reviews.com',
+                'username': 'Reviewer1',
+            }
+        )
+        self.assertEqual(
+            response.status_code,
+            201
+        )
+        # Reviewer accepts review
+        response = self.client.post(
+            '/api/ojs/accept_reviewer/{}/3.0.0/'.format(submission_id),
+            {
+                'key': 'OJS_KEY',
+                'user_id': 9263,
+                'access_rights': 'review',
+            }
+        )
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+        # Get login token and log in
+        response = self.client.get(
+            '/api/ojs/get_login_token/',
+            {
+                'key': 'OJS_KEY',
+                'fidus_id': str(submission_id),
+                'user_id': 9263,
+                'version': '3.0.0',
+                'is_editor': False
+            }
+        )
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+        login_token = json.loads(response.content)['token']
+        self.driver.get(
+            urljoin(
+                self.base_url,
+                "/api/ojs/revision/{}/3.0.0?token={}".format(
+                    submission_id,
+                    login_token
+                )
+            )
+        )
+        WebDriverWait(self.driver, self.wait_time).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'editor-toolbar'))
+        )
+        # Check that we cannot change the title
+        self.driver.find_element(By.CSS_SELECTOR, ".article-title").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
+            "ARGH"
+        )
+        time.sleep(1)
+        self.assertEqual(
+            self.driver.find_element(By.CSS_SELECTOR, ".article-title").text,
+            'Test'
+        )
+        ActionChains(self.driver).double_click(
+            self.driver.find_element(By.CSS_SELECTOR, ".article-title")
+        ).perform()
+        self.driver.find_element(
+            By.CSS_SELECTOR,
+            'button[title="Comment"]'
+        ).click()
+        self.driver.find_element(
+            By.CSS_SELECTOR,
+            '#comment-editor .ProseMirror'
+        ).send_keys('Reviewer comment')
+        self.driver.find_element(
+            By.CSS_SELECTOR,
+            'button.fw-dark'
+        ).click()
+        # Reviewer submits response to journal
+        self.driver.find_element_by_xpath(
+            '//*[@id="header-navigation"]/div[1]/span'
+        ).click()
+        self.driver.find_element_by_xpath(
+            '//*[normalize-space()="Submit to journal"]'
+        ).click()
+        self.driver.find_element_by_id(
+            'message-editor'
+        ).send_keys('A message just for the editor')
+        self.driver.find_element_by_id(
+            'message-editor-author'
+        ).send_keys('A message for the editor and author')
+        self.driver.find_element_by_id(
+            'recommendation'
+        ).click()
+        ActionChains(self.driver).send_keys(
+            Keys.DOWN
+        ).send_keys(
+            Keys.DOWN
+        ).send_keys(
+            Keys.DOWN
+        ).send_keys(
+            Keys.ENTER
+        ).perform()
+        self.driver.find_element_by_css_selector(
+            'button.fw-dark'
+        ).click()
+        self.assertSuccessAlert("Review submitted")
+        # Make another copy to give the original author access to the reviewed
+        # version
+        response = self.client.post(
+            '/api/ojs/create_copy/{}/'.format(submission_id),
+            {
+                'key': 'OJS_KEY',
+                'old_version': '3.0.0',
+                'new_version': '3.0.5',
+            }
+        )
+        self.assertEqual(
+            response.status_code,
+            201
+        )
+        # Log in as author and verify that there are now three documents
+        self.login_user(self.user1, self.driver, self.client)
+        self.driver.get(urljoin(self.base_url, "/"))
+        self.assertEqual(
+            len(
+                self.driver.find_elements_by_css_selector(
+                    'table.fw-data-table tbody tr'
+                )
+            ),
+            3
+        )
+        # Enter the latest version
+        self.driver.find_element_by_css_selector(
+            'a.doc-title'
+        ).click()
+        WebDriverWait(self.driver, self.wait_time).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'editor-toolbar'))
+        )
+        # Check that we can change the body
+        self.driver.find_element(By.CSS_SELECTOR, ".article-body").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".article-body").send_keys(
+            "An updated body"
+        )
+        time.sleep(1)
+        self.assertEqual(
+            self.driver.find_element(By.CSS_SELECTOR, ".article-body").text,
+            'An updated body'
+        )
+        # Send in for another review round
+        self.driver.find_element_by_xpath(
+            '//*[@id="header-navigation"]/div[1]/span'
+        ).click()
+        self.driver.find_element_by_xpath(
+            '//*[normalize-space()="Submit to journal"]'
+        ).click()
+        self.driver.find_element_by_css_selector(
+            'button.fw-dark'
+        ).click()
+        self.assertSuccessAlert("Resubmission successful")

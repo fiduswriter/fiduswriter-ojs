@@ -9,6 +9,7 @@ from django.contrib.auth import login
 from django.db import IntegrityError
 from allauth.account.models import EmailAddress
 from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_http_methods
 
 from . import models
 from . import token
@@ -100,9 +101,11 @@ def get_login_token(request):
 # Open a revision doc. This is where the reviewers/editor arrive when trying to
 # enter the submission doc on OJS.
 @csrf_exempt
-@require_POST
+@require_http_methods(["GET", "POST"])
 def open_revision_doc(request, submission_id, version):
-    login_token = request.POST.get('token')
+    params = request.POST.copy()
+    params.update(request.GET)
+    login_token = params['token']
     user_id = int(login_token.split("-")[0])
     user = User.objects.get(id=user_id)
     if user is None:
@@ -409,7 +412,7 @@ def remove_reviewer(request, submission_id, version):
 @require_POST
 def create_copy(request, submission_id):
     response = {}
-    status = 200
+    status = 201
     api_key = request.POST.get('key')
     old_version = request.POST.get('old_version')
     revision = models.SubmissionRevision.objects.get(
