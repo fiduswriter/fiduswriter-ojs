@@ -42,3 +42,4 @@ msgstr "Llave"
 #: ojs/templates/admin/ojs/register_journals.html:36
 msgid "Query available journals"
 msgstr "Consultar revistas disponibles"
+
