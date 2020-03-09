@@ -398,7 +398,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.get(
             urljoin(
                 self.base_url,
-                "/api/ojs/revision/{}/3.0.0?token={}".format(
+                "/api/ojs/revision/{}/3.0.0/?token={}".format(
                     submission_id,
                     login_token
                 )
