@@ -42,3 +42,4 @@ msgstr "ключ"
 #: ojs/templates/admin/ojs/register_journals.html:36
 msgid "Query available journals"
 msgstr "Поискайте наличните списания"
+
