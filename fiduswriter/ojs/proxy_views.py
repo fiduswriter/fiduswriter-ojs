@@ -32,8 +32,6 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         plugin_path = \
             '/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/'
         url = base_url + plugin_path + relative_url
-        print('URL')
-        print(url)
         http = AsyncHTTPClient()
         response = await http.fetch(
             HTTPRequest(
