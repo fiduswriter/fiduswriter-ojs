@@ -78,7 +78,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         # The document is not part of an existing submission.
         journal_id = self.get_argument('journal_id')
         journal = Journal.objects.get(id=journal_id)
-        template = journal.templates.filter(document__id__exact=document_id).first()
+        template = journal.templates.filter(
+            document__id__exact=document_id
+        ).first()
         if not template:
             # Template is not available for Journal.
             self.set_status(401)
