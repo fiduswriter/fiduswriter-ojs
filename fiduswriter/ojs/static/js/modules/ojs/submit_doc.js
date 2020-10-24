@@ -5,7 +5,6 @@ import {addAlert, post} from "../common"
 export class SendDocSubmission {
     constructor({
         doc,
-        templateId,
         imageDB,
         bibDB,
         journalId,
@@ -24,7 +23,6 @@ export class SendDocSubmission {
         this.affiliation = affiliation
         this.authorUrl = authorUrl
         this.abstract = abstract
-        this.templateId = templateId
     }
 
     init() {
@@ -36,10 +34,10 @@ export class SendDocSubmission {
 
         shrinker.init().then(
             ({shrunkImageDB, shrunkBibDB}) => {
-                const contents = this.removeAuthors(
-                    JSON.parse(JSON.stringify(this.doc.contents))
+                const content = this.removeAuthors(
+                    JSON.parse(JSON.stringify(this.doc.content))
                 )
-                this.uploadRevision(contents, shrunkBibDB, shrunkImageDB)
+                this.uploadRevision(content, shrunkBibDB, shrunkImageDB)
             }
         )
     }
@@ -53,7 +51,7 @@ export class SendDocSubmission {
         return contents
     }
 
-    uploadRevision(contents, bibDB, imageDB) {
+    uploadRevision(content, bibDB, imageDB) {
         post(
             '/proxy/ojs/author_submit',
             {
@@ -62,11 +60,10 @@ export class SendDocSubmission {
                 lastname: this.lastname,
                 affiliation: this.affiliation,
                 author_url: this.authorUrl,
-                template_id: this.templateId,
                 doc_id: this.doc.id,
                 title: this.doc.title,
                 abstract: this.abstract,
-                contents: JSON.stringify(contents),
+                content: JSON.stringify(content),
                 bibliography: JSON.stringify(bibDB),
                 image_ids: Object.keys(imageDB)
             }

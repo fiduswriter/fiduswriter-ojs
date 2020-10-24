@@ -205,6 +205,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         )
 
     def tearDown(self):
+        self.leave_site(self.driver)
         self.admin.delete()
         self.user1.delete()
 
@@ -335,6 +336,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.find_element_by_xpath(
             '//*[normalize-space()="Submit"]'
         ).click()
+        #time.sleep(1000)
         self.assertSuccessAlert("Article submitted")
         # Let OJS create a copy of the document (invisible to the original
         # author).

@@ -1,3 +1,4 @@
+import json
 from os import path
 from tornado.web import RequestHandler
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
@@ -65,7 +66,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 self.revision = revision
                 await self.author_resubmit()
             else:
-                await self.author_first_submit()
+                await self.author_first_submit(document_id)
         elif relative_url == 'reviewer_submit':
             await self.reviewer_submit()
         else:
@@ -73,12 +74,11 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.finish()
         return
 
-    async def author_first_submit(self):
+    async def author_first_submit(self, document_id):
         # The document is not part of an existing submission.
         journal_id = self.get_argument('journal_id')
         journal = Journal.objects.get(id=journal_id)
-        template_id = self.get_argument('template_id')
-        template = journal.templates.filter(id=template_id).first()
+        template = journal.templates.filter(document__id__exact=document_id).first()
         if not template:
             # Template is not available for Journal.
             self.set_status(401)
@@ -95,15 +95,15 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         # Connect a new document to the submission.
         title = self.get_argument('title')
         abstract = self.get_argument('abstract')
-        contents = self.get_argument('contents')
+        content = self.get_argument('content')
         bibliography = self.get_argument('bibliography')
         image_ids = self.get_arguments('image_ids[]')
         document = Document()
         document.owner = journal.editor
-        document.template_id = template_id
+        document.template = template
         document.title = title
-        document.contents = contents
-        document.bibliography = bibliography
+        document.content = json.loads(content)
+        document.bibliography = json.loads(bibliography)
         document.save()
         for id in image_ids:
             image = Image.objects.filter(id=id).first()
@@ -173,15 +173,15 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 return
             response.rethrow()
         # Set the submission ID from the response from the OJS server.
-        json = json_decode(response.body)
-        self.submission.ojs_jid = json['submission_id']
+        body_json = json_decode(response.body)
+        self.submission.ojs_jid = body_json['submission_id']
         self.submission.save()
         # We save the author ID on the OJS site. Currently we are NOT using
         # this information for login purposes.
         Author.objects.create(
             user=self.user,
             submission=self.submission,
-            ojs_jid=json['user_id']
+            ojs_jid=body_json['user_id']
         )
         AccessRight.objects.create(
             document=self.revision.document,

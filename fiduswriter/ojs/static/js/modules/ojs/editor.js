@@ -17,10 +17,6 @@ export class EditorOJS {
         const docData = {
             doc_id: this.editor.docInfo.id
         }
-        if (this.editor.docInfo.templateId) {
-            // Document has not been initialized yet, but we have the template id
-            docData.template_id = this.editor.docInfo.templateId
-        }
         postJson(
             '/api/ojs/get_doc_info/',
             docData
@@ -176,7 +172,6 @@ export class EditorOJS {
     submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract}) {
         const submitter = new SendDocSubmission({
             doc: this.editor.getDoc(),
-            templateId: this.editor.docInfo.template.id,
             imageDB: this.editor.mod.db.imageDB,
             bibDB: this.editor.mod.db.bibDB,
             journalId,
