@@ -16,24 +16,24 @@ export class AdminRegisterJournals {
         document.addEventListener('click', event => {
             const el = {}
             switch (true) {
-                case findTarget(event, '#get_journals', el):
-                    this.getJournals()
-                    break
-                case findTarget(event, '.related-lookup', el): {
-                    // The following is slightly modified from the binding function in the
-                    // admin interface to allow for lookups in fields that are added to the
-                    // DOM at a later stage.
-                    const nEvent = window.django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
-                    window.django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
-                    break
-                }
-                case findTarget(event, '.register-submit', el): {
-                    const journalId = el.target.dataset.id
-                    this.saveJournal(journalId)
-                    break
-                }
-                default:
-                    break
+            case findTarget(event, '#get_journals', el):
+                this.getJournals()
+                break
+            case findTarget(event, '.related-lookup', el): {
+                // The following is slightly modified from the binding function in the
+                // admin interface to allow for lookups in fields that are added to the
+                // DOM at a later stage.
+                const nEvent = window.django.jQuery.Event('django:lookup-related') // using django's builtin jQuery as required
+                window.django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
+                break
+            }
+            case findTarget(event, '.register-submit', el): {
+                const journalId = el.target.dataset.id
+                this.saveJournal(journalId)
+                break
+            }
+            default:
+                break
             }
         })
     }
@@ -73,7 +73,7 @@ export class AdminRegisterJournals {
                 return Promise.all(emailLookups).then(() => {
                     const journalHTML = journals
                         .map(journal =>
-                        noSpaceTmp`
+                            noSpaceTmp`
                             <div id="journal_${journal.id}">
                                 <b>${journal.id}</b>&nbsp;
                                 <input type="text" value="${journal.name}" id="journal_name_${journal.id}">&nbsp;
@@ -83,7 +83,7 @@ export class AdminRegisterJournals {
                                 <strong>${journal.user_name ? journal.user_name : ''}</strong>
                                 <button data-id="${journal.id}" class="button register-submit">${gettext('Register')}</button>
                             </div>`
-                    ).join('')
+                        ).join('')
                     document.getElementById('journal_form').innerHTML = journalHTML
                 })
             }
@@ -101,7 +101,9 @@ export class AdminRegisterJournals {
             '/api/ojs/get_user/',
             {email}
         ).then(
-            ({json}) => {return json}
+            ({json}) => {
+                return json
+            }
         )
     }
 
@@ -129,7 +131,7 @@ export class AdminRegisterJournals {
             }
         ).then(
             response => {
-                if (response.status===201) {
+                if (response.status === 201) {
                     addAlert('info', gettext('Journal saved.'))
                 } else {
                     addAlert('warning', gettext('Journal already present on server.'))

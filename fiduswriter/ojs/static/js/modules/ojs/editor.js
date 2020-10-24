@@ -18,8 +18,8 @@ export class EditorOJS {
             doc_id: this.editor.docInfo.id
         }
         if (this.editor.docInfo.templateId) {
-          // Document has not been initialized yet, but we have the template id
-          docData.template_id = this.editor.docInfo.templateId
+            // Document has not been initialized yet, but we have the template id
+            docData.template_id = this.editor.docInfo.templateId
         }
         postJson(
             '/api/ojs/get_doc_info/',
@@ -45,7 +45,7 @@ export class EditorOJS {
             return Promise.resolve()
         }
 
-        const fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id==='file')
+        const fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id === 'file')
         fileMenu.content.push({
             title: gettext('Submit to journal'),
             type: 'action',
@@ -97,7 +97,7 @@ export class EditorOJS {
                     const affiliation = document.getElementById("submission-affiliation").value.trim()
                     const authorUrl = document.getElementById("submission-author-url").value.trim()
                     const abstract = document.getElementById("submission-abstract").value.trim()
-                    if (firstname==="" || lastname==="" || abstract==="") {
+                    if (firstname === "" || lastname === "" || abstract === "") {
                         addAlert('error', gettext('Firstname, lastname and abstract are obligatory fields!'))
                         return
                     }
@@ -110,8 +110,8 @@ export class EditorOJS {
             }
         ]
 
-        const abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata==='abstract')
-        const authorsNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata==='authors')
+        const abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata === 'abstract')
+        const authorsNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata === 'authors')
         const authorNode = authorsNode && authorsNode.childCount ? authorsNode.firstChild : false
         const dialog = new Dialog({
             height: 460,
