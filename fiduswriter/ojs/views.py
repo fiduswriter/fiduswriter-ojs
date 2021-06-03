@@ -446,12 +446,18 @@ def create_copy(request, submission_id):
     revision.save()
 
     # Add user rights
-    if new_version.split('.')[-1] == '5':
+    new_version_parts = new_version.split('.');
+
+    if new_version_parts[0] == '4' or new_version_parts[-1] == '5':
         # We have an author version and we give the author write access.
-        access_right = 'write'
+        if new_version_parts[0] == '4':
+            access_right = 'write-tracked'
+        else:
+            access_right = 'write'
+
         authors = models.Author.objects.filter(
             submission=revision.submission
-            )
+        )
         for author in authors:
             AccessRight.objects.create(
                 document=document,
