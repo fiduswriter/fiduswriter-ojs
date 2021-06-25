@@ -4,7 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.db import IntegrityError
 from allauth.account.models import EmailAddress
@@ -107,6 +107,7 @@ def open_revision_doc(request, submission_id, version):
     params.update(request.GET)
     login_token = params['token']
     user_id = int(login_token.split("-")[0])
+    User = get_user_model()
     user = User.objects.get(id=user_id)
     if user is None:
         return HttpResponse('Invalid user', status=404)
@@ -258,6 +259,7 @@ def save_journal(request):
 # NOTE: An evil OJS editor can get access to accounts that he does not have
 # email access for this way.
 def get_or_create_user(email, username):
+    User = get_user_model()
     user_with_email = User.objects.filter(email=email).first()
     if user_with_email:
         return user_with_email
@@ -306,7 +308,7 @@ def accept_reviewer(request, submission_id, version):
     if access_right is None:
         access_right = AccessRight(
             document=revision.document,
-            user=reviewer.user
+            holder_obj=reviewer.user
         )
         status = 201
     rights = 'review'
@@ -364,7 +366,7 @@ def add_reviewer(request, submission_id, version):
     if access_right is None:
         access_right = AccessRight(
             document=revision.document,
-            user=reviewer.user
+            holder_obj=reviewer.user
         )
         status = 201
     access_right.rights = 'read-without-comments'
@@ -455,7 +457,7 @@ def create_copy(request, submission_id):
         for author in authors:
             AccessRight.objects.create(
                 document=document,
-                user=author.user,
+                holder_obj=author.user,
                 rights=access_right
             )
 
