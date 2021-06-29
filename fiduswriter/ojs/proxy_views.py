@@ -187,7 +187,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         )
         AccessRight.objects.create(
             document=self.revision.document,
-            user=self.user,
+            holder_obj=self.user,
             rights='read-without-comments'
         )
         self.write(response.body)
@@ -233,7 +233,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = AccessRight.objects.get(
-            user=self.user,
+            holder_obj=self.user,
             document=self.revision.document
         )
         right.rights = 'read'
@@ -291,7 +291,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = AccessRight.objects.get(
-            user=self.user,
+            holder_obj=self.user,
             document=self.reviewer.revision.document
         )
         right.rights = 'read'
