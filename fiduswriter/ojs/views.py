@@ -134,7 +134,7 @@ def open_revision_doc(request, submission_id, version):
     login_user(request, user)
 
     return redirect(
-        '/document/' + str(rev.document.id) + '/', permanent=True
+        f"/document/{rev.document.id}/", permanent=True
     )
 
 
@@ -267,7 +267,7 @@ def get_or_create_user(email, username):
     counter = 0
     usernamebase = username
     while User.objects.filter(username=username).first():
-        username = usernamebase + str(counter)
+        username = f"{usernamebase}{counter}"
         counter += 1
     return User.objects.create_user(username, email)
 
