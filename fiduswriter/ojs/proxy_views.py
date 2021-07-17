@@ -291,7 +291,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = AccessRight.objects.get(
-            holder_obj=self.user,
+            user=self.user,
             document=self.reviewer.revision.document
         )
         right.rights = 'read'
