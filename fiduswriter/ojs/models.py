@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
+from django.conf import settings
 
 from document.models import Document, DocumentTemplate
 
@@ -12,7 +12,7 @@ class Journal(models.Model):
     ojs_jid = models.PositiveIntegerField()  # _jid as _id is foreign key
     templates = models.ManyToManyField(DocumentTemplate)
     name = models.CharField(max_length=512)
-    editor = models.ForeignKey(User, on_delete=CASCADE)
+    editor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
 
     class Meta(object):
         unique_together = (("ojs_url", "ojs_jid"),)
@@ -23,7 +23,7 @@ class Journal(models.Model):
 
 # A submission registered with OJS
 class Submission(models.Model):
-    submitter = models.ForeignKey(User, on_delete=CASCADE)
+    submitter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
     journal = models.ForeignKey(Journal, on_delete=CASCADE)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
@@ -38,7 +38,7 @@ class Submission(models.Model):
 # An author registered with OJS and also registered here
 # Authors are the same for an entire submission.
 class Author(models.Model):
-    user = models.ForeignKey(User, on_delete=CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
     submission = models.ForeignKey(Submission, on_delete=CASCADE)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
@@ -77,7 +77,7 @@ class SubmissionRevision(models.Model):
 # A reviewer registered with OJS and also registered here
 # Reviewers can differ from revision to revision.
 class Reviewer(models.Model):
-    user = models.ForeignKey(User, on_delete=CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
     revision = models.ForeignKey(SubmissionRevision, on_delete=CASCADE)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 

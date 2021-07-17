@@ -488,9 +488,9 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             3
         )
         # Enter the latest version
-        self.driver.find_element_by_css_selector(
-            'a.doc-title'
-        ).click()
+        self.driver.find_elements_by_css_selector(
+            'a.fw-data-table-title'
+        )[2].click()
         WebDriverWait(self.driver, self.wait_time).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'editor-toolbar'))
         )

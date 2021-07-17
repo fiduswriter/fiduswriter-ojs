@@ -32,7 +32,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             return
         plugin_path = \
             '/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/'
-        url = base_url + plugin_path + relative_url
+        url = f"{base_url}{plugin_path}{relative_url}"
         http = AsyncHTTPClient()
         response = await http.fetch(
             HTTPRequest(
@@ -149,7 +149,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         body = urlencode(post_data)
         key = journal.ojs_key
         base_url = journal.ojs_url
-        url = base_url + self.plugin_path + 'authorSubmit'
+        url = f"{base_url}{self.plugin_path}authorSubmit"
         http = AsyncHTTPClient()
         response = await http.fetch(
             HTTPRequest(
@@ -187,7 +187,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         )
         AccessRight.objects.create(
             document=self.revision.document,
-            user=self.user,
+            holder_obj=self.user,
             rights='read-without-comments'
         )
         self.write(response.body)
@@ -207,7 +207,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         body = urlencode(post_data)
         key = journal.ojs_key
         base_url = journal.ojs_url
-        url = base_url + self.plugin_path + 'authorSubmit'
+        url = f"{base_url}{self.plugin_path}authorSubmit"
         http = AsyncHTTPClient()
         response = await http.fetch(
             HTTPRequest(
@@ -265,7 +265,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         body = urlencode(post_data)
         key = self.reviewer.revision.submission.journal.ojs_key
         base_url = self.reviewer.revision.submission.journal.ojs_url
-        url = base_url + self.plugin_path + 'reviewerSubmit'
+        url = f"{base_url}{self.plugin_path}reviewerSubmit"
         http = AsyncHTTPClient()
         response = await http.fetch(
             HTTPRequest(
