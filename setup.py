@@ -31,7 +31,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='fiduswriter-ojs',
-    version='3.9.0',
+    version='3.10.0',
     packages=find_namespace_packages(),
     include_package_data=True,
     exclude_package_data={
