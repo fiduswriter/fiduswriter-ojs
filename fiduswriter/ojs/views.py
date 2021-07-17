@@ -448,7 +448,7 @@ def create_copy(request, submission_id):
     revision.save()
 
     # Add user rights
-    new_version_parts = new_version.split('.');
+    new_version_parts = new_version.split('.')
 
     if new_version_parts[0] == '4' or new_version_parts[-1] == '5':
         # We have an author version and we give the author write access.
