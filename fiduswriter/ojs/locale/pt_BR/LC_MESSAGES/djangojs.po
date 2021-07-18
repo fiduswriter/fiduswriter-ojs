@@ -1,13 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Fidus Writer OJS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-18 18:44+0000\n"
-"Language: pt-br\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS\n"
+"Language: pt-br\n"
 
 #: ojs/static/js/modules/ojs/admin.js:57
 msgid "Provide a URL for the OJS server and the key to access it."
@@ -15,8 +13,7 @@ msgstr "Forneça um URL para o servidor OJS e a chave para acessá-lo."
 
 #: ojs/static/js/modules/ojs/admin.js:77
 msgid "Cannot find Fidus Writer user corresponding to email: "
-msgstr ""
-"Não é possível encontrar o usuário do Fidus Writer correspondente ao email: "
+msgstr "Não é possível encontrar o usuário do Fidus Writer correspondente ao email: "
 
 #: ojs/static/js/modules/ojs/admin.js:82
 msgid "Editor"
@@ -142,8 +139,7 @@ msgid "Webpage"
 msgstr "Página web"
 
 #: ojs/static/js/modules/ojs/templates.js:11
-msgid ""
-"By pressing the submit button your resubmission will be sent to the journal"
+msgid "By pressing the submit button your resubmission will be sent to the journal"
 msgstr "Ao pressionar o botão enviar seu  será enviado para a revista"
 
 #: ojs/static/js/modules/ojs/templates.js:11
@@ -190,3 +186,4 @@ msgstr "Declinar envio"
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
 msgstr "Ver comentários"
+
