@@ -1,13 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Fidus Writer OJS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-18 18:44+0000\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
+"Project-Id-Version: Fidus Writer OJS\n"
+"Language: fr\n"
 
 #: ojs/static/js/modules/ojs/admin.js:57
 msgid "Provide a URL for the OJS server and the key to access it."
@@ -15,8 +13,7 @@ msgstr "Fournissez une URL pour le serveur OJS et la clé pour y accéder."
 
 #: ojs/static/js/modules/ojs/admin.js:77
 msgid "Cannot find Fidus Writer user corresponding to email: "
-msgstr ""
-"Impossible de trouver l'utilisateur Fidus Writer correspondant à l'e-mail: "
+msgstr "Impossible de trouver l'utilisateur Fidus Writer correspondant à l'e-mail: "
 
 #: ojs/static/js/modules/ojs/admin.js:82
 msgid "Editor"
@@ -36,8 +33,7 @@ msgstr "Le nom de l'éditeur et du journal doivent être renseignés."
 
 #: ojs/static/js/modules/ojs/admin.js:113
 msgid "Editor needs to be the ID number of the editor user."
-msgstr ""
-"L'éditeur doit être le numéro d'identification de l'utilisateur de l'éditeur."
+msgstr "L'éditeur doit être le numéro d'identification de l'utilisateur de l'éditeur."
 
 #: ojs/static/js/modules/ojs/admin.js:125
 msgid "Journal saved."
@@ -143,11 +139,8 @@ msgid "Webpage"
 msgstr "Page Web"
 
 #: ojs/static/js/modules/ojs/templates.js:11
-msgid ""
-"By pressing the submit button your resubmission will be sent to the journal"
-msgstr ""
-"En appuyant sur le bouton Soumettre, votre nouvelle soumission sera envoyée "
-"au journal"
+msgid "By pressing the submit button your resubmission will be sent to the journal"
+msgstr "En appuyant sur le bouton Soumettre, votre nouvelle soumission sera envoyée au journal"
 
 #: ojs/static/js/modules/ojs/templates.js:11
 #: ojs/static/js/modules/ojs/templates.js:12
@@ -193,3 +186,4 @@ msgstr "Refuser la soumission"
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "See Comments"
 msgstr "Voir les commentaires"
+
