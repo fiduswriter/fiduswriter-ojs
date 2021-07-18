@@ -28,10 +28,10 @@ class Submission(models.Model):
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
     def __str__(self):
-        return u'{ojs_jid} in {journal} by {submitter}'.format(
+        return u"{ojs_jid} in {journal} by {submitter}".format(
             ojs_jid=self.ojs_jid,
             journal=self.journal.name,
-            submitter=self.submitter.username
+            submitter=self.submitter.username,
         )
 
 
@@ -43,12 +43,11 @@ class Author(models.Model):
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
     class Meta(object):
-        unique_together = (("submission", "ojs_jid"))
+        unique_together = ("submission", "ojs_jid")
 
     def __str__(self):
-        return u'{username} ({ojs_jid})'.format(
-            username=self.user.username,
-            ojs_jid=self.ojs_jid
+        return u"{username} ({ojs_jid})".format(
+            username=self.user.username, ojs_jid=self.ojs_jid
         )
 
 
@@ -62,15 +61,15 @@ class SubmissionRevision(models.Model):
     # Author version of 5th external review (stage ID=3): "3.5.5"
     # The version should increase like a computer version number. Not all
     # numbers are included.
-    version = models.CharField(max_length=8, default='1.0.0')
+    version = models.CharField(max_length=8, default="1.0.0")
     document = models.ForeignKey(Document, on_delete=CASCADE)
 
     def __str__(self):
-        return u'{ojs_jid} (v{version}) in {journal} by {submitter}'.format(
+        return u"{ojs_jid} (v{version}) in {journal} by {submitter}".format(
             ojs_jid=self.submission.ojs_jid,
             version=self.version,
             journal=self.submission.journal.name,
-            submitter=self.submission.submitter.username
+            submitter=self.submission.submitter.username,
         )
 
 
@@ -82,10 +81,9 @@ class Reviewer(models.Model):
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
     class Meta(object):
-        unique_together = (("revision", "ojs_jid"))
+        unique_together = ("revision", "ojs_jid")
 
     def __str__(self):
-        return u'{username} ({ojs_jid})'.format(
-            username=self.user.username,
-            ojs_jid=self.ojs_jid
+        return u"{username} ({ojs_jid})".format(
+            username=self.user.username, ojs_jid=self.ojs_jid
         )

@@ -33,8 +33,7 @@ def check_token(user, journal_key, token):
 
     # Check that the timestamp/uid has not been tampered with
     if not constant_time_compare(
-        calculate_token(user, journal_key, timestamp),
-        token
+        calculate_token(user, journal_key, timestamp), token
     ):
         return False
 

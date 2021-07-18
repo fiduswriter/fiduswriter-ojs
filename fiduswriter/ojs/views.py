@@ -28,36 +28,25 @@ def login_user(request, user):
 # If it's none of the two, check if there is authorization to login as an
 # editor and if this is the case, log the user in as the journal's owner.
 # Under all other circumstances, return False.
-def find_user(
-    journal_id,
-    submission_id,
-    version,
-    user_id,
-    is_editor
-):
+def find_user(journal_id, submission_id, version, user_id, is_editor):
     author = models.Author.objects.filter(
-        submission_id=submission_id,
-        ojs_jid=user_id
+        submission_id=submission_id, ojs_jid=user_id
     ).first()
     if author:
         # It's an author
         return author.user
     revision = models.SubmissionRevision.objects.filter(
-        submission_id=submission_id,
-        version=version
+        submission_id=submission_id, version=version
     ).first()
     if revision:
         revision_id = revision.id
         reviewer = models.Reviewer.objects.filter(
-            revision_id=revision_id,
-            ojs_jid=user_id
+            revision_id=revision_id, ojs_jid=user_id
         ).first()
         if reviewer:
             return reviewer.user
     if is_editor:
-        journal = models.Journal.objects.get(
-            id=journal_id
-        )
+        journal = models.Journal.objects.get(id=journal_id)
         return journal.editor
     else:
         return False
@@ -71,30 +60,24 @@ def find_user(
 @require_GET
 def get_login_token(request):
     response = {}
-    api_key = request.GET.get('key')
-    submission_id = request.GET.get('fidus_id')
+    api_key = request.GET.get("key")
+    submission_id = request.GET.get("fidus_id")
     submission = models.Submission.objects.get(id=submission_id)
     journal_key = submission.journal.ojs_key
     journal_id = submission.journal_id
-    if (journal_key != api_key):
+    if journal_key != api_key:
         # Access forbidden
-        response['error'] = 'Wrong key'
+        response["error"] = "Wrong key"
         return JsonResponse(response, status=403)
 
-    user_id = request.GET.get('user_id')
-    is_editor = request.GET.get('is_editor')
-    version = request.GET.get('version')
-    user = find_user(
-        journal_id,
-        submission_id,
-        version,
-        user_id,
-        is_editor
-    )
+    user_id = request.GET.get("user_id")
+    is_editor = request.GET.get("is_editor")
+    version = request.GET.get("version")
+    user = find_user(journal_id, submission_id, version, user_id, is_editor)
     if not user:
-        response['error'] = 'User not accessible'
+        response["error"] = "User not accessible"
         return JsonResponse(response, status=403)
-    response['token'] = token.create_token(user, journal_key)
+    response["token"] = token.create_token(user, journal_key)
     return JsonResponse(response, status=200)
 
 
@@ -105,37 +88,34 @@ def get_login_token(request):
 def open_revision_doc(request, submission_id, version):
     params = request.POST.copy()
     params.update(request.GET)
-    login_token = params['token']
+    login_token = params["token"]
     user_id = int(login_token.split("-")[0])
     User = get_user_model()
     user = User.objects.get(id=user_id)
     if user is None:
-        return HttpResponse('Invalid user', status=404)
+        return HttpResponse("Invalid user", status=404)
     rev = models.SubmissionRevision.objects.get(
-        submission_id=submission_id,
-        version=version
+        submission_id=submission_id, version=version
     )
     key = rev.submission.journal.ojs_key
 
     if not token.check_token(user, key, login_token):
-        return HttpResponse('No access', status=403)
+        return HttpResponse("No access", status=403)
     if (
-        rev.document.owner != user and
-        AccessRight.objects.filter(
-                document=rev.document,
-                user=user
-        ).count() == 0
+        rev.document.owner != user
+        and AccessRight.objects.filter(
+            document=rev.document, user=user
+        ).count()
+        == 0
     ):
         # The user to be logged in is neither the editor (owner of doc), nor
         # has he access rights to the doc. We prohibit access.
 
         # Access forbidden
-        return HttpResponse('Missing access rights', status=403)
+        return HttpResponse("Missing access rights", status=403)
     login_user(request, user)
 
-    return redirect(
-        f"/document/{rev.document.id}/", permanent=True
-    )
+    return redirect(f"/document/{rev.document.id}/", permanent=True)
 
 
 # Send basic information about the current document and the journals that can
@@ -145,66 +125,62 @@ def open_revision_doc(request, submission_id, version):
 @require_POST
 def get_doc_info(request):
     response = {}
-    document_id = int(request.POST.get('doc_id'))
+    document_id = int(request.POST.get("doc_id"))
     if document_id == 0:
-        response['submission'] = {
-            'status': 'unsubmitted'
-        }
-        template_id = int(request.POST.get('template_id'))
+        response["submission"] = {"status": "unsubmitted"}
+        template_id = int(request.POST.get("template_id"))
     else:
         document = Document.objects.get(id=document_id)
         if (
-            document.owner != request.user and
-            AccessRight.objects.filter(
-                    document=document,
-                    user=request.user
-            ).count() == 0
+            document.owner != request.user
+            and AccessRight.objects.filter(
+                document=document, user=request.user
+            ).count()
+            == 0
         ):
             # Access forbidden
-            return HttpResponse('Missing access rights', status=403)
+            return HttpResponse("Missing access rights", status=403)
         template_id = document.template_id
         # OJS submission related
-        response['submission'] = dict()
+        response["submission"] = dict()
         revision = models.SubmissionRevision.objects.filter(
             document_id=document_id
         ).first()
         if revision:
-            user_role = ''
-            if revision.reviewer_set.filter(
-                user=request.user
-            ).count() > 0:
-                user_role = 'reviewer'
-            if revision.submission.author_set.filter(
-                user=request.user
-            ).count() > 0:
-                user_role = 'author'
+            user_role = ""
+            if revision.reviewer_set.filter(user=request.user).count() > 0:
+                user_role = "reviewer"
+            if (
+                revision.submission.author_set.filter(
+                    user=request.user
+                ).count()
+                > 0
+            ):
+                user_role = "author"
             if revision.submission.journal.editor == request.user:
-                user_role = 'editor'
-            response['submission']['status'] = 'submitted'
-            response['submission']['submission_id'] = \
-                revision.submission.id
-            response['submission']['version'] = \
-                revision.version
-            response['submission']['journal_id'] = \
-                revision.submission.journal_id
-            response['submission']['user_role'] = \
-                user_role
+                user_role = "editor"
+            response["submission"]["status"] = "submitted"
+            response["submission"]["submission_id"] = revision.submission.id
+            response["submission"]["version"] = revision.version
+            response["submission"][
+                "journal_id"
+            ] = revision.submission.journal_id
+            response["submission"]["user_role"] = user_role
         else:
-            response['submission']['status'] = 'unsubmitted'
+            response["submission"]["status"] = "unsubmitted"
     journals = []
     for journal in models.Journal.objects.filter(templates=template_id):
-        journals.append({
-            'id': journal.id,
-            'name': journal.name,
-            'editor_id': journal.editor_id,
-            'ojs_jid': journal.ojs_jid
-        })
-    response['journals'] = journals
+        journals.append(
+            {
+                "id": journal.id,
+                "name": journal.name,
+                "editor_id": journal.editor_id,
+                "ojs_jid": journal.ojs_jid,
+            }
+        )
+    response["journals"] = journals
     status = 200
-    return JsonResponse(
-        response,
-        status=status
-    )
+    return JsonResponse(response, status=status)
 
 
 # Get a user based on an email address. Used for registration of journal.
@@ -213,17 +189,12 @@ def get_doc_info(request):
 def get_user(request):
     response = {}
     status = 200
-    email = request.POST.get('email')
-    email_address = EmailAddress.objects.filter(
-        email=email
-    ).first()
+    email = request.POST.get("email")
+    email_address = EmailAddress.objects.filter(email=email).first()
     if email_address:
-        response['user_id'] = email_address.user.id
-        response['user_name'] = email_address.user.username
-    return JsonResponse(
-        response,
-        status=status
-    )
+        response["user_id"] = email_address.user.id
+        response["user_name"] = email_address.user.username
+    return JsonResponse(response, status=status)
 
 
 # Save a journal. Used on custom admin page.
@@ -233,11 +204,11 @@ def save_journal(request):
     response = {}
     try:
         journal = models.Journal.objects.create(
-            ojs_jid=request.POST.get('ojs_jid'),
-            ojs_key=request.POST.get('ojs_key'),
-            ojs_url=request.POST.get('ojs_url'),
-            name=request.POST.get('name'),
-            editor_id=request.POST.get('editor_id'),
+            ojs_jid=request.POST.get("ojs_jid"),
+            ojs_key=request.POST.get("ojs_key"),
+            ojs_url=request.POST.get("ojs_url"),
+            name=request.POST.get("name"),
+            editor_id=request.POST.get("editor_id"),
         )
         dts = DocumentTemplate.objects.filter(user=None)
         for dt in dts:
@@ -245,10 +216,7 @@ def save_journal(request):
         status = 201
     except IntegrityError:
         status = 200
-    return JsonResponse(
-        response,
-        status=status
-    )
+    return JsonResponse(response, status=status)
 
 
 # Return an existing user or create a new one. The email/username come from
@@ -278,42 +246,38 @@ def get_or_create_user(email, username):
 def accept_reviewer(request, submission_id, version):
     response = {}
     status = 200
-    api_key = request.POST.get('key')
+    api_key = request.POST.get("key")
     revision = models.SubmissionRevision.objects.get(
-        submission_id=submission_id,
-        version=version
+        submission_id=submission_id, version=version
     )
     journal_key = revision.submission.journal.ojs_key
-    if (journal_key != api_key):
+    if journal_key != api_key:
         # Access forbidden
-        response['error'] = 'Wrong key'
+        response["error"] = "Wrong key"
         status = 403
         return JsonResponse(response, status=status)
 
-    ojs_jid = int(request.POST.get('user_id'))
+    ojs_jid = int(request.POST.get("user_id"))
     reviewer = models.Reviewer.objects.filter(
-        revision=revision,
-        ojs_jid=ojs_jid
+        revision=revision, ojs_jid=ojs_jid
     ).first()
     if reviewer is None:
-        response['error'] = 'Unknown reviewer'
+        response["error"] = "Unknown reviewer"
         status = 403
         return JsonResponse(response, status=status)
     # Make sure the connect document has reviewer access rights set for the
     # user.
     access_right = AccessRight.objects.filter(
-        document=revision.document,
-        user=reviewer.user
+        document=revision.document, user=reviewer.user
     ).first()
     if access_right is None:
         access_right = AccessRight(
-            document=revision.document,
-            holder_obj=reviewer.user
+            document=revision.document, holder_obj=reviewer.user
         )
         status = 201
-    rights = 'review'
-    if request.POST.get('access_rights') == 'comment':
-        rights = 'comment'
+    rights = "review"
+    if request.POST.get("access_rights") == "comment":
+        rights = "comment"
     access_right.rights = rights
     access_right.save()
     return JsonResponse(response, status=status)
@@ -328,48 +292,42 @@ def accept_reviewer(request, submission_id, version):
 def add_reviewer(request, submission_id, version):
     response = {}
     status = 200
-    api_key = request.POST.get('key')
+    api_key = request.POST.get("key")
     revision = models.SubmissionRevision.objects.get(
-        submission_id=submission_id,
-        version=version
+        submission_id=submission_id, version=version
     )
     journal_key = revision.submission.journal.ojs_key
-    if (journal_key != api_key):
+    if journal_key != api_key:
         # Access forbidden
-        response['error'] = 'Wrong key'
+        response["error"] = "Wrong key"
         status = 403
         return JsonResponse(response, status=status)
 
-    ojs_jid = int(request.POST.get('user_id'))
+    ojs_jid = int(request.POST.get("user_id"))
 
     # Make sure there is an Reviewer/user registered for the reviewer.
     reviewer = models.Reviewer.objects.filter(
-        revision=revision,
-        ojs_jid=ojs_jid
+        revision=revision, ojs_jid=ojs_jid
     ).first()
     if reviewer is None:
-        email = request.POST.get('email')
-        username = request.POST.get('username')
+        email = request.POST.get("email")
+        username = request.POST.get("username")
         user = get_or_create_user(email, username)
         reviewer = models.Reviewer.objects.create(
-            revision=revision,
-            ojs_jid=ojs_jid,
-            user=user
+            revision=revision, ojs_jid=ojs_jid, user=user
         )
         status = 201
     # Make sure the connect document has reviewer access rights set for the
     # user.
     access_right = AccessRight.objects.filter(
-        document=revision.document,
-        user=reviewer.user
+        document=revision.document, user=reviewer.user
     ).first()
     if access_right is None:
         access_right = AccessRight(
-            document=revision.document,
-            holder_obj=reviewer.user
+            document=revision.document, holder_obj=reviewer.user
         )
         status = 201
-    access_right.rights = 'read-without-comments'
+    access_right.rights = "read-without-comments"
     access_right.save()
     return JsonResponse(response, status=status)
 
@@ -379,32 +337,29 @@ def add_reviewer(request, submission_id, version):
 def remove_reviewer(request, submission_id, version):
     response = {}
     status = 200
-    api_key = request.POST.get('key')
+    api_key = request.POST.get("key")
     revision = models.SubmissionRevision.objects.get(
-        submission_id=submission_id,
-        version=version
+        submission_id=submission_id, version=version
     )
     journal_key = revision.submission.journal.ojs_key
-    if (journal_key != api_key):
+    if journal_key != api_key:
         # Access forbidden
-        response['error'] = 'Wrong key'
+        response["error"] = "Wrong key"
         status = 403
         return JsonResponse(response, status=status)
 
-    ojs_jid = int(request.POST.get('user_id'))
+    ojs_jid = int(request.POST.get("user_id"))
     # Delete reviewer access rights set for the corresponding user,
     # if there are any. Thereafter delete the Reviewer.
     reviewer = models.Reviewer.objects.filter(
-        revision=revision,
-        ojs_jid=ojs_jid
+        revision=revision, ojs_jid=ojs_jid
     ).first()
     if reviewer is None:
-        response['error'] = 'Unknown reviewer'
+        response["error"] = "Unknown reviewer"
         status = 403
         return JsonResponse(response, status=status)
     AccessRight.objects.filter(
-        document=revision.document,
-        user=reviewer.user
+        document=revision.document, user=reviewer.user
     ).delete()
     reviewer.delete()
     return JsonResponse(response, status=status)
@@ -415,16 +370,15 @@ def remove_reviewer(request, submission_id, version):
 def create_copy(request, submission_id):
     response = {}
     status = 201
-    api_key = request.POST.get('key')
-    old_version = request.POST.get('old_version')
+    api_key = request.POST.get("key")
+    old_version = request.POST.get("old_version")
     revision = models.SubmissionRevision.objects.get(
-        submission_id=submission_id,
-        version=old_version
+        submission_id=submission_id, version=old_version
     )
     journal_key = revision.submission.journal.ojs_key
-    if (journal_key != api_key):
+    if journal_key != api_key:
         # Access forbidden
-        response['error'] = 'Wrong key'
+        response["error"] = "Wrong key"
         status = 403
         return JsonResponse(response, status=status)
 
@@ -436,38 +390,29 @@ def create_copy(request, submission_id):
     document.save()
     for doc_image in doc_images:
         DocumentImage.objects.create(
-            document=document,
-            image=doc_image.image,
-            title=doc_image.title
+            document=document, image=doc_image.image, title=doc_image.title
         )
     # Copy revision
-    new_version = request.POST.get('new_version')
+    new_version = request.POST.get("new_version")
     revision.pk = None
     revision.document = document
     revision.version = new_version
     revision.save()
 
     # Add user rights
-    new_version_parts = new_version.split('.')
+    new_version_parts = new_version.split(".")
 
-    if new_version_parts[0] == '4' or new_version_parts[-1] == '5':
+    if new_version_parts[0] == "4" or new_version_parts[-1] == "5":
         # We have an author version and we give the author write access.
-        if new_version_parts[0] == '4':
-            access_right = 'write-tracked'
+        if new_version_parts[0] == "4":
+            access_right = "write-tracked"
         else:
-            access_right = 'write'
+            access_right = "write"
 
-        authors = models.Author.objects.filter(
-            submission=revision.submission
-        )
+        authors = models.Author.objects.filter(submission=revision.submission)
         for author in authors:
             AccessRight.objects.create(
-                document=document,
-                holder_obj=author.user,
-                rights=access_right
+                document=document, holder_obj=author.user, rights=access_right
             )
 
-    return JsonResponse(
-        response,
-        status=status
-    )
+    return JsonResponse(response, status=status)
