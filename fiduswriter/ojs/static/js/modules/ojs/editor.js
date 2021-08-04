@@ -50,6 +50,8 @@ export class EditorOJS {
                 if (this.submission.status === 'submitted') {
                     if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
                         this.reviewerDialog()
+                    } else if ('4.0.0' === this.submission.version) {
+                        this.updateCopyeditDraftDialog();
                     } else {
                         this.resubmissionDialog()
                     }
@@ -125,6 +127,30 @@ export class EditorOJS {
         dialog.open()
     }
 
+    /* Dialog for submitting changes on the copyediting draft revision */
+    updateCopyeditDraftDialog() {
+        const buttons = [
+              {
+                  text: gettext('Send'),
+                  click: () => {
+                      this.submitCopyeditDraftUpdate();
+                      dialog.close()
+                  },
+                  classes: 'fw-dark'
+              },
+              {
+                  type: 'cancel'
+              }
+          ],
+          dialog = new Dialog({
+              width: 300,
+              buttons,
+              title: gettext('Submit changes on the draft'),
+              body: `<p>${gettext('By pressing the submit button your will inform the journal editors about your updates on the draft revision.')}</p>`
+          })
+        dialog.open()
+    }
+
     /* Dialog for submission of all subsequent revisions */
     resubmissionDialog() {
         const buttons = [
@@ -147,6 +173,25 @@ export class EditorOJS {
                 body: resubmissionDialogTemplate()
             })
         dialog.open()
+    }
+
+    submitCopyeditDraftUpdate() {
+        post(
+          '/proxy/ojs/author_submit',
+          {
+              doc_id: this.editor.docInfo.id
+          }
+        ).then(
+          () => {
+              addAlert('success', gettext('Editors are informed.'))
+              window.setTimeout(() => window.location.reload(), 2000)
+          }
+        ).catch(
+          error => {
+              addAlert('error', gettext('Updates could not be submitted.'))
+              throw (error)
+          }
+        )
     }
 
     submitResubmission() {

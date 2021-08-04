@@ -230,14 +230,17 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 ioloop.call_later(delay=3, callback=self.author_resubmit)
                 return
             response.rethrow()
-        # submission was successful, so we replace the user's write access
-        # rights with read rights.
-        right = AccessRight.objects.get(
-            holder_obj=self.user,
-            document=self.revision.document
-        )
-        right.rights = 'read'
-        right.save()
+
+        if 0 == self.revision.version.find('3'):
+            # submission was successful, so we replace the user's write access
+            # rights with read rights.
+            right = AccessRight.objects.get(
+                user=self.user,
+                document=self.revision.document
+            )
+            right.rights = 'read'
+            right.save()
+
         self.write(response.body)
 
     async def reviewer_submit(self):
@@ -291,7 +294,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = AccessRight.objects.get(
-            holder_obj=self.user,
+            user=self.user,
             document=self.reviewer.revision.document
         )
         right.rights = 'read'
