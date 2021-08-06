@@ -38,8 +38,8 @@ class JournalAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         extra_urls = [
             path(
-                'register_journal/',
-                self.admin_site.admin_view(self.register_journal_view)
+                "register_journal/",
+                self.admin_site.admin_view(self.register_journal_view),
             )
         ]
         urls = extra_urls + urls
@@ -47,7 +47,7 @@ class JournalAdmin(admin.ModelAdmin):
 
     def register_journal_view(self, request):
         response = {}
-        return render(request, 'admin/ojs/register_journals.html', response)
+        return render(request, "admin/ojs/register_journals.html", response)
 
 
 admin.site.register(models.Journal, JournalAdmin)

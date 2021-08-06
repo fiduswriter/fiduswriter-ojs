@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('document', '0019_remove_documenttemplate_definition_hash'),
-        ('ojs', '0002_remove_submission_file_object'),
+        ("document", "0019_remove_documenttemplate_definition_hash"),
+        ("ojs", "0002_remove_submission_file_object"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='journal',
-            name='templates',
-            field=models.ManyToManyField(to='document.DocumentTemplate'),
+            model_name="journal",
+            name="templates",
+            field=models.ManyToManyField(to="document.DocumentTemplate"),
         ),
     ]

@@ -15,7 +15,7 @@ def create_token(user, journal_key):
 
 def calculate_token(user, journal_key, timestamp):
     ts_b36 = int_to_base36(timestamp)
-    value = (str(user.pk) + user.password + str(timestamp))
+    value = f"{user.pk}{user.password}{timestamp}"
     hash = salted_hmac(journal_key, value).hexdigest()[::2]
     return "%s-%s-%s" % (user.id, ts_b36, hash)
 
@@ -33,8 +33,7 @@ def check_token(user, journal_key, token):
 
     # Check that the timestamp/uid has not been tampered with
     if not constant_time_compare(
-        calculate_token(user, journal_key, timestamp),
-        token
+        calculate_token(user, journal_key, timestamp), token
     ):
         return False
 

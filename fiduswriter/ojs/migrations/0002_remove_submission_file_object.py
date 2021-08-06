@@ -7,12 +7,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ojs', '0001_initial'),
+        ("ojs", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='submission',
-            name='file_object',
+            model_name="submission",
+            name="file_object",
         ),
     ]
