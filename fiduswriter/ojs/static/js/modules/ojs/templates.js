@@ -2,8 +2,13 @@ import {escapeText} from "../common"
 
 /** Dialog to add a note to a revision before saving. */
 
-export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, affiliation, abstract}) =>
-    `<h3>${gettext('Submission information')}</h3>
+export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, affiliation, abstract}) => {
+  const eFirstName = first_name ? escapeText(first_name) : '';
+  const eLastName = last_name ? escapeText(last_name) : '';
+  const eAffiliation = affiliation ? escapeText(affiliation) : '';
+  const eAbstract = abstract ? escapeText(abstract) : '';
+
+  return `<h3>${gettext('Submission information')}</h3>
     <table class="fw-dialog-table fw-dialog-table-wide">
         <tbody>
             <tr>
@@ -13,11 +18,11 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
                         <select id="submission-journal" class="fw-button fw-white fw-large">
                         ${
     journals.map(journal =>
-        `<option value="${journal.id}">
+      `<option value="${journal.id}">
                                     ${escapeText(journal.name)}
                                 </option>`
     ).join('')
-}
+  }
                         </select>
                         <div class="fw-select-arrow fa fa-caret-down"></div>
                     </div>
@@ -26,7 +31,7 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('Abstract')} *</h4></th>
                 <td class="entry-field">
-                    <textarea id="submission-abstract" rows="8" style="width:678px;resize:none;">${escapeText(abstract)}</textarea>
+                    <textarea id="submission-abstract" rows="8" style="width:678px;resize:none;">${eAbstract}</textarea>
                 </td>
             </tr>
         </tbody>
@@ -37,17 +42,17 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('First name')} *</h4></th>
                 <td class="entry-field">
-                    <input type="text" id="submission-firstname" value="${escapeText(first_name)}">
+                    <input type="text" id="submission-firstname" value="${eFirstName}">
                 </td>
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('Last name')} *</h4></th>
                 <td class="entry-field">
-                    <input type="text" id="submission-lastname" value="${escapeText(last_name)}"></td>
+                    <input type="text" id="submission-lastname" value="${eLastName}"></td>
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('Affiliation')}</h4></th>
-                <td class="entry-field"><input type="text" id="submission-affiliation" value="${escapeText(affiliation)}"></td>
+                <td class="entry-field"><input type="text" id="submission-affiliation" value="${eAffiliation}"></td>
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext('Webpage')}</h4></th>
@@ -55,6 +60,7 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
             </tr>
         </tbody>
     </table>`
+}
 
 
 export const resubmissionDialogTemplate = () =>
