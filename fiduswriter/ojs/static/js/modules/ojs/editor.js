@@ -146,7 +146,7 @@ export class EditorOJS {
               width: 300,
               buttons,
               title: gettext('Submit changes on the draft'),
-              body: `<p>${gettext('By pressing the submit button your will inform the journal editors about your updates on the draft revision.')}</p>`
+              body: resubmissionDialogTemplate()
           })
         dialog.open()
     }

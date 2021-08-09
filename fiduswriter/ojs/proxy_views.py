@@ -229,14 +229,13 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 return
             response.rethrow()
 
-        if 0 == self.revision.version.find('3'):
-            # submission was successful, so we replace the user's write access
-            # rights with read rights.
-            right = AccessRight.objects.get(
-                user=self.user, document=self.revision.document
-            )
-            right.rights = "read"
-            right.save()
+        # submission was successful, so we replace the user's write access
+        # rights with read rights.
+        right = AccessRight.objects.get(
+            user=self.user, document=self.revision.document
+        )
+        right.rights = "read"
+        right.save()
 
         self.write(response.body)
 
