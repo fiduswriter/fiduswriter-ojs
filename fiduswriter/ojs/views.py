@@ -73,6 +73,13 @@ def get_login_token(request):
     user_id = request.GET.get("user_id")
     is_editor = request.GET.get("is_editor")
     version = request.GET.get("version")
+
+    # Validate is_editor
+    try:
+        is_editor = int(is_editor)
+    except ValueError:
+        is_editor = 0
+
     user = find_user(journal_id, submission_id, version, user_id, is_editor)
     if not user:
         response["error"] = "User not accessible"
