@@ -60,22 +60,29 @@ export class EditorOJS {
                 }
             },
             disabled: editor => {
-                if (
-                    READ_ONLY_ROLES.includes(editor.docInfo.access_rights) ||
-                    (
-                        COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights) &&
-                        this.submission.status !== 'submitted'
-                    ) ||
-                    (
-                        this.submission.status === 'submitted' &&
-                        editor.docInfo.access_rights === 'write' &&
-                        this.submission.version.slice(-1) === '0'
-                    )
-                ) {
+                if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                    // Not allowed to submit the doc for review without the rights to write
                     return true
                 } else {
-                    return false
+                    if (this.submission.status === 'submitted') {
+                        const role = this.submission.user_role;
+                        if ('editor' === role) {
+                            // Editors have no need to submit
+                            return true;
+                        } else {
+                            const submissionStep = parseInt(this.submission.version.slice(0, 1))
+                            if (4 > submissionStep && ['subeditor', 'assistant'].includes(role)) {
+                                // Users with editor roles have no need to submit review revisions
+                                return true;
+                            }
+                        }
+                    } else if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                        // Not allowed to submit the doc for review without the rights to write
+                        return true;
+                    }
                 }
+
+                return false
             }
         })
         return Promise.resolve()
@@ -177,7 +184,7 @@ export class EditorOJS {
 
     submitCopyeditDraftUpdate() {
         post(
-          '/proxy/ojs/author_submit',
+          '/proxy/ojs/copyedit_draft_submit',
           {
               doc_id: this.editor.docInfo.id
           }

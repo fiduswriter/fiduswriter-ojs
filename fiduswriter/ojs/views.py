@@ -13,9 +13,9 @@ from django.views.decorators.http import require_http_methods
 
 from . import models
 from . import token
+from . import constants
 from document.models import Document, AccessRight, DocumentTemplate
 from usermedia.models import DocumentImage
-
 
 # logs a user in
 def login_user(request, user):
@@ -35,6 +35,7 @@ def find_user(journal_id, submission_id, version, user_id, is_editor):
     if author:
         # It's an author
         return author.user
+
     revision = models.SubmissionRevision.objects.filter(
         submission_id=submission_id, version=version
     ).first()
@@ -45,11 +46,15 @@ def find_user(journal_id, submission_id, version, user_id, is_editor):
         ).first()
         if reviewer:
             return reviewer.user
+
     if is_editor:
-        journal = models.Journal.objects.get(id=journal_id)
-        return journal.editor
-    else:
-        return False
+        editor = models.Editor.objects.filter(
+            submission_id=submission_id, ojs_jid=user_id
+        ).first()
+        if editor:
+            return editor.user
+
+    return False
 
 
 # To login from OJS, the OJS server first gets a temporary login token from the
@@ -150,28 +155,22 @@ def get_doc_info(request):
         template_id = document.template_id
         # OJS submission related
         response["submission"] = dict()
-        revision = models.SubmissionRevision.objects.filter(
-            document_id=document_id
-        ).first()
+        revision = models.SubmissionRevision.objects.filter(document_id=document_id).first()
         if revision:
             user_role = ""
             if revision.reviewer_set.filter(user=request.user).count() > 0:
                 user_role = "reviewer"
-            if (
-                revision.submission.author_set.filter(
-                    user=request.user
-                ).count()
-                > 0
-            ):
+            elif revision.submission.author_set.filter(user=request.user).count() > 0:
                 user_role = "author"
-            if revision.submission.journal.editor == request.user:
-                user_role = "editor"
+            else:
+                editor = revision.submission.editor_set.filter(user=request.user).first()
+                if editor and editor.role in constants.EDITOR_ROLES:
+                    user_role = constants.EDITOR_ROLES[editor.role]
+
             response["submission"]["status"] = "submitted"
             response["submission"]["submission_id"] = revision.submission.id
             response["submission"]["version"] = revision.version
-            response["submission"][
-                "journal_id"
-            ] = revision.submission.journal_id
+            response["submission"]["journal_id"] = revision.submission.journal_id
             response["submission"]["user_role"] = user_role
         else:
             response["submission"]["status"] = "unsubmitted"
@@ -409,6 +408,23 @@ def create_copy(request, submission_id):
     # Add user rights
     new_version_parts = new_version.split(".")
 
+    # Rights for editors
+    editors = models.Editor.objects.filter(submission=revision.submission)
+    if editors is not None:
+        for editor in editors:
+            rights = "write-tracked"
+            role = int(editor.role)
+
+            if constants.ROLE_ID_ASSISTANT == role:
+                rights = "comment"
+            elif constants.ROLE_ID_SITE_ADMIN == role:
+                rights = "write"
+
+            AccessRight.objects.create(
+                document=document, holder_obj=editor.user, rights=rights
+            )
+
+    # Rights for authors
     if new_version_parts[0] == "4" or new_version_parts[-1] == "5":
         # We have an author version and we give the author write access.
         if new_version_parts[0] == "4":
@@ -421,5 +437,89 @@ def create_copy(request, submission_id):
             AccessRight.objects.create(
                 document=document, holder_obj=author.user, rights=access_right
             )
+
+    return JsonResponse(response, status=status)
+
+# Add a editor connected to a submission
+# password-less login from OJS.
+@csrf_exempt
+@require_POST
+def add_editor(request, submission_id):
+    response = {}
+    status = 200
+    api_key = request.POST.get("key")
+    submission = models.Submission.objects.get(id=submission_id)
+    journal_key = submission.journal.ojs_key
+    if journal_key != api_key:
+        # Access forbidden
+        response["error"] = "Wrong key"
+        return JsonResponse(response, status=403)
+
+    ojs_jid = int(request.POST.get("user_id"))
+
+    # check, if editor account lready exists
+    editor = models.Editor.objects.filter(submission=submission_id, ojs_jid=ojs_jid).first()
+
+    # if no editor exists, create one
+    if editor is None:
+        email = request.POST.get("email")
+        username = request.POST.get("username")
+        role = request.POST.get("role")
+        user = get_or_create_user(email, username)
+        editor = models.Editor.objects.create(
+            user=user, submission=submission, ojs_jid=ojs_jid, role=role
+        )
+        status = 201
+
+    # create access_rights for existing revisions
+    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    if revisions is not None:
+        for revision in revisions:
+            access_right = AccessRight.objects.filter(document=revision.document, user=editor.user).first()
+            if access_right is None:
+                rights = "write-tracked"
+                role = int(editor.role)
+                if constants.ROLE_ID_ASSISTANT == role:
+                    rights = "comment"
+                elif constants.ROLE_ID_SITE_ADMIN == role:
+                    rights = "write"
+
+                access_right = AccessRight(document=revision.document, holder_obj=editor.user)
+                access_right.rights = rights
+                access_right.save()
+                status = 201
+
+    return JsonResponse(response, status=status)
+
+# Remove editor
+# password-less login from OJS.
+@csrf_exempt
+@require_POST
+def remove_editor(request, submission_id):
+    response = {}
+    status = 200
+    api_key = request.POST.get("key")
+    submission = models.Submission.objects.get(id=submission_id)
+    journal_key = submission.journal.ojs_key
+    if journal_key != api_key:
+        # Access forbidden
+        response["error"] = "Wrong key"
+        return JsonResponse(response, status=403)
+
+    ojs_jid = int(request.POST.get("user_id"))
+
+    # check, if editor account lready exists
+    editor = models.Editor.objects.filter(submission=submission_id, ojs_jid=ojs_jid).first()
+    if editor is None:
+        response["error"] = "Unknown reviewer"
+        status = 403
+        return JsonResponse(response, status=status)
+
+    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    if revisions is not None:
+        for revision in revisions:
+            AccessRight.objects.filter(document=revision.document, user=editor.user).delete()
+
+    editor.delete()
 
     return JsonResponse(response, status=status)
