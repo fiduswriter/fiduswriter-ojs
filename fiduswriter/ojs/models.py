@@ -100,6 +100,10 @@ class Editor(models.Model):
         unique_together = ("submission", "ojs_jid")
 
     def __str__(self):
-        return u"{username} ({ojs_jid})".format(
-            username=self.user.username, ojs_jid=self.ojs_jid
+        return u"User: {username} (OJS User-ID: {user_id}), Submission: {ojs_jid} in {journal} by {submitter}".format(
+            username=self.user.username,
+            user_id=self.ojs_jid,
+            ojs_jid=self.submission.ojs_jid,
+            journal=self.submission.journal.name,
+            submitter=self.submission.submitter.username,
         )
