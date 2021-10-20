@@ -409,20 +409,23 @@ def create_copy(request, submission_id):
     new_version_parts = new_version.split(".")
 
     # Rights for editors
-    editors = models.Editor.objects.filter(submission=revision.submission)
-    if editors is not None:
-        for editor in editors:
-            rights = "write-tracked"
-            role = int(editor.role)
+    granted_user_ids = request.POST.get('granted_users').split(',')
+    if granted_user_ids:
+        editors = models.Editor.objects.filter(submission=revision.submission)
+        if editors is not None:
+            for editor in editors:
+                if str(editor.ojs_jid) in granted_user_ids:
+                    rights = "write"
+                    role = int(editor.role)
 
-            if constants.ROLE_ID_ASSISTANT == role:
-                rights = "comment"
-            elif constants.ROLE_ID_SITE_ADMIN == role:
-                rights = "write"
+                    if constants.ROLE_ID_ASSISTANT == role:
+                        rights = "comment"
+                    elif constants.ROLE_ID_SUB_EDITOR == role:
+                        rights = "write-tracked"
 
-            AccessRight.objects.create(
-                document=document, holder_obj=editor.user, rights=rights
-            )
+                    AccessRight.objects.create(
+                        document=document, holder_obj=editor.user, rights=rights
+                    )
 
     # Rights for authors
     if new_version_parts[0] == "4" or new_version_parts[-1] == "5":
@@ -472,22 +475,28 @@ def add_editor(request, submission_id):
         status = 201
 
     # create access_rights for existing revisions
-    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
-    if revisions is not None:
-        for revision in revisions:
-            access_right = AccessRight.objects.filter(document=revision.document, user=editor.user).first()
-            if access_right is None:
-                rights = "write-tracked"
-                role = int(editor.role)
-                if constants.ROLE_ID_ASSISTANT == role:
-                    rights = "comment"
-                elif constants.ROLE_ID_SITE_ADMIN == role:
-                    rights = "write"
+    # get ids of stages access granted
+    granted_stage_ids = request.POST.get('stage_ids').split(",")
+    if granted_stage_ids:
+        revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+        if revisions is not None:
+            for revision in revisions:
+                version = revision.version.split(".")
+                stage_id = version[0]
+                if stage_id in granted_stage_ids:
+                    access_right = AccessRight.objects.filter(document=revision.document, user=editor.user).first()
+                    if access_right is None:
+                        rights = "write"
+                        role = int(editor.role)
+                        if constants.ROLE_ID_ASSISTANT == role:
+                            rights = "comment"
+                        elif constants.ROLE_ID_SUB_EDITOR == role:
+                            rights = "write-tracked"
 
-                access_right = AccessRight(document=revision.document, holder_obj=editor.user)
-                access_right.rights = rights
-                access_right.save()
-                status = 201
+                        access_right = AccessRight(document=revision.document, holder_obj=editor.user)
+                        access_right.rights = rights
+                        access_right.save()
+                        status = 201
 
     return JsonResponse(response, status=status)
 
