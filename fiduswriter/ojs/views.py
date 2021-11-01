@@ -407,6 +407,7 @@ def create_copy(request, submission_id):
 
     # Add user rights
     new_version_parts = new_version.split(".")
+    new_version_stage = int(new_version_parts[0])
 
     # Rights for editors
     granted_user_ids = request.POST.get('granted_users').split(',')
@@ -415,22 +416,16 @@ def create_copy(request, submission_id):
         if editors is not None:
             for editor in editors:
                 if str(editor.ojs_jid) in granted_user_ids:
-                    rights = "write"
                     role = int(editor.role)
-
-                    if constants.ROLE_ID_ASSISTANT == role:
-                        rights = "comment"
-                    elif constants.ROLE_ID_SUB_EDITOR == role:
-                        rights = "write-tracked"
-
+                    rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][new_version_stage]
                     AccessRight.objects.create(
                         document=document, holder_obj=editor.user, rights=rights
                     )
 
     # Rights for authors
-    if new_version_parts[0] == "4" or new_version_parts[-1] == "5":
+    if new_version_stage == 4 or new_version_parts[-1] == "5":
         # We have an author version and we give the author write access.
-        if new_version_parts[0] == "4":
+        if new_version_stage == 4:
             access_right = "write-tracked"
         else:
             access_right = "write"
@@ -486,13 +481,8 @@ def add_editor(request, submission_id):
                 if stage_id in granted_stage_ids:
                     access_right = AccessRight.objects.filter(document=revision.document, user=editor.user).first()
                     if access_right is None:
-                        rights = "write"
                         role = int(editor.role)
-                        if constants.ROLE_ID_ASSISTANT == role:
-                            rights = "comment"
-                        elif constants.ROLE_ID_SUB_EDITOR == role:
-                            rights = "write-tracked"
-
+                        rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][int(stage_id)]
                         access_right = AccessRight(document=revision.document, holder_obj=editor.user)
                         access_right.rights = rights
                         access_right.save()
