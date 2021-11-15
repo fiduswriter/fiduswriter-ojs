@@ -60,19 +60,24 @@ export class EditorOJS {
                 }
             },
             disabled: editor => {
+                if ("sub-author" === this.submission.user_role) {
+                    // No submission allowed to the sub-authors
+                    return true;
+                }
+
                 if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
                     // Not allowed to submit the doc for review without the rights to write
                     return true
                 } else {
                     if (this.submission.status === 'submitted') {
                         const role = this.submission.user_role;
-                        if ('editor' === role) {
-                            // Editors have no need to submit
+                        if ('editor' === role || 'subeditor' === role) {
+                            // Editors and Sub-Editors have no need to submit
                             return true;
-                        } else {
+                        } else if ('assistant' === role) {
                             const submissionStep = parseInt(this.submission.version.slice(0, 1))
-                            if (4 > submissionStep && ['subeditor', 'assistant'].includes(role)) {
-                                // Users with editor roles have no need to submit review revisions
+                            if (4 !== submissionStep) {
+                                // Assistants can only submit on copyediting revisions
                                 return true;
                             }
                         }

@@ -34,4 +34,6 @@ urlpatterns = [
     url("^get_doc_info/$", views.get_doc_info, name="get_doc_info"),
     url("^add_editor/(?P<submission_id>[0-9]+)/$", views.add_editor, name="add_editor"),
     url("^remove_editor/(?P<submission_id>[0-9]+)/$", views.remove_editor, name="remove_editor"),
+    url("^add_author/(?P<submission_id>[0-9]+)/$", views.add_author, name="add_author"),
+    url("^remove_author/(?P<submission_id>[0-9]+)/$", views.remove_author, name="remove_author"),
 ]
