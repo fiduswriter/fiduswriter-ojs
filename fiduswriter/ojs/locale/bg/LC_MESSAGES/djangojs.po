@@ -74,7 +74,7 @@ msgid "Send"
 msgstr "Изпрати"
 
 #: ojs/static/js/modules/ojs/editor.js:130
-msgid "Resubmit"
+msgid "Submit revision"
 msgstr "Повторно изпращане на"
 
 #: ojs/static/js/modules/ojs/editor.js:140

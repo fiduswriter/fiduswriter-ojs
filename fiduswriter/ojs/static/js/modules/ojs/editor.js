@@ -157,7 +157,7 @@ export class EditorOJS {
           dialog = new Dialog({
               width: 300,
               buttons,
-              title: gettext('Submit changes on the draft'),
+              title: gettext('Submit revision'),
               body: resubmissionDialogTemplate()
           })
         dialog.open()
@@ -181,7 +181,7 @@ export class EditorOJS {
             dialog = new Dialog({
                 width: 300,
                 buttons,
-                title: gettext('Resubmit'),
+                title: gettext('Submit revision'),
                 body: resubmissionDialogTemplate()
             })
         dialog.open()

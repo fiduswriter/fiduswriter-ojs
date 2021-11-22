@@ -71,11 +71,11 @@ msgstr "Vervollständige die Detalien und wähle Journal aus"
 #: ojs/static/js/modules/ojs/editor.js:118
 #: ojs/static/js/modules/ojs/editor.js:173
 msgid "Send"
-msgstr "Schicken"
+msgstr "Abschicken"
 
 #: ojs/static/js/modules/ojs/editor.js:130
-msgid "Resubmit"
-msgstr "Erneut einschicken"
+msgid "Submit revision"
+msgstr "Überarbeitung einreichen"
 
 #: ojs/static/js/modules/ojs/editor.js:140
 msgid "Resubmission successful"
@@ -140,12 +140,12 @@ msgstr "Webseite"
 
 #: ojs/static/js/modules/ojs/templates.js:11
 msgid "By pressing the submit button your resubmission will be sent to the journal"
-msgstr "Durch das Drücken des Einschicken-knopfes wird die Neueinreichung an die Zeitschrift geschickt"
+msgstr "Durch das Betätigen der „Abschicken“-Schaltfläche wird der überarbeitete Beitrag gesendet."
 
 #: ojs/static/js/modules/ojs/templates.js:11
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Be aware that this action cannot be undone!"
-msgstr "Vorsicht, denn diese Handlung kann nicht rückgängig gemacht werden!"
+msgstr "Achtung, diese Handlung kann nicht rückgängig gemacht werden!"
 
 #: ojs/static/js/modules/ojs/templates.js:12
 msgid "Message for editor"

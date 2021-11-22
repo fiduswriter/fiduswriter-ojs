@@ -74,7 +74,7 @@ msgid "Send"
 msgstr "Envoyer"
 
 #: ojs/static/js/modules/ojs/editor.js:130
-msgid "Resubmit"
+msgid "Submit revision"
 msgstr "Soumettre à nouveau"
 
 #: ojs/static/js/modules/ojs/editor.js:140
