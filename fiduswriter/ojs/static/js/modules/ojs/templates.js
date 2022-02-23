@@ -3,12 +3,12 @@ import {escapeText} from "../common"
 /** Dialog to add a note to a revision before saving. */
 
 export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, affiliation, abstract}) => {
-  const eFirstName = first_name ? escapeText(first_name) : '';
-  const eLastName = last_name ? escapeText(last_name) : '';
-  const eAffiliation = affiliation ? escapeText(affiliation) : '';
-  const eAbstract = abstract ? escapeText(abstract) : '';
+    const eFirstName = first_name ? escapeText(first_name) : ''
+    const eLastName = last_name ? escapeText(last_name) : ''
+    const eAffiliation = affiliation ? escapeText(affiliation) : ''
+    const eAbstract = abstract ? escapeText(abstract) : ''
 
-  return `<h3>${gettext('Submission information')}</h3>
+    return `<h3>${gettext('Submission information')}</h3>
     <table class="fw-dialog-table fw-dialog-table-wide">
         <tbody>
             <tr>
@@ -18,11 +18,11 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
                         <select id="submission-journal" class="fw-button fw-white fw-large">
                         ${
     journals.map(journal =>
-      `<option value="${journal.id}">
+        `<option value="${journal.id}">
                                     ${escapeText(journal.name)}
                                 </option>`
     ).join('')
-  }
+}
                         </select>
                         <div class="fw-select-arrow fa fa-caret-down"></div>
                     </div>
