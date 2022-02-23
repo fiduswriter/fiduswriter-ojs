@@ -9,21 +9,41 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('ojs', '0003_journal_templates'),
+        ("ojs", "0003_journal_templates"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Editor',
+            name="Editor",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ojs_jid', models.PositiveIntegerField(default=0)),
-                ('role', models.PositiveIntegerField(default=0)),
-                ('submission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ojs.submission')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("ojs_jid", models.PositiveIntegerField(default=0)),
+                ("role", models.PositiveIntegerField(default=0)),
+                (
+                    "submission",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="ojs.submission",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('submission', 'ojs_jid')},
+                "unique_together": {("submission", "ojs_jid")},
             },
         ),
     ]
