@@ -28,7 +28,7 @@ class Submission(models.Model):
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
 
     def __str__(self):
-        return u"{ojs_jid} in {journal} by {submitter}".format(
+        return "{ojs_jid} in {journal} by {submitter}".format(
             ojs_jid=self.ojs_jid,
             journal=self.journal.name,
             submitter=self.submitter.username,
@@ -46,7 +46,7 @@ class Author(models.Model):
         unique_together = ("submission", "ojs_jid")
 
     def __str__(self):
-        return u"{username} ({ojs_jid})".format(
+        return "{username} ({ojs_jid})".format(
             username=self.user.username, ojs_jid=self.ojs_jid
         )
 
@@ -65,7 +65,7 @@ class SubmissionRevision(models.Model):
     document = models.ForeignKey(Document, on_delete=CASCADE)
 
     def __str__(self):
-        return u"{ojs_jid} (v{version}) in {journal} by {submitter}".format(
+        return "{ojs_jid} (v{version}) in {journal} by {submitter}".format(
             ojs_jid=self.submission.ojs_jid,
             version=self.version,
             journal=self.submission.journal.name,
@@ -84,6 +84,6 @@ class Reviewer(models.Model):
         unique_together = ("revision", "ojs_jid")
 
     def __str__(self):
-        return u"{username} ({ojs_jid})".format(
+        return "{username} ({ojs_jid})".format(
             username=self.user.username, ojs_jid=self.ojs_jid
         )
