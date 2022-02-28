@@ -50,6 +50,8 @@ export class EditorOJS {
                 if (this.submission.status === 'submitted') {
                     if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
                         this.reviewerDialog()
+                    } else if ('4.0.0' === this.submission.version) {
+                        this.updateCopyeditDraftDialog()
                     } else {
                         this.resubmissionDialog()
                     }
@@ -58,22 +60,34 @@ export class EditorOJS {
                 }
             },
             disabled: editor => {
-                if (
-                    READ_ONLY_ROLES.includes(editor.docInfo.access_rights) ||
-                    (
-                        COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights) &&
-                        this.submission.status !== 'submitted'
-                    ) ||
-                    (
-                        this.submission.status === 'submitted' &&
-                        editor.docInfo.access_rights === 'write' &&
-                        this.submission.version.slice(-1) === '0'
-                    )
-                ) {
+                if ("sub-author" === this.submission.user_role) {
+                    // No submission allowed to the sub-authors
+                    return true
+                }
+
+                if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                    // Not allowed to submit the doc for review without the rights to write
                     return true
                 } else {
-                    return false
+                    if (this.submission.status === 'submitted') {
+                        const role = this.submission.user_role
+                        if ('editor' === role || 'subeditor' === role) {
+                            // Editors and Sub-Editors have no need to submit
+                            return true
+                        } else if ('assistant' === role) {
+                            const submissionStep = parseInt(this.submission.version.slice(0, 1))
+                            if (4 !== submissionStep) {
+                                // Assistants can only submit on copyediting revisions
+                                return true
+                            }
+                        }
+                    } else if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                        // Not allowed to submit the doc for review without the rights to write
+                        return true
+                    }
                 }
+
+                return false
             }
         })
         return Promise.resolve()
@@ -125,6 +139,30 @@ export class EditorOJS {
         dialog.open()
     }
 
+    /* Dialog for submitting changes on the copyediting draft revision */
+    updateCopyeditDraftDialog() {
+        const buttons = [
+                {
+                    text: gettext('Send'),
+                    click: () => {
+                        this.submitCopyeditDraftUpdate()
+                        dialog.close()
+                    },
+                    classes: 'fw-dark'
+                },
+                {
+                    type: 'cancel'
+                }
+            ],
+            dialog = new Dialog({
+                width: 300,
+                buttons,
+                title: gettext('Submit revision'),
+                body: resubmissionDialogTemplate()
+            })
+        dialog.open()
+    }
+
     /* Dialog for submission of all subsequent revisions */
     resubmissionDialog() {
         const buttons = [
@@ -143,10 +181,29 @@ export class EditorOJS {
             dialog = new Dialog({
                 width: 300,
                 buttons,
-                title: gettext('Resubmit'),
+                title: gettext('Submit revision'),
                 body: resubmissionDialogTemplate()
             })
         dialog.open()
+    }
+
+    submitCopyeditDraftUpdate() {
+        post(
+            '/proxy/ojs/copyedit_draft_submit',
+            {
+                doc_id: this.editor.docInfo.id
+            }
+        ).then(
+            () => {
+                addAlert('success', gettext('Editors are informed.'))
+                window.setTimeout(() => window.location.reload(), 2000)
+            }
+        ).catch(
+            error => {
+                addAlert('error', gettext('Updates could not be submitted.'))
+                throw (error)
+            }
+        )
     }
 
     submitResubmission() {

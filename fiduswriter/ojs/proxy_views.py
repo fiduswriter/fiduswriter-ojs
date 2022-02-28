@@ -66,6 +66,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 await self.author_resubmit()
             else:
                 await self.author_first_submit(document_id)
+        elif relative_url == "copyedit_draft_submit":
+            document_id = self.get_argument("doc_id")
+            revision = SubmissionRevision.objects.filter(
+                document_id=document_id
+            ).first()
+            if revision:
+                self.revision = revision
+                await self.copyedit_draft_submit()
         elif relative_url == "reviewer_submit":
             await self.reviewer_submit()
         else:
@@ -178,16 +186,85 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.submission.save()
         # We save the author ID on the OJS site. Currently we are NOT using
         # this information for login purposes.
-        Author.objects.create(
-            user=self.user,
-            submission=self.submission,
-            ojs_jid=body_json["user_id"],
+        author = Author.objects.filter(
+            submission=self.submission, ojs_jid=body_json["user_id"]
+        ).first()
+        if author is None:
+            Author.objects.create(
+                user=self.user,
+                submission=self.submission,
+                ojs_jid=body_json["user_id"],
+            )
+            AccessRight.objects.create(
+                document=self.revision.document,
+                holder_obj=self.user,
+                rights="read-without-comments",
+            )
+
+        self.write(response.body)
+
+    async def copyedit_draft_submit(self):
+        if self.revision.version != "4.0.0":
+            # version is not 4.0.0 (not copyedit draft)
+            self.set_status(403)
+            self.finish()
+            return
+
+        submission = self.revision.submission
+        journal = submission.journal
+        ojs_uid = False
+        author = submission.author_set.filter(user=self.user).first()
+        if author:
+            # User is the author
+            ojs_uid = author.ojs_jid
+        else:
+            editor = submission.editor_set.filter(user=self.user).first()
+            if editor:
+                # User is the one of the editors
+                ojs_uid = editor.ojs_jid
+
+        if not ojs_uid:
+            # User is neither author nor editor
+            self.set_status(401)
+            self.finish()
+            return
+
+        post_data = {"submission_id": submission.ojs_jid, "ojs_uid": ojs_uid}
+        body = urlencode(post_data)
+        key = journal.ojs_key
+        base_url = journal.ojs_url
+        url = f"{base_url}{self.plugin_path}copyeditDraftSubmit"
+        http = AsyncHTTPClient()
+        response = await http.fetch(
+            HTTPRequest(
+                url_concat(url, {"key": key}),
+                "POST",
+                None,
+                body,
+                request_timeout=40.0,
+            )
         )
-        AccessRight.objects.create(
-            document=self.revision.document,
-            holder_obj=self.user,
-            rights="read-without-comments",
+        # The response is asynchronous so that the getting of the data from the
+        # OJS server doesn't block the FW server connection.
+        if response.error:
+            code = response.code
+            if code >= 500 and code < 600 and self.submission_attempts < 10:
+                self.submission_attempts += 1
+                # We wait 3 seconds and try again. Maybe the OJS server has
+                # issues.
+                ioloop = IOLoop.current()
+                ioloop.call_later(delay=3, callback=self.author_resubmit)
+                return
+            response.rethrow()
+
+        # submission was successful, so we replace the user's write access
+        # rights with read rights.
+        right = AccessRight.objects.get(
+            user=self.user, document=self.revision.document
         )
+        right.rights = "read"
+        right.save()
+
         self.write(response.body)
 
     async def author_resubmit(self):
@@ -228,6 +305,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 ioloop.call_later(delay=3, callback=self.author_resubmit)
                 return
             response.rethrow()
+
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = AccessRight.objects.get(
@@ -235,6 +313,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         )
         right.rights = "read"
         right.save()
+
         self.write(response.body)
 
     async def reviewer_submit(self):

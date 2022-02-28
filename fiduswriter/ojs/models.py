@@ -87,3 +87,26 @@ class Reviewer(models.Model):
         return "{username} ({ojs_jid})".format(
             username=self.user.username, ojs_jid=self.ojs_jid
         )
+
+
+# An editor/partial editor registered with OJS and also registered here
+# Editors are the same for an entire submission.
+class Editor(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
+    submission = models.ForeignKey(Submission, on_delete=CASCADE)
+    ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
+    role = models.PositiveIntegerField(
+        default=0
+    )  # role (SITE_ADMIN/MANAGER/SUB_EDITOR/ASSISTANT) in OJS
+
+    class Meta(object):
+        unique_together = ("submission", "ojs_jid")
+
+    def __str__(self):
+        return "User: {username} (OJS User-ID: {user_id}), Submission: {ojs_jid} in {journal} by {submitter}".format(
+            username=self.user.username,
+            user_id=self.ojs_jid,
+            ojs_jid=self.submission.ojs_jid,
+            journal=self.submission.journal.name,
+            submitter=self.submission.submitter.username,
+        )

@@ -33,6 +33,13 @@ class ReviewerAdmin(admin.ModelAdmin):
 admin.site.register(models.Reviewer, ReviewerAdmin)
 
 
+class EditorAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(models.Editor, EditorAdmin)
+
+
 class JournalAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
