@@ -68,7 +68,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 await self.author_first_submit(document_id)
         elif relative_url == "copyedit_draft_submit":
             document_id = self.get_argument("doc_id")
-            revision = SubmissionRevision.objects.filter(document_id=document_id).first()
+            revision = SubmissionRevision.objects.filter(
+                document_id=document_id
+            ).first()
             if revision:
                 self.revision = revision
                 await self.copyedit_draft_submit()
@@ -184,7 +186,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.submission.save()
         # We save the author ID on the OJS site. Currently we are NOT using
         # this information for login purposes.
-        author = Author.objects.filter(submission=self.submission, ojs_jid=body_json["user_id"]).first()
+        author = Author.objects.filter(
+            submission=self.submission, ojs_jid=body_json["user_id"]
+        ).first()
         if author is None:
             Author.objects.create(
                 user=self.user,
@@ -200,7 +204,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.write(response.body)
 
     async def copyedit_draft_submit(self):
-        if self.revision.version != '4.0.0':
+        if self.revision.version != "4.0.0":
             # version is not 4.0.0 (not copyedit draft)
             self.set_status(403)
             self.finish()
@@ -225,10 +229,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             self.finish()
             return
 
-        post_data = {
-            "submission_id": submission.ojs_jid,
-            "ojs_uid": ojs_uid
-        }
+        post_data = {"submission_id": submission.ojs_jid, "ojs_uid": ojs_uid}
         body = urlencode(post_data)
         key = journal.ojs_key
         base_url = journal.ojs_url
@@ -258,7 +259,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
 
         # submission was successful, so we replace the user's write access
         # rights with read rights.
-        right = AccessRight.objects.get(user=self.user, document=self.revision.document)
+        right = AccessRight.objects.get(
+            user=self.user, document=self.revision.document
+        )
         right.rights = "read"
         right.save()
 

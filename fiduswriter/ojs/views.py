@@ -17,6 +17,7 @@ from . import constants
 from document.models import Document, AccessRight, DocumentTemplate
 from usermedia.models import DocumentImage
 
+
 # logs a user in
 def login_user(request, user):
     # TODO: Is next line really needed?
@@ -155,23 +156,38 @@ def get_doc_info(request):
         template_id = document.template_id
         # OJS submission related
         response["submission"] = dict()
-        revision = models.SubmissionRevision.objects.filter(document_id=document_id).first()
+        revision = models.SubmissionRevision.objects.filter(
+            document_id=document_id
+        ).first()
         if revision:
             user_role = ""
             if revision.reviewer_set.filter(user=request.user).count() > 0:
                 user_role = "reviewer"
-            elif revision.submission.author_set.filter(user=request.user).count() > 0:
+            elif (
+                revision.submission.author_set.filter(
+                    user=request.user
+                ).count()
+                > 0
+            ):
                 # User with author role but not submission submitter as sub-author
-                user_role = "author" if revision.submission.submitter.id == request.user.id else "sub-author"
+                user_role = (
+                    "author"
+                    if revision.submission.submitter.id == request.user.id
+                    else "sub-author"
+                )
             else:
-                editor = revision.submission.editor_set.filter(user=request.user).first()
+                editor = revision.submission.editor_set.filter(
+                    user=request.user
+                ).first()
                 if editor and editor.role in constants.EDITOR_ROLES:
                     user_role = constants.EDITOR_ROLES[editor.role]
 
             response["submission"]["status"] = "submitted"
             response["submission"]["submission_id"] = revision.submission.id
             response["submission"]["version"] = revision.version
-            response["submission"]["journal_id"] = revision.submission.journal_id
+            response["submission"][
+                "journal_id"
+            ] = revision.submission.journal_id
             response["submission"]["user_role"] = user_role
         else:
             response["submission"]["status"] = "unsubmitted"
@@ -411,16 +427,20 @@ def create_copy(request, submission_id):
     new_version_stage = int(new_version_parts[0])
 
     # Rights for editors
-    granted_user_ids = request.POST.get('granted_users').split(',')
+    granted_user_ids = request.POST.get("granted_users").split(",")
     if granted_user_ids:
         editors = models.Editor.objects.filter(submission=revision.submission)
         if editors is not None:
             for editor in editors:
                 if str(editor.ojs_jid) in granted_user_ids:
                     role = int(editor.role)
-                    rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][new_version_stage]
+                    rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][
+                        new_version_stage
+                    ]
                     AccessRight.objects.create(
-                        document=document, holder_obj=editor.user, rights=rights
+                        document=document,
+                        holder_obj=editor.user,
+                        rights=rights,
                     )
 
     # Rights for authors
@@ -438,6 +458,7 @@ def create_copy(request, submission_id):
             )
 
     return JsonResponse(response, status=status)
+
 
 # Add a editor connected to a submission
 # password-less login from OJS.
@@ -457,7 +478,9 @@ def add_editor(request, submission_id):
     ojs_jid = int(request.POST.get("user_id"))
 
     # check, if editor account already exists
-    editor = models.Editor.objects.filter(submission=submission_id, ojs_jid=ojs_jid).first()
+    editor = models.Editor.objects.filter(
+        submission=submission_id, ojs_jid=ojs_jid
+    ).first()
 
     # if no editor exists, create one
     if editor is None:
@@ -472,24 +495,33 @@ def add_editor(request, submission_id):
 
     # create access_rights for existing revisions
     # get ids of stages access granted
-    granted_stage_ids = request.POST.get('stage_ids').split(",")
+    granted_stage_ids = request.POST.get("stage_ids").split(",")
     if granted_stage_ids:
-        revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+        revisions = models.SubmissionRevision.objects.filter(
+            submission_id=submission_id
+        )
         if revisions is not None:
             for revision in revisions:
                 version = revision.version.split(".")
                 stage_id = version[0]
                 if stage_id in granted_stage_ids:
-                    access_right = AccessRight.objects.filter(document=revision.document, user=editor.user).first()
+                    access_right = AccessRight.objects.filter(
+                        document=revision.document, user=editor.user
+                    ).first()
                     if access_right is None:
                         role = int(editor.role)
-                        rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][int(stage_id)]
-                        access_right = AccessRight(document=revision.document, holder_obj=editor.user)
+                        rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][
+                            int(stage_id)
+                        ]
+                        access_right = AccessRight(
+                            document=revision.document, holder_obj=editor.user
+                        )
                         access_right.rights = rights
                         access_right.save()
                         status = 201
 
     return JsonResponse(response, status=status)
+
 
 # Remove editor
 # password-less login from OJS.
@@ -509,20 +541,27 @@ def remove_editor(request, submission_id):
     ojs_jid = int(request.POST.get("user_id"))
 
     # check, if editor account already exists
-    editor = models.Editor.objects.filter(submission=submission_id, ojs_jid=ojs_jid).first()
+    editor = models.Editor.objects.filter(
+        submission=submission_id, ojs_jid=ojs_jid
+    ).first()
     if editor is None:
         response["error"] = "Unknown reviewer"
         status = 403
         return JsonResponse(response, status=status)
 
-    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    revisions = models.SubmissionRevision.objects.filter(
+        submission_id=submission_id
+    )
     if revisions is not None:
         for revision in revisions:
-            AccessRight.objects.filter(document=revision.document, user=editor.user).delete()
+            AccessRight.objects.filter(
+                document=revision.document, user=editor.user
+            ).delete()
 
     editor.delete()
 
     return JsonResponse(response, status=status)
+
 
 # Add a author connected to a submission
 # password-less login from OJS.
@@ -542,7 +581,9 @@ def add_author(request, submission_id):
     ojs_jid = int(request.POST.get("user_id"))
 
     # check, if author account already exists
-    author = models.Author.objects.filter(submission=submission_id, ojs_jid=ojs_jid).first()
+    author = models.Author.objects.filter(
+        submission=submission_id, ojs_jid=ojs_jid
+    ).first()
 
     # if no author exists, create one
     if author is None:
@@ -556,20 +597,31 @@ def add_author(request, submission_id):
 
     # create access_rights for existing revisions
     # get ids of stages access granted
-    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    revisions = models.SubmissionRevision.objects.filter(
+        submission_id=submission_id
+    )
     if revisions is not None:
         for revision in revisions:
             version = revision.version.split(".")
             stage_id = version[0]
             if stage_id in ["1", "4"]:
-                access_right = AccessRight.objects.filter(document=revision.document, user=author.user).first()
+                access_right = AccessRight.objects.filter(
+                    document=revision.document, user=author.user
+                ).first()
                 if access_right is None:
-                    access_right = AccessRight(document=revision.document, holder_obj=author.user)
-                    access_right.rights = "read-without-comments" if stage_id == "1" else "write-tracked"
+                    access_right = AccessRight(
+                        document=revision.document, holder_obj=author.user
+                    )
+                    access_right.rights = (
+                        "read-without-comments"
+                        if stage_id == "1"
+                        else "write-tracked"
+                    )
                     access_right.save()
                     status = 201
 
     return JsonResponse(response, status=status)
+
 
 # Remove author
 # password-less login from OJS.
@@ -589,16 +641,22 @@ def remove_author(request, submission_id):
     ojs_jid = int(request.POST.get("user_id"))
 
     # check, if author account already exists
-    author = models.Author.objects.filter(submission=submission_id, ojs_jid=ojs_jid).first()
+    author = models.Author.objects.filter(
+        submission=submission_id, ojs_jid=ojs_jid
+    ).first()
     if author is None:
         response["error"] = "Unknown reviewer"
         status = 403
         return JsonResponse(response, status=status)
 
-    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    revisions = models.SubmissionRevision.objects.filter(
+        submission_id=submission_id
+    )
     if revisions is not None:
         for revision in revisions:
-            AccessRight.objects.filter(document=revision.document, user=author.user).delete()
+            AccessRight.objects.filter(
+                document=revision.document, user=author.user
+            ).delete()
 
     author.delete()
 

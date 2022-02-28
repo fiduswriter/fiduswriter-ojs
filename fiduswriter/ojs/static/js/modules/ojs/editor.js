@@ -51,7 +51,7 @@ export class EditorOJS {
                     if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
                         this.reviewerDialog()
                     } else if ('4.0.0' === this.submission.version) {
-                        this.updateCopyeditDraftDialog();
+                        this.updateCopyeditDraftDialog()
                     } else {
                         this.resubmissionDialog()
                     }
@@ -62,7 +62,7 @@ export class EditorOJS {
             disabled: editor => {
                 if ("sub-author" === this.submission.user_role) {
                     // No submission allowed to the sub-authors
-                    return true;
+                    return true
                 }
 
                 if (READ_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
@@ -70,20 +70,20 @@ export class EditorOJS {
                     return true
                 } else {
                     if (this.submission.status === 'submitted') {
-                        const role = this.submission.user_role;
+                        const role = this.submission.user_role
                         if ('editor' === role || 'subeditor' === role) {
                             // Editors and Sub-Editors have no need to submit
-                            return true;
+                            return true
                         } else if ('assistant' === role) {
                             const submissionStep = parseInt(this.submission.version.slice(0, 1))
                             if (4 !== submissionStep) {
                                 // Assistants can only submit on copyediting revisions
-                                return true;
+                                return true
                             }
                         }
                     } else if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
                         // Not allowed to submit the doc for review without the rights to write
-                        return true;
+                        return true
                     }
                 }
 
@@ -142,24 +142,24 @@ export class EditorOJS {
     /* Dialog for submitting changes on the copyediting draft revision */
     updateCopyeditDraftDialog() {
         const buttons = [
-              {
-                  text: gettext('Send'),
-                  click: () => {
-                      this.submitCopyeditDraftUpdate();
-                      dialog.close()
-                  },
-                  classes: 'fw-dark'
-              },
-              {
-                  type: 'cancel'
-              }
-          ],
-          dialog = new Dialog({
-              width: 300,
-              buttons,
-              title: gettext('Submit revision'),
-              body: resubmissionDialogTemplate()
-          })
+                {
+                    text: gettext('Send'),
+                    click: () => {
+                        this.submitCopyeditDraftUpdate()
+                        dialog.close()
+                    },
+                    classes: 'fw-dark'
+                },
+                {
+                    type: 'cancel'
+                }
+            ],
+            dialog = new Dialog({
+                width: 300,
+                buttons,
+                title: gettext('Submit revision'),
+                body: resubmissionDialogTemplate()
+            })
         dialog.open()
     }
 
@@ -189,20 +189,20 @@ export class EditorOJS {
 
     submitCopyeditDraftUpdate() {
         post(
-          '/proxy/ojs/copyedit_draft_submit',
-          {
-              doc_id: this.editor.docInfo.id
-          }
+            '/proxy/ojs/copyedit_draft_submit',
+            {
+                doc_id: this.editor.docInfo.id
+            }
         ).then(
-          () => {
-              addAlert('success', gettext('Editors are informed.'))
-              window.setTimeout(() => window.location.reload(), 2000)
-          }
+            () => {
+                addAlert('success', gettext('Editors are informed.'))
+                window.setTimeout(() => window.location.reload(), 2000)
+            }
         ).catch(
-          error => {
-              addAlert('error', gettext('Updates could not be submitted.'))
-              throw (error)
-          }
+            error => {
+                addAlert('error', gettext('Updates could not be submitted.'))
+                throw (error)
+            }
         )
     }
 

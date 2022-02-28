@@ -37,7 +37,7 @@ msgstr "El editor debe ser el número ID del usuario del editor."
 
 #: ojs/static/js/modules/ojs/admin.js:125
 msgid "Journal saved."
-msgstr "Revista guardado."
+msgstr "Revista guardada."
 
 #: ojs/static/js/modules/ojs/admin.js:127
 msgid "Journal already present on server."
@@ -66,7 +66,7 @@ msgstr "¡Nombre, apellido y resumen son campos obligatorios!"
 
 #: ojs/static/js/modules/ojs/editor.js:102
 msgid "Complete missing information and choose journal"
-msgstr "Complete la información faltante y elija la  revista"
+msgstr "Complete la información faltante y elija la revista"
 
 #: ojs/static/js/modules/ojs/editor.js:118
 #: ojs/static/js/modules/ojs/editor.js:173
