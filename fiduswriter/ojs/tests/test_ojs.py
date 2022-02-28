@@ -426,7 +426,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
                 "key": "OJS_KEY",
                 "old_version": "3.0.0",
                 "new_version": "3.0.5",
-                "granted_users": "1"
+                "granted_users": "1",
             },
         )
         self.assertEqual(response.status_code, 201)
