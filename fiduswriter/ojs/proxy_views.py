@@ -1,5 +1,4 @@
 import json
-from os import path
 from tornado.web import RequestHandler
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.httputil import url_concat
@@ -7,11 +6,9 @@ from tornado.escape import json_decode
 from tornado.ioloop import IOLoop
 from base.django_handler_mixin import DjangoHandlerMixin
 from urllib.parse import urlencode
-from django.conf import settings
-from django.core.files import File
 
-from document.models import Document, AccessRight
-from usermedia.models import Image, DocumentImage
+from document.models import AccessRight
+from usermedia.models import Image
 
 from .models import Journal, Submission, SubmissionRevision, Author, Reviewer
 from . import helpers
@@ -123,7 +120,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             images,
             {},
             self.submission.id,
-            version
+            version,
         )
 
         self.revision.document = document

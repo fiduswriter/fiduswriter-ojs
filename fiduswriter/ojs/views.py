@@ -16,7 +16,6 @@ from . import token
 from . import constants
 from . import helpers
 from document.models import Document, AccessRight, DocumentTemplate
-from usermedia.models import DocumentImage
 
 
 # logs a user in
@@ -412,7 +411,7 @@ def create_copy(request, submission_id):
         revision.document,
         revision.submission.journal.editor,
         submission_id,
-        new_version
+        new_version,
     )
 
     # Copy revision
