@@ -14,6 +14,7 @@ from django.views.decorators.http import require_http_methods
 from . import models
 from . import token
 from . import constants
+from . import helpers
 from document.models import Document, AccessRight, DocumentTemplate
 from usermedia.models import DocumentImage
 
@@ -395,6 +396,7 @@ def create_copy(request, submission_id):
     status = 201
     api_key = request.POST.get("key")
     old_version = request.POST.get("old_version")
+    new_version = request.POST.get("new_version")
     revision = models.SubmissionRevision.objects.get(
         submission_id=submission_id, version=old_version
     )
@@ -406,17 +408,14 @@ def create_copy(request, submission_id):
         return JsonResponse(response, status=status)
 
     # Copy the document
-    document = revision.document
-    # This saves the document with a new pk
-    doc_images = document.documentimage_set.all()
-    document.pk = None
-    document.save()
-    for doc_image in doc_images:
-        DocumentImage.objects.create(
-            document=document, image=doc_image.image, title=doc_image.title
-        )
+    document = helpers.copy_doc(
+        revision.document,
+        revision.submission.journal.editor,
+        submission_id,
+        new_version
+    )
+
     # Copy revision
-    new_version = request.POST.get("new_version")
     revision.pk = None
     revision.document = document
     revision.version = new_version

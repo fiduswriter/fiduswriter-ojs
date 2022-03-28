@@ -14,6 +14,7 @@ from document.models import Document, AccessRight
 from usermedia.models import Image, DocumentImage
 
 from .models import Journal, Submission, SubmissionRevision, Author, Reviewer
+from . import helpers
 
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
@@ -107,29 +108,24 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         content = self.get_argument("content")
         bibliography = self.get_argument("bibliography")
         image_ids = self.get_arguments("image_ids[]")
-        document = Document()
-        document.owner = journal.editor
-        document.template = template
-        document.title = title
-        document.content = json.loads(content)
-        document.bibliography = json.loads(bibliography)
-        document.save()
+
+        images = []
         for id in image_ids:
             image = Image.objects.filter(id=id).first()
-            if image is None:
-                image = Image()
-                image.pk = id
-                image.uploader = journal.editor
-                f = open(
-                    path.join(
-                        settings.PROJECT_PATH, "base/static/img/error.png"
-                    )
-                )
-                image.image.save("error.png", File(f))
-                image.save()
-            DocumentImage.objects.create(
-                document=document, image=image, title=""
-            )
+            images.append(image)
+
+        document = helpers.create_revision(
+            journal.editor,
+            template,
+            title,
+            json.loads(content),
+            json.loads(bibliography),
+            images,
+            {},
+            self.submission.id,
+            version
+        )
+
         self.revision.document = document
         self.revision.save()
 
