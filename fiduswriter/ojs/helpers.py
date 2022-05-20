@@ -1,7 +1,8 @@
-from document.models import Document, AccessRight
+from document.models import Document
 from usermedia.models import Image, DocumentImage
 from django.conf import settings
 from django.core.files import File
+from os import path
 
 def create_revision(
     owner,
@@ -35,6 +36,7 @@ def create_revision(
         DocumentImage.objects.create(document=revision, image=image, title="")
 
     return revision
+
 
 def copy_doc(doc, journal_editor, submission_id, revision_version):
     images = []
