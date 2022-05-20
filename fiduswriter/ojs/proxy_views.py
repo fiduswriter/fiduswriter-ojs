@@ -180,22 +180,6 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         body_json = json_decode(response.body)
         self.submission.ojs_jid = body_json["submission_id"]
         self.submission.save()
-        # We save the author ID on the OJS site. Currently we are NOT using
-        # this information for login purposes.
-        author = Author.objects.filter(
-            submission=self.submission, ojs_jid=body_json["user_id"]
-        ).first()
-        if author is None:
-            Author.objects.create(
-                user=self.user,
-                submission=self.submission,
-                ojs_jid=body_json["user_id"],
-            )
-            AccessRight.objects.create(
-                document=self.revision.document,
-                holder_obj=self.user,
-                rights="read-without-comments",
-            )
 
         self.write(response.body)
 
