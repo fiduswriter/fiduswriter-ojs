@@ -10,13 +10,13 @@ from django.db import IntegrityError
 from allauth.account.models import EmailAddress
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.http import require_http_methods
-from os import path
 
 from . import models
 from . import token
 from . import constants
 from . import helpers
 from document.models import Document, AccessRight, DocumentTemplate
+
 
 # logs a user in
 def login_user(request, user):

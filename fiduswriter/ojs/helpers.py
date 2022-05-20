@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.files import File
 from os import path
 
+
 def create_revision(
     owner,
     template,

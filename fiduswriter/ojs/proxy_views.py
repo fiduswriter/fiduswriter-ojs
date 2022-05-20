@@ -7,6 +7,9 @@ from tornado.ioloop import IOLoop
 from base.django_handler_mixin import DjangoHandlerMixin
 from urllib.parse import urlencode
 
+from document.models import AccessRight
+from usermedia.models import Image
+
 from .models import Journal, Submission, SubmissionRevision, Reviewer
 from . import helpers
 
