@@ -120,7 +120,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             images,
             {},
             self.submission.id,
-            version
+            version,
         )
 
         self.revision.document = document

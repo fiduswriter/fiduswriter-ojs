@@ -1,8 +1,8 @@
+from os import path
 from document.models import Document
 from usermedia.models import Image, DocumentImage
 from django.conf import settings
 from django.core.files import File
-from os import path
 
 
 def create_revision(
@@ -14,7 +14,7 @@ def create_revision(
     images,
     comments,
     submission_id,
-    revision_version
+    revision_version,
 ):
     revision = Document()
     revision.owner = owner
@@ -30,7 +30,9 @@ def create_revision(
         if image is None:
             image = Image()
             image.uploader = owner
-            f = open(path.join(settings.PROJECT_PATH, "base/static/img/error.png"))
+            f = open(
+                path.join(settings.PROJECT_PATH, "base/static/img/error.png")
+            )
             image.image.save("error.png", File(f))
             image.save()
 
@@ -54,5 +56,5 @@ def copy_doc(doc, journal_editor, submission_id, revision_version):
         images,
         doc.comments,
         submission_id,
-        revision_version
+        revision_version,
     )

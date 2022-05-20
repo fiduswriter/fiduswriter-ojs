@@ -411,7 +411,7 @@ def create_copy(request, submission_id):
         revision.document,
         revision.submission.journal.editor,
         submission_id,
-        new_version
+        new_version,
     )
 
     # Copy revision
