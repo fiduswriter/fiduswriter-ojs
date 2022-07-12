@@ -116,7 +116,10 @@ def open_revision_doc(request, submission_id, version):
         return HttpResponse("No access", status=403)
     if (
         rev.document.owner != user
-        and AccessRight.objects.filter(document=rev.document, user=user).count() == 0
+        and AccessRight.objects.filter(
+            document=rev.document, user=user
+        ).count()
+        == 0
     ):
         # The user to be logged in is neither the editor (owner of doc), nor
         # has he access rights to the doc. We prohibit access.
@@ -182,7 +185,9 @@ def get_doc_info(request):
         document = Document.objects.get(id=document_id)
         if (
             document.owner != request.user
-            and AccessRight.objects.filter(document=document, user=request.user).count()
+            and AccessRight.objects.filter(
+                document=document, user=request.user
+            ).count()
             == 0
         ):
             # Access forbidden
@@ -197,7 +202,12 @@ def get_doc_info(request):
             user_role = ""
             if revision.reviewer_set.filter(user=request.user).count() > 0:
                 user_role = "reviewer"
-            elif revision.submission.author_set.filter(user=request.user).count() > 0:
+            elif (
+                revision.submission.author_set.filter(
+                    user=request.user
+                ).count()
+                > 0
+            ):
                 # User with author role but not submission submitter as sub-author
                 user_role = (
                     "author"
@@ -214,7 +224,9 @@ def get_doc_info(request):
             response["submission"]["status"] = "submitted"
             response["submission"]["submission_id"] = revision.submission.id
             response["submission"]["version"] = revision.version
-            response["submission"]["journal_id"] = revision.submission.journal_id
+            response["submission"][
+                "journal_id"
+            ] = revision.submission.journal_id
             response["submission"]["user_role"] = user_role
         else:
             response["submission"]["status"] = "unsubmitted"
@@ -321,7 +333,9 @@ def accept_reviewer(request, submission_id, version):
         document=revision.document, user=reviewer.user
     ).first()
     if access_right is None:
-        access_right = AccessRight(document=revision.document, holder_obj=reviewer.user)
+        access_right = AccessRight(
+            document=revision.document, holder_obj=reviewer.user
+        )
         status = 201
     rights = "review"
     if request.POST.get("access_rights") == "comment":
@@ -371,7 +385,9 @@ def add_reviewer(request, submission_id, version):
         document=revision.document, user=reviewer.user
     ).first()
     if access_right is None:
-        access_right = AccessRight(document=revision.document, holder_obj=reviewer.user)
+        access_right = AccessRight(
+            document=revision.document, holder_obj=reviewer.user
+        )
         status = 201
     access_right.rights = "read-without-comments"
     access_right.save()
@@ -404,7 +420,9 @@ def remove_reviewer(request, submission_id, version):
         response["error"] = "Unknown reviewer"
         status = 403
         return JsonResponse(response, status=status)
-    AccessRight.objects.filter(document=revision.document, user=reviewer.user).delete()
+    AccessRight.objects.filter(
+        document=revision.document, user=reviewer.user
+    ).delete()
     reviewer.delete()
     return JsonResponse(response, status=status)
 
@@ -453,7 +471,9 @@ def create_copy(request, submission_id):
             for editor in editors:
                 if str(editor.ojs_jid) in granted_user_ids:
                     role = int(editor.role)
-                    rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][new_version_stage]
+                    rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][
+                        new_version_stage
+                    ]
                     AccessRight.objects.create(
                         document=document,
                         holder_obj=editor.user,
@@ -527,7 +547,9 @@ def add_editor(request, submission_id):
                     ).first()
                     if access_right is None:
                         role = int(editor.role)
-                        rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][int(stage_id)]
+                        rights = constants.EDITOR_ROLE_STAGE_RIGHTS[role][
+                            int(stage_id)
+                        ]
                         access_right = AccessRight(
                             document=revision.document, holder_obj=editor.user
                         )
@@ -564,7 +586,9 @@ def remove_editor(request, submission_id):
         status = 403
         return JsonResponse(response, status=status)
 
-    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    revisions = models.SubmissionRevision.objects.filter(
+        submission_id=submission_id
+    )
     if revisions is not None:
         for revision in revisions:
             AccessRight.objects.filter(
@@ -610,16 +634,14 @@ def add_author(request, submission_id):
 
     # create access_rights for existing revisions
     # get ids of stages access granted
-    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    revisions = models.SubmissionRevision.objects.filter(
+        submission_id=submission_id
+    )
     if revisions is not None:
         for revision in revisions:
             version = revision.version.split(".")
             stage_id = version[0]
-            if (
-                stage_id == "1"
-                or stage_id == "4"
-                or (stage_id == "3" and version[2] == "5")
-            ):
+            if stage_id == "1" or stage_id == "4" or (stage_id == "3" and version[2] == "5"):
                 access_right = AccessRight.objects.filter(
                     document=revision.document, user=author.user
                 ).first()
@@ -668,7 +690,9 @@ def remove_author(request, submission_id):
         status = 403
         return JsonResponse(response, status=status)
 
-    revisions = models.SubmissionRevision.objects.filter(submission_id=submission_id)
+    revisions = models.SubmissionRevision.objects.filter(
+        submission_id=submission_id
+    )
     if revisions is not None:
         for revision in revisions:
             AccessRight.objects.filter(
