@@ -152,7 +152,9 @@ def check_revision_doc(request, submission_id, version):
         except ValueError:
             is_editor = 0
 
-        user = find_user(journal_id, submission_id, version, user_id, is_editor)
+        user = find_user(
+            journal_id, submission_id, version, user_id, is_editor
+        )
 
         # Validate if user exists
         if not user:
@@ -641,7 +643,11 @@ def add_author(request, submission_id):
         for revision in revisions:
             version = revision.version.split(".")
             stage_id = version[0]
-            if stage_id == "1" or stage_id == "4" or (stage_id == "3" and version[2] == "5"):
+            if (
+                stage_id == "1"
+                or stage_id == "4"
+                or (stage_id == "3" and version[2] == "5")
+            ):
                 access_right = AccessRight.objects.filter(
                     document=revision.document, user=author.user
                 ).first()
