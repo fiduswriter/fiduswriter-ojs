@@ -131,6 +131,46 @@ def open_revision_doc(request, submission_id, version):
     return redirect(f"/document/{rev.document.id}/", permanent=True)
 
 
+# Check if the revision doc exists.
+@csrf_exempt
+@require_GET
+def check_revision_doc(request, submission_id, version):
+    api_key = request.GET.get("key")
+    submission = models.Submission.objects.get(id=submission_id)
+    journal_key = submission.journal.ojs_key
+    journal_id = submission.journal_id
+    res = 0
+
+    # Validate api key
+    if journal_key == api_key:
+        user_id = request.GET.get("user_id")
+        is_editor = request.GET.get("is_editor")
+
+        # Validate is_editor
+        try:
+            is_editor = int(is_editor)
+        except ValueError:
+            is_editor = 0
+
+        user = find_user(journal_id, submission_id, version, user_id, is_editor)
+
+        # Validate if user exists
+        if not user:
+            return HttpResponse("User not accessible", status=403)
+
+        # Validate if doc exists
+        try:
+            models.SubmissionRevision.objects.get(
+                submission_id=submission_id,
+                version=version
+            )
+            res = 1
+        except Exception:
+            res = 0
+
+    return HttpResponse(res, status=200)
+
+
 # Send basic information about the current document and the journals that can
 # be submitted to. This information is used as a starting point to decide what
 # OJS-related UI elements to add on the editor page.
@@ -602,19 +642,23 @@ def add_author(request, submission_id):
         for revision in revisions:
             version = revision.version.split(".")
             stage_id = version[0]
-            if stage_id in ["1", "4"]:
+            if stage_id == "1" or stage_id == "4" or (stage_id == "3" and version[2] == "5"):
                 access_right = AccessRight.objects.filter(
                     document=revision.document, user=author.user
                 ).first()
+
                 if access_right is None:
                     access_right = AccessRight(
                         document=revision.document, holder_obj=author.user
                     )
-                    access_right.rights = (
-                        "read-without-comments"
-                        if stage_id == "1"
-                        else "write-tracked"
-                    )
+
+                    if stage_id == "1":
+                        access_right.rights = "read-without-comments"
+                    elif stage_id == "3":
+                        access_right.rights = "write"
+                    else:
+                        access_right.rights = "write-tracked"
+
                     access_right.save()
                     status = 201
 
