@@ -242,16 +242,16 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.find_element(
             By.CSS_SELECTOR, 'a[href="register_journal/"]'
         ).click()
-        self.driver.find_element(By.ID, 'ojs_url').send_keys(
+        self.driver.find_element(By.ID, "ojs_url").send_keys(
             "http://localhost:{}/".format(self.server_port)
         )
-        self.driver.find_element(By.ID, 'ojs_key').send_keys("OJS_KEY")
+        self.driver.find_element(By.ID, "ojs_key").send_keys("OJS_KEY")
         self.driver.find_element(By.ID, "get_journals").click()
-        self.driver.find_element_by_id("editor_4").send_keys(self.editor1.id)
+        self.driver.find_element(By.ID, "editor_4").send_keys(self.editor1.id)
         self.driver.find_element(
             By.CSS_SELECTOR, 'button[data-id="4"]'
         ).click()
-        self.driver.find_element_by_id("editor_5").send_keys(self.editor2.id)
+        self.driver.find_element(By.ID, "editor_5").send_keys(self.editor2.id)
         self.driver.find_element(
             By.CSS_SELECTOR, 'button[data-id="5"]'
         ).click()
@@ -294,30 +294,30 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         ).perform()
         time.sleep(1)
         # We submit the article to journal
-        self.driver.find_element_by_xpath(
-            '//*[@id="header-navigation"]/div[1]/span'
+        self.driver.find_element(
+            By.XPATH, '//*[@id="header-navigation"]/div[1]/span'
         ).click()
-        self.driver.find_element_by_xpath(
-            '//*[normalize-space()="Submit to journal"]'
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Submit to journal"]'
         ).click()
-        self.driver.find_element_by_id("submission-journal").click()
-        self.driver.find_element_by_xpath(
-            '//*[normalize-space()="Journal of the Past"]'
+        self.driver.find_element(By.ID, "submission-journal").click()
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Journal of the Past"]'
         ).click()
         self.assertEqual(
-            self.driver.find_element_by_id(
-                "submission-abstract"
+            self.driver.find_element(
+                By.ID, "submission-abstract"
             ).get_attribute("value"),
             "An abstract title",
         )
-        self.driver.find_element_by_id("submission-firstname").send_keys(
+        self.driver.find_element(By.ID, "submission-firstname").send_keys(
             "Jens"
         )
-        self.driver.find_element_by_id("submission-lastname").send_keys(
+        self.driver.find_element(By.ID, "submission-lastname").send_keys(
             "Hansen"
         )
-        self.driver.find_element_by_xpath(
-            '//*[normalize-space()="Submit"]'
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Submit"]'
         ).click()
         self.assertSuccessAlert("Article submitted")
         # Let OJS create a copy of the document (invisible to the original
@@ -400,23 +400,23 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         ).send_keys("Reviewer comment")
         self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
         # Reviewer submits response to journal
-        self.driver.find_element_by_xpath(
-            '//*[@id="header-navigation"]/div[1]/span'
+        self.driver.find_element(
+            By.XPATH, '//*[@id="header-navigation"]/div[1]/span'
         ).click()
-        self.driver.find_element_by_xpath(
-            '//*[normalize-space()="Submit to journal"]'
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Submit to journal"]'
         ).click()
-        self.driver.find_element_by_id("message-editor").send_keys(
+        self.driver.find_element(By.ID, "message-editor").send_keys(
             "A message just for the editor"
         )
-        self.driver.find_element_by_id("message-editor-author").send_keys(
+        self.driver.find_element(By.ID, "message-editor-author").send_keys(
             "A message for the editor and author"
         )
-        self.driver.find_element_by_id("recommendation").click()
+        self.driver.find_element(By.ID, "recommendation").click()
         ActionChains(self.driver).send_keys(Keys.DOWN).send_keys(
             Keys.DOWN
         ).send_keys(Keys.DOWN).send_keys(Keys.ENTER).perform()
-        self.driver.find_element_by_css_selector("button.fw-dark").click()
+        self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
         self.assertSuccessAlert("Review submitted")
         # Make another copy to give the original author access to the reviewed
         # version
@@ -459,11 +459,11 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             "An updated body",
         )
         # Send in for another review round
-        self.driver.find_element_by_xpath(
-            '//*[@id="header-navigation"]/div[1]/span'
+        self.driver.find_element(
+            By.XPATH, '//*[@id="header-navigation"]/div[1]/span'
         ).click()
-        self.driver.find_element_by_xpath(
-            '//*[normalize-space()="Submit to journal"]'
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Submit to journal"]'
         ).click()
-        self.driver.find_element_by_css_selector("button.fw-dark").click()
+        self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
         self.assertSuccessAlert("Resubmission successful")
