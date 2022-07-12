@@ -242,11 +242,11 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.find_element(
             By.CSS_SELECTOR, 'a[href="register_journal/"]'
         ).click()
-        self.driver.find_element_by_id("ojs_url").send_keys(
+        self.driver.find_element(By.ID, 'ojs_url').send_keys(
             "http://localhost:{}/".format(self.server_port)
         )
-        self.driver.find_element_by_id("ojs_key").send_keys("OJS_KEY")
-        self.driver.find_element_by_id("get_journals").click()
+        self.driver.find_element(By.ID, 'ojs_key').send_keys("OJS_KEY")
+        self.driver.find_element(By.ID, "get_journals").click()
         self.driver.find_element_by_id("editor_4").send_keys(self.editor1.id)
         self.driver.find_element(
             By.CSS_SELECTOR, 'button[data-id="4"]'
