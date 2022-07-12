@@ -435,14 +435,14 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.get(urljoin(self.base_url, "/"))
         self.assertEqual(
             len(
-                self.driver.find_elements_by_css_selector(
-                    "table.fw-data-table tbody tr"
+                self.driver.find_elements(
+                    By.CSS_SELECTOR, "table.fw-data-table tbody tr"
                 )
             ),
             3,
         )
         # Enter the latest version
-        self.driver.find_elements_by_css_selector("a.fw-data-table-title")[
+        self.driver.find_elements(By.CSS_SELECTOR, "a.fw-data-table-title")[
             2
         ].click()
         WebDriverWait(self.driver, self.wait_time).until(
