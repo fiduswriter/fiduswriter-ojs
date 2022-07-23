@@ -19,6 +19,11 @@ urlpatterns = [
         name="remove_reviewer",
     ),
     url(
+        "^check_revision/(?P<submission_id>[0-9]+)/(?P<version>[0-9.]+)/$",
+        views.check_revision_doc,
+        name="check_revision_doc",
+    ),
+    url(
         "^revision/(?P<submission_id>[0-9]+)/(?P<version>[0-9.]+)/$",
         views.open_revision_doc,
         name="open_revision_doc",

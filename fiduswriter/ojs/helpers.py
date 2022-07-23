@@ -1,5 +1,4 @@
 from os import path
-
 from document.models import Document
 from usermedia.models import Image, DocumentImage
 from django.conf import settings
