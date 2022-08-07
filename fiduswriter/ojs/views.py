@@ -336,7 +336,9 @@ def accept_reviewer(request, submission_id, version):
     ).first()
     if access_right is None:
         access_right = AccessRight(
-            document=revision.document, holder_obj=reviewer.user
+            document=revision.document,
+            holder_obj=reviewer.user,
+            path=revision.document.path,
         )
         status = 201
     rights = "review"
@@ -388,7 +390,9 @@ def add_reviewer(request, submission_id, version):
     ).first()
     if access_right is None:
         access_right = AccessRight(
-            document=revision.document, holder_obj=reviewer.user
+            document=revision.document,
+            holder_obj=reviewer.user,
+            path=revision.document.path,
         )
         status = 201
     access_right.rights = "read-without-comments"
@@ -479,6 +483,7 @@ def create_copy(request, submission_id):
                     AccessRight.objects.create(
                         document=document,
                         holder_obj=editor.user,
+                        path=document.path,
                         rights=rights,
                     )
 
@@ -493,7 +498,10 @@ def create_copy(request, submission_id):
         authors = models.Author.objects.filter(submission=revision.submission)
         for author in authors:
             AccessRight.objects.create(
-                document=document, holder_obj=author.user, rights=access_right
+                document=document,
+                holder_obj=author.user,
+                path=document.path,
+                rights=access_right,
             )
 
     return JsonResponse(response, status=status)
@@ -553,7 +561,9 @@ def add_editor(request, submission_id):
                             int(stage_id)
                         ]
                         access_right = AccessRight(
-                            document=revision.document, holder_obj=editor.user
+                            document=revision.document,
+                            holder_obj=editor.user,
+                            path=revision.document.path,
                         )
                         access_right.rights = rights
                         access_right.save()
@@ -654,7 +664,9 @@ def add_author(request, submission_id):
 
                 if access_right is None:
                     access_right = AccessRight(
-                        document=revision.document, holder_obj=author.user
+                        document=revision.document,
+                        holder_obj=author.user,
+                        path=revision.document.path,
                     )
 
                     if stage_id == "1":

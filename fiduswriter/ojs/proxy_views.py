@@ -192,6 +192,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             AccessRight.objects.create(
                 document=self.revision.document,
                 holder_obj=self.user,
+                path=self.revision.document.path,
                 rights="read-without-comments",
             )
 
