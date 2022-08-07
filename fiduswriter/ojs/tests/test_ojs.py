@@ -439,9 +439,17 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
                     By.CSS_SELECTOR, "table.fw-data-table tbody tr"
                 )
             ),
-            3,
+            2,
         )
         # Enter the latest version
+        self.driver.find_elements(By.CSS_SELECTOR, "a.fw-data-table-title")[
+            0
+        ].click()
+        WebDriverWait(self.driver, self.wait_time).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//h1[contains(text(),'/Submission 1/')]")
+            )
+        )
         self.driver.find_elements(By.CSS_SELECTOR, "a.fw-data-table-title")[
             2
         ].click()
