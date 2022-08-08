@@ -455,7 +455,7 @@ def create_copy(request, submission_id):
     document = helpers.copy_doc(
         revision.document,
         revision.submission.journal.editor,
-        submission_id,
+        revision.submission,
         new_version,
     )
 

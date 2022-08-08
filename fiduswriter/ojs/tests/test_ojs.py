@@ -292,7 +292,46 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         ActionChains(self.driver).send_keys(Keys.LEFT).send_keys(
             "An abstract title"
         ).perform()
+        # Enable authors
+        self.driver.find_element(
+            By.XPATH, '//*[@id="header-navigation"]/div[3]/span'
+        ).click()
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Optional sections"]'
+        ).click()
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Authors"]'
+        ).click()
+        # Close menu
+        self.driver.find_element(By.CSS_SELECTOR, "#document-top").click()
+        # Add author
+        self.driver.find_element(
+            By.CSS_SELECTOR, ".article-authors button"
+        ).click()
+        self.driver.find_element(
+            By.CSS_SELECTOR, "input[name=firstname]"
+        ).send_keys("Wendy")
+        self.driver.find_element(
+            By.CSS_SELECTOR, "input[name=lastname]"
+        ).send_keys("Pox")
+        self.driver.find_element(
+            By.CSS_SELECTOR, "input[name=email]"
+        ).send_keys("wendy@pox.com")
+        self.driver.find_element(
+            By.CSS_SELECTOR, "input[name=institution]"
+        ).send_keys("Sunny University")
+
+        self.driver.find_element(
+            By.CSS_SELECTOR, ".ui-dialog-buttonset .fw-dark"
+        ).click()
         time.sleep(1)
+        # Check that there is now one author
+        self.assertEqual(
+            len(
+                self.driver.find_elements(By.CSS_SELECTOR, "span.contributor")
+            ),
+            1,
+        )
         # We submit the article to journal
         self.driver.find_element(
             By.XPATH, '//*[@id="header-navigation"]/div[1]/span'
@@ -310,11 +349,21 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             ).get_attribute("value"),
             "An abstract title",
         )
-        self.driver.find_element(By.ID, "submission-firstname").send_keys(
-            "Jens"
+        self.assertEqual(
+            self.driver.find_element(
+                By.ID, "submission-firstname"
+            ).get_attribute("value"),
+            "Wendy",
         )
+        self.assertEqual(
+            self.driver.find_element(
+                By.ID, "submission-lastname"
+            ).get_attribute("value"),
+            "Pox",
+        )
+        # Modify the lastname
         self.driver.find_element(By.ID, "submission-lastname").send_keys(
-            "Hansen"
+            " Hansen"
         )
         self.driver.find_element(
             By.XPATH, '//*[normalize-space()="Submit"]'
@@ -384,6 +433,13 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
             "ARGH"
         )
+        # Check that no authors are listed
+        self.assertEqual(
+            len(
+                self.driver.find_elements(By.CSS_SELECTOR, "span.contributor")
+            ),
+            0,
+        )
         time.sleep(1)
         self.assertEqual(
             self.driver.find_element(By.CSS_SELECTOR, ".article-title").text,
@@ -441,15 +497,23 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             ),
             2,
         )
-        # Enter the latest version
         self.driver.find_elements(By.CSS_SELECTOR, "a.fw-data-table-title")[
             0
         ].click()
+        self.assertEqual(
+            len(
+                self.driver.find_elements(
+                    By.CSS_SELECTOR, "table.fw-data-table tbody tr"
+                )
+            ),
+            3,
+        )
         WebDriverWait(self.driver, self.wait_time).until(
             EC.presence_of_element_located(
                 (By.XPATH, "//h1[contains(text(),'/Submission 1/')]")
             )
         )
+        # Enter the latest version
         self.driver.find_elements(By.CSS_SELECTOR, "a.fw-data-table-title")[
             2
         ].click()
@@ -466,7 +530,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             self.driver.find_element(By.CSS_SELECTOR, ".article-body").text,
             "An updated body",
         )
-        # Send in for another review round
+        # Resubmit
         self.driver.find_element(
             By.XPATH, '//*[@id="header-navigation"]/div[1]/span'
         ).click()
@@ -475,3 +539,39 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         ).click()
         self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
         self.assertSuccessAlert("Resubmission successful")
+        # Journal accepts. Make another copy moving from review into
+        # copy-editing
+        response = self.client.post(
+            "/api/ojs/create_copy/{}/".format(submission_id),
+            {
+                "key": "OJS_KEY",
+                "old_version": "3.0.5",
+                "new_version": "4.0.0",
+                "granted_users": "1",
+            },
+        )
+        # Go back to overview.
+        self.driver.find_element(
+            By.CSS_SELECTOR, "#close-document-top"
+        ).click()
+        time.sleep(1)
+        # Check that there is now another document.
+        self.assertEqual(
+            len(
+                self.driver.find_elements(
+                    By.CSS_SELECTOR, "table.fw-data-table tbody tr"
+                )
+            ),
+            4,
+        )
+        # Enter the latest version
+        self.driver.find_elements(By.CSS_SELECTOR, "a.fw-data-table-title")[
+            3
+        ].click()
+        # Check that the author information is back.
+        self.assertEqual(
+            len(
+                self.driver.find_elements(By.CSS_SELECTOR, "span.contributor")
+            ),
+            1,
+        )

@@ -94,6 +94,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.submission = Submission()
         self.submission.submitter = self.user
         self.submission.journal_id = journal_id
+        self.submission.authors = json.loads(self.get_argument("authors"))
         self.submission.save()
         self.revision = SubmissionRevision()
         self.revision.submission = self.submission

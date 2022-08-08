@@ -41,20 +41,30 @@ def create_revision(
     return revision
 
 
-def copy_doc(doc, journal_editor, submission_id, revision_version):
+def copy_doc(doc, journal_editor, submission, revision_version):
     images = []
     doc_images = doc.documentimage_set.all()
     for doc_image in doc_images:
         images.append(doc_image.image)
-
+    content = doc.content
+    authors = submission.authors
+    if revision_version == "4.0.0" and len(authors):
+        # Readd author information after review process.
+        for part in content["content"]:
+            if (
+                "attrs" in part
+                and "metadata" in part["attrs"]
+                and part["attrs"]["metadata"] == "authors"
+            ):
+                part["content"] = authors.pop(0)
     return create_revision(
         journal_editor,
         doc.template,
         doc.title,
-        doc.content,
+        content,
         doc.bibliography,
         images,
         doc.comments,
-        submission_id,
+        submission.id,
         revision_version,
     )
