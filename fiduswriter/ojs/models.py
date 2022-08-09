@@ -26,7 +26,7 @@ class Submission(models.Model):
     submitter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
     journal = models.ForeignKey(Journal, on_delete=CASCADE)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
-    authors = models.JSONField(default=list)
+    contributors = models.JSONField(default=dict)
 
     def __str__(self):
         return "{ojs_jid} in {journal} by {submitter}".format(

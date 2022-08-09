@@ -230,6 +230,12 @@ def get_doc_info(request):
                 "journal_id"
             ] = revision.submission.journal_id
             response["submission"]["user_role"] = user_role
+            if user_role == "reviewer":
+                response["submission"]["contributors"] = False
+            else:
+                response["submission"][
+                    "contributors"
+                ] = revision.submission.contributors
         else:
             response["submission"]["status"] = "unsubmitted"
     journals = []
@@ -243,6 +249,7 @@ def get_doc_info(request):
             }
         )
     response["journals"] = journals
+
     status = 200
     return JsonResponse(response, status=status)
 

@@ -255,6 +255,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.find_element(
             By.CSS_SELECTOR, 'button[data-id="5"]'
         ).click()
+        time.sleep(1)
         # Log in as user to submit an article
         self.login_user(self.user1, self.driver, self.client)
         self.driver.get(urljoin(self.base_url, "/"))
@@ -520,6 +521,22 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         WebDriverWait(self.driver, self.wait_time).until(
             EC.presence_of_element_located((By.CLASS_NAME, "editor-toolbar"))
         )
+        # Check that authors are listed
+        self.assertEqual(
+            len(
+                self.driver.find_elements(By.CSS_SELECTOR, "span.contributor")
+            ),
+            1,
+        )
+        # Check that authors are listed read only
+        self.assertEqual(
+            len(
+                self.driver.find_elements(
+                    By.CSS_SELECTOR, "div.article-authors-readonly"
+                )
+            ),
+            1,
+        )
         # Check that we can change the body
         self.driver.find_element(By.CSS_SELECTOR, ".article-body").click()
         self.driver.find_element(By.CSS_SELECTOR, ".article-body").send_keys(
@@ -568,10 +585,19 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         self.driver.find_elements(By.CSS_SELECTOR, "a.fw-data-table-title")[
             3
         ].click()
-        # Check that the author information is back.
+        # Check that the author information is listed.
         self.assertEqual(
             len(
                 self.driver.find_elements(By.CSS_SELECTOR, "span.contributor")
             ),
             1,
+        )
+        # Check that authors are not listed read only
+        self.assertEqual(
+            len(
+                self.driver.find_elements(
+                    By.CSS_SELECTOR, "div.article-authors-readonly"
+                )
+            ),
+            0,
         )

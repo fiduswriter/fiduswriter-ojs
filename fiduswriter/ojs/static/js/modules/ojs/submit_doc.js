@@ -34,26 +34,26 @@ export class SendDocSubmission {
 
         shrinker.init().then(
             ({shrunkImageDB, shrunkBibDB}) => {
-                const {content, authors} = this.removeAuthors(
+                const {content, contributors} = this.removeContributors(
                     JSON.parse(JSON.stringify(this.doc.content))
                 )
-                this.uploadRevision(content, authors, shrunkBibDB, shrunkImageDB)
+                this.uploadRevision(content, contributors, shrunkBibDB, shrunkImageDB)
             }
         )
     }
 
-    removeAuthors(content) {
-        const authors = []
+    removeContributors(content) {
+        const contributors = {}
         content.content.forEach(part => {
-            if (part.attrs.metadata === 'authors') {
-                authors.push(part.content)
+            if (part.type === 'contributors_part') {
+                contributors[part.attrs.id] = part.content
                 part.content = []
             }
         })
-        return {content, authors}
+        return {content, contributors}
     }
 
-    uploadRevision(content, authors, bibDB, imageDB) {
+    uploadRevision(content, contributors, bibDB, imageDB) {
         post(
             '/proxy/ojs/author_submit',
             {
@@ -66,7 +66,7 @@ export class SendDocSubmission {
                 title: this.doc.title,
                 abstract: this.abstract,
                 content: JSON.stringify(content),
-                authors: JSON.stringify(authors),
+                contributors: JSON.stringify(contributors),
                 bibliography: JSON.stringify(bibDB),
                 image_ids: Object.keys(imageDB)
             }

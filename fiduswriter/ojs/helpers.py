@@ -47,16 +47,17 @@ def copy_doc(doc, journal_editor, submission, revision_version):
     for doc_image in doc_images:
         images.append(doc_image.image)
     content = doc.content
-    authors = submission.authors
-    if revision_version == "4.0.0" and len(authors):
+    contributors = submission.contributors
+    if revision_version == "4.0.0" and len(contributors):
         # Readd author information after review process.
         for part in content["content"]:
             if (
-                "attrs" in part
-                and "metadata" in part["attrs"]
-                and part["attrs"]["metadata"] == "authors"
+                "type" in part
+                and part["type"] == "contributors_part"
+                and "attrs" in part
+                and part["attrs"]["id"] in contributors
             ):
-                part["content"] = authors.pop(0)
+                part["content"] = contributors[part["attrs"]["id"]]
     return create_revision(
         journal_editor,
         doc.template,

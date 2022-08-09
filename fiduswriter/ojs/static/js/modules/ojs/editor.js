@@ -2,6 +2,8 @@ import {addAlert, activateWait, deactivateWait, postJson, post, Dialog} from "..
 import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
 import {SendDocSubmission} from "./submit_doc"
 import {READ_ONLY_ROLES, COMMENT_ONLY_ROLES} from "../editor"
+import {contributorInputPlugin} from "../editor/state_plugins"
+import {reviewContributorPlugin} from "./contributor_state_plugin"
 
 // Adds functions for OJS to the editor
 export class EditorOJS {
@@ -17,14 +19,14 @@ export class EditorOJS {
         const docData = {
             doc_id: this.editor.docInfo.id
         }
-        postJson(
+        return postJson(
             '/api/ojs/get_doc_info/',
             docData
         ).then(
             ({json}) => {
                 this.submission = json['submission']
                 this.journals = json['journals']
-                this.setupUI()
+                return this.setupUI()
             }
         ).catch(
             error => {
@@ -39,6 +41,12 @@ export class EditorOJS {
         if (this.journals.length === 0) {
             // This installation does not have any journals setup. Abort.
             return Promise.resolve()
+        }
+        if (this.submission.status === 'submitted' && parseInt(this.submission.version[0]) < 4) {
+            // We are in the peer review process.
+            // replace contributorInputPlugin.
+            this.editor.statePlugins = this.editor.statePlugins.filter(plugin => plugin[0] !== contributorInputPlugin)
+            this.editor.statePlugins.push([reviewContributorPlugin, () => ({editor: this, contributors: this.submission.contributors})])
         }
 
         const fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id === 'file')
