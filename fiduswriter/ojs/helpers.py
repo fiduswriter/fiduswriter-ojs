@@ -60,8 +60,8 @@ def copy_revision(revision, old_version_stage, new_version_stage, new_version):
                 revision.contributors[part["attrs"]["id"]] = part["content"]
                 part["content"] = []
     elif (
-        old_version_stage < 4
-        and new_version_stage >= 4
+        old_version_stage == 3
+        and new_version_stage > 3
         and len(revision.contributors)
     ):
         # Readd author information after review process.
