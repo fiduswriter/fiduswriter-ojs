@@ -26,7 +26,6 @@ class Submission(models.Model):
     submitter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
     journal = models.ForeignKey(Journal, on_delete=CASCADE)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
-    contributors = models.JSONField(default=dict)
 
     def __str__(self):
         return "{ojs_jid} in {journal} by {submitter}".format(
@@ -64,6 +63,8 @@ class SubmissionRevision(models.Model):
     # numbers are included.
     version = models.CharField(max_length=8, default="1.0.0")
     document = models.ForeignKey(Document, on_delete=CASCADE)
+    # Contributor information if it has been removed from the document
+    contributors = models.JSONField(default=dict)
 
     def __str__(self):
         return "{ojs_jid} (v{version}) in {journal} by {submitter}".format(

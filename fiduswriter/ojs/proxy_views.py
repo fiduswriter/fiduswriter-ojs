@@ -94,13 +94,13 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.submission = Submission()
         self.submission.submitter = self.user
         self.submission.journal_id = journal_id
-        self.submission.contributors = json.loads(
-            self.get_argument("contributors")
-        )
         self.submission.save()
         self.revision = SubmissionRevision()
         self.revision.submission = self.submission
         self.revision.version = "1.0.0"
+        self.revision.contributors = json.loads(
+            self.get_argument("contributors")
+        )
         version = "1.0.0"
         # Connect a new document to the submission.
         title = self.get_argument("title")
@@ -114,7 +114,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             image = Image.objects.filter(id=id).first()
             images.append(image)
 
-        document = helpers.create_revision(
+        document = helpers.create_doc(
             journal.editor,
             template,
             title,

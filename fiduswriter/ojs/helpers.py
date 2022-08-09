@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.files import File
 
 
-def create_revision(
+def create_doc(
     owner,
     template,
     title,
@@ -16,15 +16,15 @@ def create_revision(
     submission_id,
     revision_version,
 ):
-    revision = Document()
-    revision.owner = owner
-    revision.template = template
-    revision.title = title
-    revision.content = content
-    revision.bibliography = bibliography
-    revision.path = f"/Submission {submission_id}/{title.replace('/', '')} ({revision_version})"
-    revision.comments = comments
-    revision.save()
+    doc = Document()
+    doc.owner = owner
+    doc.template = template
+    doc.title = title
+    doc.content = content
+    doc.bibliography = bibliography
+    doc.path = f"/Submission {submission_id}/{title.replace('/', '')} ({revision_version})"
+    doc.comments = comments
+    doc.save()
 
     for image in images:
         if image is None:
@@ -36,36 +36,49 @@ def create_revision(
             image.image.save("error.png", File(f))
             image.save()
 
-        DocumentImage.objects.create(document=revision, image=image, title="")
+        DocumentImage.objects.create(document=doc, image=image, title="")
 
-    return revision
+    return doc
 
 
-def copy_doc(doc, journal_editor, submission, revision_version):
+def copy_revision(revision, old_version_stage, new_version_stage, new_version):
     images = []
-    doc_images = doc.documentimage_set.all()
+    doc_images = revision.document.documentimage_set.all()
     for doc_image in doc_images:
         images.append(doc_image.image)
-    content = doc.content
-    contributors = submission.contributors
-    if revision_version == "4.0.0" and len(contributors):
+    content = revision.document.content
+
+    if (
+        old_version_stage < 4
+        and new_version_stage >= 4
+        and len(revision.contributors)
+    ):
         # Readd author information after review process.
         for part in content["content"]:
             if (
                 "type" in part
                 and part["type"] == "contributors_part"
                 and "attrs" in part
-                and part["attrs"]["id"] in contributors
+                and part["attrs"]["id"] in revision.contributors
             ):
-                part["content"] = contributors[part["attrs"]["id"]]
-    return create_revision(
-        journal_editor,
-        doc.template,
-        doc.title,
+                part["content"] = revision.contributors[part["attrs"]["id"]]
+        revision.contributors = {}
+    document = create_doc(
+        revision.submission.journal.editor,
+        revision.document.template,
+        revision.document.title,
         content,
-        doc.bibliography,
+        revision.document.bibliography,
         images,
-        doc.comments,
-        submission.id,
-        revision_version,
+        revision.document.comments,
+        revision.submission.id,
+        new_version,
     )
+
+    # Copy revision
+    revision.pk = None
+    revision.document = document
+    revision.version = new_version
+    revision.save()
+
+    return revision

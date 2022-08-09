@@ -231,11 +231,9 @@ def get_doc_info(request):
             ] = revision.submission.journal_id
             response["submission"]["user_role"] = user_role
             if user_role == "reviewer":
-                response["submission"]["contributors"] = False
+                response["submission"]["contributors"] = {}
             else:
-                response["submission"][
-                    "contributors"
-                ] = revision.submission.contributors
+                response["submission"]["contributors"] = revision.contributors
         else:
             response["submission"]["status"] = "unsubmitted"
     journals = []
@@ -447,7 +445,13 @@ def create_copy(request, submission_id):
     status = 201
     api_key = request.POST.get("key")
     old_version = request.POST.get("old_version")
+    old_version_parts = old_version.split(".")
+    old_version_stage = int(old_version_parts[0])
+
     new_version = request.POST.get("new_version")
+    new_version_parts = new_version.split(".")
+    new_version_stage = int(new_version_parts[0])
+
     revision = models.SubmissionRevision.objects.get(
         submission_id=submission_id, version=old_version
     )
@@ -458,23 +462,12 @@ def create_copy(request, submission_id):
         status = 403
         return JsonResponse(response, status=status)
 
-    # Copy the document
-    document = helpers.copy_doc(
-        revision.document,
-        revision.submission.journal.editor,
-        revision.submission,
-        new_version,
+    # Copy the revision
+    revision = helpers.copy_revision(
+        revision, old_version_stage, new_version_stage, new_version
     )
 
-    # Copy revision
-    revision.pk = None
-    revision.document = document
-    revision.version = new_version
-    revision.save()
-
     # Add user rights
-    new_version_parts = new_version.split(".")
-    new_version_stage = int(new_version_parts[0])
 
     # Rights for editors
     granted_user_ids = request.POST.get("granted_users").split(",")
@@ -488,9 +481,9 @@ def create_copy(request, submission_id):
                         new_version_stage
                     ]
                     AccessRight.objects.create(
-                        document=document,
+                        document=revision.document,
                         holder_obj=editor.user,
-                        path=document.path,
+                        path=revision.document.path,
                         rights=rights,
                     )
 
@@ -505,9 +498,9 @@ def create_copy(request, submission_id):
         authors = models.Author.objects.filter(submission=revision.submission)
         for author in authors:
             AccessRight.objects.create(
-                document=document,
+                document=revision.document,
                 holder_obj=author.user,
-                path=document.path,
+                path=revision.document.path,
                 rights=access_right,
             )
 
