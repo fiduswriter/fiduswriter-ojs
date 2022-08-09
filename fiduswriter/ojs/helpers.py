@@ -47,8 +47,19 @@ def copy_revision(revision, old_version_stage, new_version_stage, new_version):
     for doc_image in doc_images:
         images.append(doc_image.image)
     content = revision.document.content
-
-    if (
+    if old_version_stage < 3 and new_version_stage == 3:
+        # Remove author information at start of review process.
+        revision.contributors = {}
+        for part in content["content"]:
+            if (
+                "type" in part
+                and part["type"] == "contributors_part"
+                and "attrs" in part
+                and "id" in part["attrs"]
+            ):
+                revision.contributors[part["attrs"]["id"]] = part["content"]
+                part["content"] = []
+    elif (
         old_version_stage < 4
         and new_version_stage >= 4
         and len(revision.contributors)

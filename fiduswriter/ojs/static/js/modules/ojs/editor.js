@@ -42,8 +42,8 @@ export class EditorOJS {
             // This installation does not have any journals setup. Abort.
             return Promise.resolve()
         }
-        if (this.submission.status === 'submitted' && parseInt(this.submission.version[0]) < 4) {
-            // We are in the peer review process.
+        if (this.submission.status === 'submitted' && this.submission.version.split('.')[0] === '3') {
+            // We are in the peer review stage.
             // replace contributorInputPlugin.
             this.editor.statePlugins = this.editor.statePlugins.filter(plugin => plugin[0] !== contributorInputPlugin)
             this.editor.statePlugins.push([reviewContributorPlugin, () => ({editor: this, contributors: this.submission.contributors})])

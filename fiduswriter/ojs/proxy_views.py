@@ -98,9 +98,6 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         self.revision = SubmissionRevision()
         self.revision.submission = self.submission
         self.revision.version = "1.0.0"
-        self.revision.contributors = json.loads(
-            self.get_argument("contributors")
-        )
         version = "1.0.0"
         # Connect a new document to the submission.
         title = self.get_argument("title")
