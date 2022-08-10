@@ -383,8 +383,8 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             },
         )
         self.assertEqual(response.status_code, 201)
-        # Let OJS assign a new reviewer to the submitted article and give
-        # access
+        # Let OJS assign a new double-blind reviewer to the submitted article
+        # and give access.
         response = self.client.post(
             "/api/ojs/add_reviewer/{}/3.0.0/".format(submission_id),
             {
@@ -401,7 +401,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             {
                 "key": "OJS_KEY",
                 "user_id": 9263,
-                "access_rights": "review",
+                "review_method": "doubleanonymous",
             },
         )
         self.assertEqual(response.status_code, 200)
@@ -429,11 +429,6 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         WebDriverWait(self.driver, self.wait_time).until(
             EC.presence_of_element_located((By.CLASS_NAME, "editor-toolbar"))
         )
-        # Check that we cannot change the title
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
-            "ARGH"
-        )
         # Check that no authors are listed
         self.assertEqual(
             len(
@@ -442,6 +437,11 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             0,
         )
         time.sleep(1)
+        # Check that we cannot change the title
+        self.driver.find_element(By.CSS_SELECTOR, ".article-title").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
+            "ARGH"
+        )
         self.assertEqual(
             self.driver.find_element(By.CSS_SELECTOR, ".article-title").text,
             "Test",
@@ -468,6 +468,98 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         )
         self.driver.find_element(By.ID, "message-editor-author").send_keys(
             "A message for the editor and author"
+        )
+        self.driver.find_element(By.ID, "recommendation").click()
+        ActionChains(self.driver).send_keys(Keys.DOWN).send_keys(
+            Keys.DOWN
+        ).send_keys(Keys.DOWN).send_keys(Keys.ENTER).perform()
+        self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
+        self.assertSuccessAlert("Review submitted")
+        # Let OJS assign a new anonymous reviewer to the submitted article
+        # and give access.
+        response = self.client.post(
+            "/api/ojs/add_reviewer/{}/3.0.0/".format(submission_id),
+            {
+                "key": "OJS_KEY",
+                "user_id": 18364,
+                "email": "reviewer2@reviews.com",
+                "username": "Reviewer2",
+            },
+        )
+        self.assertEqual(response.status_code, 201)
+        # Reviewer accepts review
+        response = self.client.post(
+            "/api/ojs/accept_reviewer/{}/3.0.0/".format(submission_id),
+            {
+                "key": "OJS_KEY",
+                "user_id": 18364,
+                "review_method": "anonymous",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        # Get login token and log in
+        response = self.client.get(
+            "/api/ojs/get_login_token/",
+            {
+                "key": "OJS_KEY",
+                "fidus_id": str(submission_id),
+                "user_id": 18364,
+                "version": "3.0.0",
+                "is_editor": False,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        login_token = json.loads(response.content)["token"]
+        self.driver.get(
+            urljoin(
+                self.base_url,
+                "/api/ojs/revision/{}/3.0.0/?token={}".format(
+                    submission_id, login_token
+                ),
+            )
+        )
+        WebDriverWait(self.driver, self.wait_time).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "editor-toolbar"))
+        )
+        # Check that authors are listed
+        self.assertEqual(
+            len(
+                self.driver.find_elements(By.CSS_SELECTOR, "span.contributor")
+            ),
+            1,
+        )
+        time.sleep(1)
+        # Check that we cannot change the title
+        self.driver.find_element(By.CSS_SELECTOR, ".article-title").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
+            "ARGH"
+        )
+        self.assertEqual(
+            self.driver.find_element(By.CSS_SELECTOR, ".article-title").text,
+            "Test",
+        )
+        ActionChains(self.driver).double_click(
+            self.driver.find_element(By.CSS_SELECTOR, ".article-title")
+        ).perform()
+        self.driver.find_element(
+            By.CSS_SELECTOR, 'button[title="Comment"]'
+        ).click()
+        self.driver.find_element(
+            By.CSS_SELECTOR, "#comment-editor .ProseMirror"
+        ).send_keys("Reviewer comment")
+        self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
+        # Reviewer submits response to journal
+        self.driver.find_element(
+            By.XPATH, '//*[@id="header-navigation"]/div[1]/span'
+        ).click()
+        self.driver.find_element(
+            By.XPATH, '//*[normalize-space()="Submit to journal"]'
+        ).click()
+        self.driver.find_element(By.ID, "message-editor").send_keys(
+            "Another message just for the editor"
+        )
+        self.driver.find_element(By.ID, "message-editor-author").send_keys(
+            "Another message for the editor and author"
         )
         self.driver.find_element(By.ID, "recommendation").click()
         ActionChains(self.driver).send_keys(Keys.DOWN).send_keys(

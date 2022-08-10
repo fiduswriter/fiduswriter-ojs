@@ -202,7 +202,8 @@ def get_doc_info(request):
         ).first()
         if revision:
             user_role = ""
-            if revision.reviewer_set.filter(user=request.user).count() > 0:
+            reviewer = revision.reviewer_set.filter(user=request.user).first()
+            if reviewer:
                 user_role = "reviewer"
             elif (
                 revision.submission.author_set.filter(
@@ -230,7 +231,7 @@ def get_doc_info(request):
                 "journal_id"
             ] = revision.submission.journal_id
             response["submission"]["user_role"] = user_role
-            if user_role == "reviewer":
+            if reviewer and reviewer.method == "doubleanonymous":
                 response["submission"]["contributors"] = {}
             else:
                 response["submission"]["contributors"] = revision.contributors
@@ -334,6 +335,22 @@ def accept_reviewer(request, submission_id, version):
         response["error"] = "Unknown reviewer"
         status = 403
         return JsonResponse(response, status=status)
+    review_method = request.POST.get("review_method")
+
+    # ojs-fiduswriter < 3.0.0.0 specified "access_rights" instead of "review_method".
+    if not review_method:
+        if request.POST.get("access_rights") == "comment":
+            review_method = "open"
+        else:
+            review_method = "doubleanonymous"
+
+    reviewer.method = review_method
+    reviewer.save()
+
+    if review_method == "open":
+        rights = "comment"
+    else:
+        rights = "review"
     # Make sure the connect document has reviewer access rights set for the
     # user.
     access_right = AccessRight.objects.filter(
@@ -346,9 +363,7 @@ def accept_reviewer(request, submission_id, version):
             path=revision.document.path,
         )
         status = 201
-    rights = "review"
-    if request.POST.get("access_rights") == "comment":
-        rights = "comment"
+
     access_right.rights = rights
     access_right.save()
     return JsonResponse(response, status=status)

@@ -75,12 +75,27 @@ class SubmissionRevision(models.Model):
         )
 
 
+REVIEW_METHODS = [
+    ("open", "Open"),  # Author and reviewer can see one-another's names.
+    (
+        "anonymous",
+        "Anonymous",
+    ),  # Reviewer can see name of author, but author cannot see name of reviewer.
+    (
+        "doubleanonymous",
+        "Double anonymous",
+    ),  # Author and reviewer cannot see one-another's names.
+]
+
 # A reviewer registered with OJS and also registered here
 # Reviewers can differ from revision to revision.
 class Reviewer(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
     revision = models.ForeignKey(SubmissionRevision, on_delete=CASCADE)
     ojs_jid = models.PositiveIntegerField(default=0)  # ID in OJS
+    method = models.CharField(
+        max_length=15, default="doubleanonymous", choices=REVIEW_METHODS
+    )
 
     class Meta(object):
         unique_together = ("revision", "ojs_jid")
