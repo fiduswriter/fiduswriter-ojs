@@ -87,6 +87,7 @@ REVIEW_METHODS = [
     ),  # Author and reviewer cannot see one-another's names.
 ]
 
+
 # A reviewer registered with OJS and also registered here
 # Reviewers can differ from revision to revision.
 class Reviewer(models.Model):
