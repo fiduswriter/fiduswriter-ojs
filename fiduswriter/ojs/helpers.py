@@ -54,6 +54,7 @@ def copy_revision(revision, old_version_stage, new_version_stage, new_version):
             if (
                 "type" in part
                 and part["type"] == "contributors_part"
+                and "content" in part
                 and "attrs" in part
                 and "id" in part["attrs"]
             ):
