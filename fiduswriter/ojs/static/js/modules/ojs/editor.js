@@ -267,7 +267,7 @@ export class EditorOJS {
             ],
             reviewMessageEl = document.getElementById('review-message'),
             dialog = new Dialog({
-                height: 350,
+                height: 400,
                 width: 380,
                 id: "review-message",
                 title: gettext('Leave your messages for editor and authors'),
