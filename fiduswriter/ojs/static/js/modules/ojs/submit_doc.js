@@ -42,7 +42,7 @@ export class SendDocSubmission {
 
     uploadRevision(content, bibDB, imageDB) {
         post(
-            '/proxy/ojs/author_submit',
+            "/proxy/ojs/author_submit",
             {
                 journal_id: this.journalId,
                 firstname: this.firstname,
@@ -57,10 +57,10 @@ export class SendDocSubmission {
                 image_ids: Object.keys(imageDB)
             }
         ).then(
-            () => addAlert('success', gettext('Article submitted'))
+            () => addAlert("success", gettext("Article submitted"))
         ).catch(
             error => {
-                addAlert('error', gettext('Article could not be submitted.'))
+                addAlert("error", gettext("Article could not be submitted."))
                 throw (error)
             }
         )

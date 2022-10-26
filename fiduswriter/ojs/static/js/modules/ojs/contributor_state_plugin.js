@@ -1,7 +1,7 @@
 import {Plugin, PluginKey} from "prosemirror-state"
 import {DOMSerializer} from "prosemirror-model"
 
-const key = new PluginKey('reviewContributorInput')
+const key = new PluginKey("reviewContributorInput")
 
 
 class ReviewContributorsPartView {
@@ -9,8 +9,8 @@ class ReviewContributorsPartView {
         this.node = node
         this.view = view
         this.getPos = getPos
-        this.dom = document.createElement('div')
-        this.dom.classList.add('article-part')
+        this.dom = document.createElement("div")
+        this.dom.classList.add("article-part")
         this.dom.classList.add(`article-${this.node.type.name}`)
         this.dom.classList.add(`article-${this.node.attrs.id}`)
         this.dom.classList.add(`article-${this.node.attrs.id}-readonly`)
@@ -27,9 +27,9 @@ class ReviewContributorsPartView {
                 json => this.dom.append(serializer.serializeNode(schema.nodeFromJSON(json)))
             )
         }
-        this.contentDOM = document.createElement('span')
-        this.contentDOM.classList.add('contributors-inner')
-        this.contentDOM.style.display = 'none'
+        this.contentDOM = document.createElement("span")
+        this.contentDOM.classList.add("contributors-inner")
+        this.contentDOM.style.display = "none"
         this.dom.appendChild(this.contentDOM)
     }
 }
