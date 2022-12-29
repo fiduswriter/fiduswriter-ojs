@@ -204,11 +204,6 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             username="Editor2", email="editor2@user.com", passtext="password"
         )
 
-    def tearDown(self):
-        self.leave_site(self.driver)
-        self.admin.delete()
-        self.user1.delete()
-
     def assertSuccessAlert(self, message):
         i = 0
         message_found = False
