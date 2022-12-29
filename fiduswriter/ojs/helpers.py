@@ -22,9 +22,7 @@ def create_doc(
     doc.title = title
     doc.content = content
     doc.bibliography = bibliography
-    doc.path = (
-        f"/Submission {submission_id}/{title.replace('/', '')} ({revision_version})"
-    )
+    doc.path = f"/Submission {submission_id}/{title.replace('/', '')} ({revision_version})"
     doc.comments = comments
     doc.save()
 
@@ -32,7 +30,9 @@ def create_doc(
         if image is None:
             image = Image()
             image.uploader = owner
-            f = open(path.join(settings.PROJECT_PATH, "base/static/img/error.png"))
+            f = open(
+                path.join(settings.PROJECT_PATH, "base/static/img/error.png")
+            )
             image.image.save("error.png", File(f))
             image.save()
 
@@ -61,7 +61,9 @@ def copy_revision(revision, old_version_stage, new_version_stage, new_version):
                 revision.contributors[part["attrs"]["id"]] = part["content"]
                 part["content"] = []
     elif (
-        old_version_stage == 3 and new_version_stage > 3 and len(revision.contributors)
+        old_version_stage == 3
+        and new_version_stage > 3
+        and len(revision.contributors)
     ):
         # Readd author information after review process.
         for part in content["content"]:

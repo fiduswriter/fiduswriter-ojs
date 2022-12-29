@@ -28,10 +28,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             key = self.get_argument("key")
         else:
             return
-        plugin_path = "/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/"
+        plugin_path = (
+            "/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/"
+        )
         url = f"{base_url}{plugin_path}{relative_url}"
         http = AsyncHTTPClient()
-        response = await http.fetch(HTTPRequest(url_concat(url, {"key": key}), "GET"))
+        response = await http.fetch(
+            HTTPRequest(url_concat(url, {"key": key}), "GET")
+        )
         # The response is asynchronous so that the getting of the data from the
         # OJS server doesn't block the FW server connection.
         if response.error:
@@ -45,7 +49,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             self.set_status(401)
             self.finish()
             return
-        self.plugin_path = "/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/"
+        self.plugin_path = (
+            "/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/"
+        )
         self.submission_attempts = 0
         if relative_url == "author_submit":
             # Submitting a new submission revision.
@@ -77,7 +83,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         # The document is not part of an existing submission.
         journal_id = self.get_argument("journal_id")
         journal = Journal.objects.get(id=journal_id)
-        template = journal.templates.filter(document__id__exact=document_id).first()
+        template = journal.templates.filter(
+            document__id__exact=document_id
+        ).first()
         if not template:
             # Template is not available for Journal.
             self.set_status(401)
@@ -246,7 +254,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
 
         # submission was successful, so we replace the user's write access
         # rights with read rights.
-        right = AccessRight.objects.get(user=self.user, document=self.revision.document)
+        right = AccessRight.objects.get(
+            user=self.user, document=self.revision.document
+        )
         right.rights = "read"
         right.save()
 
@@ -293,7 +303,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
 
         # submission was successful, so we replace the user's write access
         # rights with read rights.
-        right = AccessRight.objects.get(user=self.user, document=self.revision.document)
+        right = AccessRight.objects.get(
+            user=self.user, document=self.revision.document
+        )
         right.rights = "read"
         right.save()
 
@@ -315,7 +327,9 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             "version": self.reviewer.revision.version,
             "user_id": self.reviewer.ojs_jid,
             "editor_message": self.get_argument("editor_message"),
-            "editor_author_message": self.get_argument("editor_author_message"),
+            "editor_author_message": self.get_argument(
+                "editor_author_message"
+            ),
             "recommendation": self.get_argument("recommendation"),
         }
 
