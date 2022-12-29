@@ -28,9 +28,7 @@ urlpatterns = [
         views.open_revision_doc,
         name="open_revision_doc",
     ),
-    re_path(
-        "^get_login_token/$", views.get_login_token, name="get_login_token"
-    ),
+    re_path("^get_login_token/$", views.get_login_token, name="get_login_token"),
     re_path(
         "^create_copy/(?P<submission_id>[0-9]+)/$",
         views.create_copy,

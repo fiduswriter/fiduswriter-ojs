@@ -1,1 +1,1 @@
-INSTALLED_APPS = ['ojs']
+INSTALLED_APPS = ["ojs"]
