@@ -286,8 +286,9 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         ).click()
         self.driver.find_element(By.CSS_SELECTOR, ".article-body").click()
         ActionChains(self.driver).send_keys(Keys.LEFT).send_keys(
-            "An abstract title"
+            "An abstract"
         ).perform()
+        time.sleep(1)
         # Enable authors
         self.driver.find_element(
             By.XPATH, '//*[@id="header-navigation"]/div[3]/span'
@@ -343,7 +344,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
             self.driver.find_element(
                 By.ID, "submission-abstract"
             ).get_attribute("value"),
-            "An abstract title",
+            "An abstract",
         )
         self.assertEqual(
             self.driver.find_element(
@@ -577,6 +578,7 @@ class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
         # Log in as author and verify that there are now three documents
         self.login_user(self.user1, self.driver, self.client)
         self.driver.get(urljoin(self.base_url, "/"))
+        time.sleep(1)
         self.assertEqual(
             len(
                 self.driver.find_elements(
