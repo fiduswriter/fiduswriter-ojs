@@ -10,7 +10,10 @@
 <!--  Translations -->
 <script type="text/javascript" src="/api/jsi18n/"></script>
 <!-- JS error handling -->
-<script type="text/javascript" src="{% url 'js-error-handler-js' %}"></script>
+<script type="text/javascript">
+    window.djangoJSErrorHandlerUrl = "{% url 'js-error-handler' %}"
+</script>
+<script type="text/javascript" src="{% static 'js/django_js_error_hook.js' %}"></script>
 <!-- jQuery -->
 <script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
