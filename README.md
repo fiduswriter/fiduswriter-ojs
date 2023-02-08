@@ -9,6 +9,8 @@ This plugin has to be combined with the `OJS-FidusWriter plugin <https://github.
 NOTE
 ----
 
+These instructions are for developers only. If you are running Fidus Writer as a snap, see [these instructions](https://github.com/fiduswriter/fiduswriter/wiki/Installation-and-configuration-on-Ubuntu-using-snap#activate-plugins) on how to activate plugins.
+
 Installation
 ------------
 
