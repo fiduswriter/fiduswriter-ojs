@@ -16,7 +16,6 @@ def submission_filename(instance, filename):
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

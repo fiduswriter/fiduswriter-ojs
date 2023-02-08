@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("ojs", "0007_move_contributors_from_submission_to_revision"),
     ]
