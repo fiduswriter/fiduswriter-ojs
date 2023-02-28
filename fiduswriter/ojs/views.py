@@ -1,21 +1,36 @@
+import json
+from asgiref.sync import async_to_sync, sync_to_async
+from httpx import HTTPError, Request
+
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import JsonResponse, HttpResponse
+from django.http import (
+    JsonResponse,
+    HttpResponse,
+    HttpResponseForbidden,
+    HttpResponseNotFound,
+)
 from django.shortcuts import redirect
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.db import IntegrityError
-from allauth.account.models import EmailAddress
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.http import require_http_methods
+
+from allauth.account.models import EmailAddress
+
+from document.models import Document, AccessRight, DocumentTemplate
+from usermedia.models import Image
 
 from . import models
 from . import token
 from . import constants
 from . import helpers
-from document.models import Document, AccessRight, DocumentTemplate
+
+
+OJS_PLUGIN_PATH = "/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/"
 
 
 # logs a user in
@@ -251,6 +266,242 @@ def get_doc_info(request):
 
     status = 200
     return JsonResponse(response, status=status)
+
+
+@sync_to_async
+@login_required
+@require_GET
+@async_to_sync
+async def get_journals(request):
+    base_url = request.GET["url"]
+    key = request.GET["key"]
+    url = f"{base_url}{OJS_PLUGIN_PATH}journals"
+    response = await helpers.send_async(
+        Request("GET", url, params={"key": key})
+    )
+    return HttpResponse(response.content)
+
+
+@sync_to_async
+@login_required
+@require_POST
+@async_to_sync
+async def author_submit(request):
+    # Submitting a new submission revision.
+    document_id = request.POST["doc_id"]
+    revision = models.SubmissionRevision.objects.filter(
+        document_id=document_id
+    ).first()
+    if revision:
+        # resubmission
+        submission = revision.submission
+        if submission.submitter != request.user:
+            # Trying to submit revision for submission of other user
+            return HttpResponseForbidden()
+        journal = submission.journal
+        data = {
+            "submission_id": submission.ojs_jid,
+            "version": revision.version,
+        }
+        key = journal.ojs_key
+        base_url = journal.ojs_url
+        url = f"{base_url}{OJS_PLUGIN_PATH}authorSubmit"
+        response = await helpers.send_async(
+            Request("POST", url, params={"key": key}, data=data)
+        )
+
+        # submission was successful, so we replace the user's write access
+        # rights with read rights.
+        right = AccessRight.objects.get(
+            user=request.user, document=revision.document
+        )
+        right.rights = "read"
+        right.save()
+
+        return HttpResponse(response.content)
+    else:
+        # The document is not part of an existing submission.
+        journal_id = request.POST["journal_id"]
+        journal = models.Journal.objects.get(id=journal_id)
+        template = journal.templates.filter(
+            document__id__exact=document_id
+        ).first()
+        if not template:
+            # Template is not available for Journal.
+            return HttpResponseForbidden()
+        submission = models.Submission()
+        submission.submitter = request.user
+        submission.journal_id = journal_id
+        submission.save()
+        revision = models.SubmissionRevision()
+        revision.submission = submission
+        revision.version = "1.0.0"
+        version = "1.0.0"
+        # Connect a new document to the submission.
+        title = request.POST["title"]
+        abstract = request.POST["abstract"]
+        content = request.POST["content"]
+        bibliography = request.POST["bibliography"]
+        image_ids = request.POST.getlist("image_ids[]")
+
+        images = []
+        for id in image_ids:
+            image = Image.objects.filter(id=id).first()
+            images.append(image)
+
+        document = helpers.create_doc(
+            journal.editor,
+            template,
+            title,
+            json.loads(content),
+            json.loads(bibliography),
+            images,
+            {},
+            submission.id,
+            version,
+        )
+
+        revision.document = document
+        revision.save()
+
+        fidus_url = request.build_absolute_uri("/")[:-1]
+
+        data = {
+            "username": request.user.username.encode("utf8"),
+            "title": title.encode("utf8"),
+            "abstract": abstract.encode("utf8"),
+            "first_name": request.POST["firstname"].encode("utf8"),
+            "last_name": request.POST["lastname"].encode("utf8"),
+            "email": request.user.email.encode("utf8"),
+            "affiliation": request.POST["affiliation"].encode("utf8"),
+            "author_url": request.POST["author_url"].encode("utf8"),
+            "journal_id": journal.ojs_jid,
+            "fidus_url": fidus_url,
+            "fidus_id": submission.id,
+            "version": version,
+        }
+
+        key = journal.ojs_key
+        base_url = journal.ojs_url
+        url = f"{base_url}{OJS_PLUGIN_PATH}authorSubmit"
+        try:
+            response = await helpers.send_async(
+                Request("POST", url, params={"key": key}, data=data)
+            )
+        except HTTPError:
+            revision.document.delete()
+            revision.delete()
+            raise
+        # Set the submission ID from the response from the OJS server.
+        body_json = json.loads(response.content)
+        submission.ojs_jid = body_json["submission_id"]
+        submission.save()
+
+        # We save the author ID on the OJS site. Currently we are NOT using
+        # this information for login purposes.
+        author = models.Author.objects.filter(
+            submission=submission.id, ojs_jid=body_json["user_id"]
+        ).first()
+        if author is None:
+            models.Author.objects.create(
+                user=request.user,
+                submission=submission,
+                ojs_jid=body_json["user_id"],
+            )
+            AccessRight.objects.create(
+                document=revision.document,
+                holder_obj=request.user,
+                path=revision.document.path,
+                rights="read-without-comments",
+            )
+        return HttpResponse(response.content)
+
+
+@sync_to_async
+@login_required
+@require_POST
+@async_to_sync
+async def copyedit_draft_submit(request):
+    document_id = request.POST["doc_id"]
+    revision = models.SubmissionRevision.objects.filter(
+        document_id=document_id
+    ).first()
+    if not revision:
+        return HttpResponseNotFound()
+    if revision.version != "4.0.0":
+        # version is not 4.0.0 (not copyedit draft)
+        return HttpResponseForbidden()
+    submission = revision.submission
+    journal = submission.journal
+    ojs_uid = False
+    author = submission.author_set.filter(user=request.user).first()
+    if author:
+        # User is the author
+        ojs_uid = author.ojs_jid
+    else:
+        editor = submission.editor_set.filter(user=request.user).first()
+        if editor:
+            # User is the one of the editors
+            ojs_uid = editor.ojs_jid
+
+    if not ojs_uid:
+        # User is neither author nor editor
+        return HttpResponseForbidden()
+
+    data = {"submission_id": submission.ojs_jid, "ojs_uid": ojs_uid}
+    key = journal.ojs_key
+    base_url = journal.ojs_url
+    url = f"{base_url}{OJS_PLUGIN_PATH}copyeditDraftSubmit"
+    response = await helpers.send_async(
+        Request("POST", url, params={"key": key}, data=data)
+    )
+
+    # submission was successful, so we replace the user's write access
+    # rights with read rights.
+    right = AccessRight.objects.get(
+        user=request.user, document=revision.document
+    )
+    right.rights = "read"
+    right.save()
+    return HttpResponse(response.content)
+
+
+@sync_to_async
+@login_required
+@require_POST
+@async_to_sync
+async def reviewer_submit(request):
+    # Submitting a new submission revision.
+    document_id = request.POST["doc_id"]
+    reviewer = models.Reviewer.objects.filter(
+        revision__document_id=document_id, user=request.user
+    ).first()
+    if reviewer is None:
+        # Trying to submit review without access rights.
+        return HttpResponseForbidden()
+    data = {
+        "submission_id": reviewer.revision.submission.ojs_jid,
+        "version": reviewer.revision.version,
+        "user_id": reviewer.ojs_jid,
+        "editor_message": request.POST["editor_message"],
+        "editor_author_message": request.POST["editor_author_message"],
+        "recommendation": request.POST["recommendation"],
+    }
+
+    key = reviewer.revision.submission.journal.ojs_key
+    base_url = reviewer.revision.submission.journal.ojs_url
+    url = f"{base_url}{OJS_PLUGIN_PATH}reviewerSubmit"
+    response = await helpers.send_async(
+        Request("POST", url, params={"key": key}, data=data)
+    )
+    # submission was successful, so we replace the user's write access
+    # rights with read rights.
+    right = AccessRight.objects.get(
+        user=request.user, document=reviewer.revision.document
+    )
+    right.rights = "read"
+    right.save()
+    return HttpResponse(response.content)
 
 
 # Get a user based on an email address. Used for registration of journal.

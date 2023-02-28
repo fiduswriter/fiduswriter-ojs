@@ -42,7 +42,7 @@ export class SendDocSubmission {
 
     uploadRevision(content, bibDB, imageDB) {
         post(
-            "/proxy/ojs/author_submit",
+            "/api/ojs/author_submit/",
             {
                 journal_id: this.journalId,
                 firstname: this.firstname,

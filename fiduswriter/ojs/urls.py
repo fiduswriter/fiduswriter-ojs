@@ -39,6 +39,16 @@ urlpatterns = [
     re_path("^get_user/$", views.get_user, name="get_user"),
     re_path("^save_journal/$", views.save_journal, name="save_journal"),
     re_path("^get_doc_info/$", views.get_doc_info, name="get_doc_info"),
+    re_path("^author_submit/$", views.author_submit, name="author_submit"),
+    re_path(
+        "^copyedit_draft_submit/$",
+        views.copyedit_draft_submit,
+        name="copyedit_draft_submit",
+    ),
+    re_path(
+        "^reviewer_submit/$", views.reviewer_submit, name="reviewer_submit"
+    ),
+    re_path("^get_journals/$", views.get_journals, name="get_journals"),
     re_path(
         "^add_editor/(?P<submission_id>[0-9]+)/$",
         views.add_editor,

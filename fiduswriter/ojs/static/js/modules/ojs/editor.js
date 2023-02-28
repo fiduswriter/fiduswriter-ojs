@@ -197,7 +197,7 @@ export class EditorOJS {
 
     submitCopyeditDraftUpdate() {
         post(
-            "/proxy/ojs/copyedit_draft_submit",
+            "/api/ojs/copyedit_draft_submit/",
             {
                 doc_id: this.editor.docInfo.id
             }
@@ -217,7 +217,7 @@ export class EditorOJS {
     submitResubmission() {
 
         post(
-            "/proxy/ojs/author_submit",
+            "/api/ojs/author_submit/",
             {
                 doc_id: this.editor.docInfo.id
             }
@@ -292,7 +292,7 @@ export class EditorOJS {
         }
         activateWait()
         post(
-            "/proxy/ojs/reviewer_submit",
+            "/api/ojs/reviewer_submit/",
             {
                 doc_id: this.editor.docInfo.id,
                 editor_message,

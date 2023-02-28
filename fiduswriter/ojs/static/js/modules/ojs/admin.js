@@ -46,7 +46,7 @@ export class AdminRegisterJournals {
             return
         }
         getJson(
-            "/proxy/ojs/journals",
+            "/api/ojs/get_journals/",
             {url: this.ojsUrl, key: this.ojsKey}
         ).then(
             json => {

@@ -56,4 +56,5 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
     cmdclass={"build_py": build_py},
+    install_requires=read("requirements.txt").splitlines(),
 )
