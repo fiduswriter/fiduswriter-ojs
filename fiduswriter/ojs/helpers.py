@@ -99,7 +99,7 @@ def copy_revision(revision, old_version_stage, new_version_stage, new_version):
     return revision
 
 
-@retry(stop=stop_after_attempt(10), wait=wait_fixed(3))
+@retry(reraise=True, stop=stop_after_attempt(10), wait=wait_fixed(3))
 async def send_async(request, timeout=40):
     async with AsyncClient(timeout=timeout) as client:
         response = await client.send(request)

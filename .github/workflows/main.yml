@@ -31,6 +31,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install libjpeg-dev python3-dev python3-pip gettext zlib1g-dev git nodejs build-essential
+        pip install -r requirements.txt
         cd fiduswriter
         mv ../ci/configuration.py ./
         pip install requests[security]
