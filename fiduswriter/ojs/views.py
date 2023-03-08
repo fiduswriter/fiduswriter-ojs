@@ -1,6 +1,7 @@
 import json
 from asgiref.sync import async_to_sync, sync_to_async
 from httpx import HTTPError, Request
+from urllib.parse import urlencode
 
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -307,7 +308,13 @@ async def author_submit(request):
         base_url = journal.ojs_url
         url = f"{base_url}{OJS_PLUGIN_PATH}authorSubmit"
         response = await helpers.send_async(
-            Request("POST", url, params={"key": key}, data=data)
+            Request(
+                "POST",
+                url,
+                params={"key": key},
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+                content=urlencode(data),
+            )
         )
 
         # submission was successful, so we replace the user's write access
@@ -380,13 +387,20 @@ async def author_submit(request):
             "fidus_id": submission.id,
             "version": version,
         }
-
         key = journal.ojs_key
         base_url = journal.ojs_url
         url = f"{base_url}{OJS_PLUGIN_PATH}authorSubmit"
         try:
             response = await helpers.send_async(
-                Request("POST", url, params={"key": key}, data=data)
+                Request(
+                    "POST",
+                    url,
+                    params={"key": key},
+                    headers={
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    content=urlencode(data),
+                )
             )
         except HTTPError:
             revision.document.delete()
@@ -453,7 +467,13 @@ async def copyedit_draft_submit(request):
     base_url = journal.ojs_url
     url = f"{base_url}{OJS_PLUGIN_PATH}copyeditDraftSubmit"
     response = await helpers.send_async(
-        Request("POST", url, params={"key": key}, data=data)
+        Request(
+            "POST",
+            url,
+            params={"key": key},
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            content=urlencode(data),
+        )
     )
 
     # submission was successful, so we replace the user's write access
@@ -492,7 +512,13 @@ async def reviewer_submit(request):
     base_url = reviewer.revision.submission.journal.ojs_url
     url = f"{base_url}{OJS_PLUGIN_PATH}reviewerSubmit"
     response = await helpers.send_async(
-        Request("POST", url, params={"key": key}, data=data)
+        Request(
+            "POST",
+            url,
+            params={"key": key},
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            content=urlencode(data),
+        )
     )
     # submission was successful, so we replace the user's write access
     # rights with read rights.
