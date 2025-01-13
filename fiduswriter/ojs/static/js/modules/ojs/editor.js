@@ -1,9 +1,20 @@
-import {addAlert, activateWait, deactivateWait, postJson, post, Dialog} from "../common"
-import {firstSubmissionDialogTemplate, resubmissionDialogTemplate, reviewSubmitDialogTemplate} from "./templates"
-import {SendDocSubmission} from "./submit_doc"
-import {READ_ONLY_ROLES, COMMENT_ONLY_ROLES} from "../editor"
+import {
+    Dialog,
+    activateWait,
+    addAlert,
+    deactivateWait,
+    post,
+    postJson
+} from "../common"
+import {COMMENT_ONLY_ROLES, READ_ONLY_ROLES} from "../editor"
 import {contributorInputPlugin} from "../editor/state_plugins"
 import {reviewContributorPlugin} from "./contributor_state_plugin"
+import {SendDocSubmission} from "./submit_doc"
+import {
+    firstSubmissionDialogTemplate,
+    resubmissionDialogTemplate,
+    reviewSubmitDialogTemplate
+} from "./templates"
 
 // Adds functions for OJS to the editor
 export class EditorOJS {
@@ -19,22 +30,16 @@ export class EditorOJS {
         const docData = {
             doc_id: this.editor.docInfo.id
         }
-        return postJson(
-            "/api/ojs/get_doc_info/",
-            docData
-        ).then(
-            ({json}) => {
+        return postJson("/api/ojs/get_doc_info/", docData)
+            .then(({json}) => {
                 this.submission = json["submission"]
                 this.journals = json["journals"]
                 return this.setupUI()
-            }
-        ).catch(
-            error => {
+            })
+            .catch(error => {
                 addAlert("error", gettext("Could not obtain submission info."))
-                throw (error)
-            }
-        )
-
+                throw error
+            })
     }
 
     setupUI() {
@@ -42,21 +47,38 @@ export class EditorOJS {
             // This installation does not have any journals setup. Abort.
             return Promise.resolve()
         }
-        if (this.submission.status === "submitted" && this.submission.version.split(".")[0] === "3") {
+        if (
+            this.submission.status === "submitted" &&
+            this.submission.version.split(".")[0] === "3"
+        ) {
             // We are in the peer review stage.
             // replace contributorInputPlugin.
-            this.editor.statePlugins = this.editor.statePlugins.filter(plugin => plugin[0] !== contributorInputPlugin)
-            this.editor.statePlugins.push([reviewContributorPlugin, () => ({editor: this, contributors: this.submission.contributors})])
+            this.editor.statePlugins = this.editor.statePlugins.filter(
+                plugin => plugin[0] !== contributorInputPlugin
+            )
+            this.editor.statePlugins.push([
+                reviewContributorPlugin,
+                () => ({
+                    editor: this,
+                    contributors: this.submission.contributors
+                })
+            ])
         }
 
-        const fileMenu = this.editor.menu.headerbarModel.content.find(menu => menu.id === "file")
+        const fileMenu = this.editor.menu.headerbarModel.content.find(
+            menu => menu.id === "file"
+        )
         fileMenu.content.push({
             title: gettext("Submit to journal"),
             type: "action",
             tooltip: gettext("Submit to journal"),
             action: editor => {
                 if (this.submission.status === "submitted") {
-                    if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                    if (
+                        COMMENT_ONLY_ROLES.includes(
+                            editor.docInfo.access_rights
+                        )
+                    ) {
                         this.reviewerDialog()
                     } else if ("4.0.0" === this.submission.version) {
                         this.updateCopyeditDraftDialog()
@@ -83,13 +105,19 @@ export class EditorOJS {
                             // Editors and Sub-Editors have no need to submit
                             return true
                         } else if ("assistant" === role) {
-                            const submissionStep = parseInt(this.submission.version.slice(0, 1))
+                            const submissionStep = parseInt(
+                                this.submission.version.slice(0, 1)
+                            )
                             if (4 !== submissionStep) {
                                 // Assistants can only submit on copyediting revisions
                                 return true
                             }
                         }
-                    } else if (COMMENT_ONLY_ROLES.includes(editor.docInfo.access_rights)) {
+                    } else if (
+                        COMMENT_ONLY_ROLES.includes(
+                            editor.docInfo.access_rights
+                        )
+                    ) {
                         // Not allowed to submit the doc for review without the rights to write
                         return true
                     }
@@ -103,23 +131,50 @@ export class EditorOJS {
 
     // Dialog for an article that has no submisison status. Includes selection of journal.
     firstSubmissionDialog() {
-
         const buttons = [
             {
                 text: gettext("Submit"),
                 classes: "fw-dark",
                 click: () => {
-                    const journalId = parseInt(document.getElementById("submission-journal").value)
-                    const firstname = document.getElementById("submission-firstname").value.trim()
-                    const lastname = document.getElementById("submission-lastname").value.trim()
-                    const affiliation = document.getElementById("submission-affiliation").value.trim()
-                    const authorUrl = document.getElementById("submission-author-url").value.trim()
-                    const abstract = document.getElementById("submission-abstract").value.trim()
-                    if (firstname === "" || lastname === "" || abstract === "") {
-                        addAlert("error", gettext("Firstname, lastname and abstract are obligatory fields!"))
+                    const journalId = parseInt(
+                        document.getElementById("submission-journal").value
+                    )
+                    const firstname = document
+                        .getElementById("submission-firstname")
+                        .value.trim()
+                    const lastname = document
+                        .getElementById("submission-lastname")
+                        .value.trim()
+                    const affiliation = document
+                        .getElementById("submission-affiliation")
+                        .value.trim()
+                    const authorUrl = document
+                        .getElementById("submission-author-url")
+                        .value.trim()
+                    const abstract = document
+                        .getElementById("submission-abstract")
+                        .value.trim()
+                    if (
+                        firstname === "" ||
+                        lastname === "" ||
+                        abstract === ""
+                    ) {
+                        addAlert(
+                            "error",
+                            gettext(
+                                "Firstname, lastname and abstract are obligatory fields!"
+                            )
+                        )
                         return
                     }
-                    this.submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract})
+                    this.submitDoc({
+                        journalId,
+                        firstname,
+                        lastname,
+                        affiliation,
+                        authorUrl,
+                        abstract
+                    })
                     dialog.close()
                 }
             },
@@ -128,9 +183,18 @@ export class EditorOJS {
             }
         ]
 
-        const abstractNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata === "abstract")
-        const authorsNode = this.editor.docInfo.confirmedDoc.firstChild.content.content.find(node => node.attrs && node.attrs.metadata === "authors")
-        const authorNode = authorsNode && authorsNode.childCount ? authorsNode.firstChild : false
+        const abstractNode =
+            this.editor.docInfo.confirmedDoc.firstChild.content.content.find(
+                node => node.attrs && node.attrs.metadata === "abstract"
+            )
+        const authorsNode =
+            this.editor.docInfo.confirmedDoc.firstChild.content.content.find(
+                node => node.attrs && node.attrs.metadata === "authors"
+            )
+        const authorNode =
+            authorsNode && authorsNode.childCount
+                ? authorsNode.firstChild
+                : false
         const dialog = new Dialog({
             height: 460,
             width: 800,
@@ -138,10 +202,17 @@ export class EditorOJS {
             title: gettext("Complete missing information and choose journal"),
             body: firstSubmissionDialogTemplate({
                 journals: this.journals,
-                first_name: authorNode ? authorNode.attrs.firstname : this.editor.user.first_name,
-                last_name: authorNode ? authorNode.attrs.lastname : this.editor.user.last_name,
+                first_name: authorNode
+                    ? authorNode.attrs.firstname
+                    : this.editor.user.first_name,
+                last_name: authorNode
+                    ? authorNode.attrs.lastname
+                    : this.editor.user.last_name,
                 affiliation: authorNode ? authorNode.attrs.institution : "",
-                abstract: !abstractNode || abstractNode.attrs.hidden ? "" : abstractNode.textContent
+                abstract:
+                    !abstractNode || abstractNode.attrs.hidden
+                        ? ""
+                        : abstractNode.textContent
             })
         })
         dialog.open()
@@ -196,45 +267,41 @@ export class EditorOJS {
     }
 
     submitCopyeditDraftUpdate() {
-        post(
-            "/api/ojs/copyedit_draft_submit/",
-            {
-                doc_id: this.editor.docInfo.id
-            }
-        ).then(
-            () => {
+        post("/api/ojs/copyedit_draft_submit/", {
+            doc_id: this.editor.docInfo.id
+        })
+            .then(() => {
                 addAlert("success", gettext("Editors are informed."))
                 window.setTimeout(() => window.location.reload(), 2000)
-            }
-        ).catch(
-            error => {
+            })
+            .catch(error => {
                 addAlert("error", gettext("Updates could not be submitted."))
-                throw (error)
-            }
-        )
+                throw error
+            })
     }
 
     submitResubmission() {
-
-        post(
-            "/api/ojs/author_submit/",
-            {
-                doc_id: this.editor.docInfo.id
-            }
-        ).then(
-            () => {
+        post("/api/ojs/author_submit/", {
+            doc_id: this.editor.docInfo.id
+        })
+            .then(() => {
                 addAlert("success", gettext("Resubmission successful"))
                 window.setTimeout(() => window.location.reload(), 2000)
-            }
-        ).catch(
-            error => {
+            })
+            .catch(error => {
                 addAlert("error", gettext("Review could not be submitted."))
-                throw (error)
-            }
-        )
+                throw error
+            })
     }
 
-    submitDoc({journalId, firstname, lastname, affiliation, authorUrl, abstract}) {
+    submitDoc({
+        journalId,
+        firstname,
+        lastname,
+        affiliation,
+        authorUrl,
+        abstract
+    }) {
         const submitter = new SendDocSubmission({
             doc: this.editor.getDoc(),
             imageDB: this.editor.mod.db.imageDB,
@@ -284,34 +351,34 @@ export class EditorOJS {
     // Send the opinion of the reviewer to OJS.
     submitReview() {
         const editor_message = document.getElementById("message-editor").value,
-            editor_author_message = document.getElementById("message-editor-author").value,
+            editor_author_message = document.getElementById(
+                "message-editor-author"
+            ).value,
             recommendation = document.getElementById("recommendation").value
-        if (editor_message === "" || editor_author_message === "" || recommendation === "") {
+        if (
+            editor_message === "" ||
+            editor_author_message === "" ||
+            recommendation === ""
+        ) {
             addAlert("error", gettext("Fill out all fields before submitting!"))
             return false
         }
         activateWait()
-        post(
-            "/api/ojs/reviewer_submit/",
-            {
-                doc_id: this.editor.docInfo.id,
-                editor_message,
-                editor_author_message,
-                recommendation
-            }
-        ).then(
-            () => {
+        post("/api/ojs/reviewer_submit/", {
+            doc_id: this.editor.docInfo.id,
+            editor_message,
+            editor_author_message,
+            recommendation
+        })
+            .then(() => {
                 deactivateWait()
                 addAlert("success", gettext("Review submitted"))
                 window.setTimeout(() => window.location.reload(), 2000)
-            }
-        ).catch(
-            error => {
+            })
+            .catch(error => {
                 addAlert("error", gettext("Review could not be submitted."))
-                throw (error)
-            }
-        )
+                throw error
+            })
         return true
     }
-
 }

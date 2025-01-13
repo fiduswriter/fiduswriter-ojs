@@ -1,4 +1,11 @@
-import {noSpaceTmp, addAlert, getJson, postJson, post, findTarget} from "../common"
+import {
+    addAlert,
+    findTarget,
+    getJson,
+    noSpaceTmp,
+    post,
+    postJson
+} from "../common"
 // Adds capabilities for admins to register journals
 
 export class AdminRegisterJournals {
@@ -16,24 +23,26 @@ export class AdminRegisterJournals {
         document.addEventListener("click", event => {
             const el = {}
             switch (true) {
-            case findTarget(event, "#get_journals", el):
-                this.getJournals()
-                break
-            case findTarget(event, ".related-lookup", el): {
-                // The following is slightly modified from the binding function in the
-                // admin interface to allow for lookups in fields that are added to the
-                // DOM at a later stage.
-                const nEvent = window.django.jQuery.Event("django:lookup-related") // using django's builtin jQuery as required
-                window.django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
-                break
-            }
-            case findTarget(event, ".register-submit", el): {
-                const journalId = el.target.dataset.id
-                this.saveJournal(journalId)
-                break
-            }
-            default:
-                break
+                case findTarget(event, "#get_journals", el):
+                    this.getJournals()
+                    break
+                case findTarget(event, ".related-lookup", el): {
+                    // The following is slightly modified from the binding function in the
+                    // admin interface to allow for lookups in fields that are added to the
+                    // DOM at a later stage.
+                    const nEvent = window.django.jQuery.Event(
+                        "django:lookup-related"
+                    ) // using django's builtin jQuery as required
+                    window.django.jQuery(el.target).trigger(nEvent) // using django's builtin jQuery as required
+                    break
+                }
+                case findTarget(event, ".register-submit", el): {
+                    const journalId = el.target.dataset.id
+                    this.saveJournal(journalId)
+                    break
+                }
+                default:
+                    break
             }
         })
     }
@@ -42,38 +51,45 @@ export class AdminRegisterJournals {
         this.ojsUrl = document.getElementById("ojs_url").value
         this.ojsKey = document.getElementById("ojs_key").value
         if (this.ojsUrl.length === 0 || this.ojsKey.length === 0) {
-            addAlert("error", gettext("Provide a URL for the OJS server and the key to access it."))
+            addAlert(
+                "error",
+                gettext(
+                    "Provide a URL for the OJS server and the key to access it."
+                )
+            )
             return
         }
-        getJson(
-            "/api/ojs/get_journals/",
-            {url: this.ojsUrl, key: this.ojsKey}
-        ).then(
-            json => {
-                const journals = json["journals"]
-                    .sort((a, b) => parseInt(a.id) - parseInt(b.id))
+        getJson("/api/ojs/get_journals/", {url: this.ojsUrl, key: this.ojsKey})
+            .then(json => {
+                const journals = json["journals"].sort(
+                    (a, b) => parseInt(a.id) - parseInt(b.id)
+                )
                 const emailLookups = []
                 journals.forEach(journal => {
                     if (!journal.contact_email) {
                         return
                     }
-                    const emailLookup = this.getUser(journal.contact_email).then(
-                        user => {
+                    const emailLookup = this.getUser(journal.contact_email)
+                        .then(user => {
                             if (user) {
                                 Object.assign(journal, user)
                             }
-                        }
-                    ).catch(
-                        _error => {
-                            addAlert("info", gettext(`Cannot find Fidus Writer user corresponding to email: ${journal.contact_email}`))
-                        }
-                    )
+                        })
+                        .catch(_error => {
+                            addAlert(
+                                "info",
+                                gettext(
+                                    `Cannot find Fidus Writer user corresponding to email: ${journal.contact_email}`
+                                )
+                            )
+                        })
                     emailLookups.push(emailLookup)
                 })
                 return Promise.all(emailLookups).then(() => {
                     const journalHTML = journals
-                        .map(journal =>
-                            noSpaceTmp`
+                        .map(
+                            journal =>
+                                noSpaceTmp`
                             <div id="journal_${journal.id}">
                                 <b>${journal.id}</b>&nbsp;
                                 <input type="text" value="${journal.name}" id="journal_name_${journal.id}">&nbsp;
@@ -83,68 +99,68 @@ export class AdminRegisterJournals {
                                 <strong>${journal.user_name ? journal.user_name : ""}</strong>
                                 <button data-id="${journal.id}" class="button register-submit">${gettext("Register")}</button>
                             </div>`
-                        ).join("")
-                    document.getElementById("journal_form").innerHTML = journalHTML
+                        )
+                        .join("")
+                    document.getElementById("journal_form").innerHTML =
+                        journalHTML
                 })
-            }
-        ).catch(
-            error => {
+            })
+            .catch(error => {
                 addAlert("error", gettext("Could not connect to OJS server."))
-                throw (error)
-            }
-        )
-
+                throw error
+            })
     }
 
     getUser(email) {
-        return postJson(
-            "/api/ojs/get_user/",
-            {email}
-        ).then(
-            ({json}) => {
-                return json
-            }
-        )
+        return postJson("/api/ojs/get_user/", {email}).then(({json}) => {
+            return json
+        })
     }
 
     saveJournal(ojs_jid) {
         const name = document.getElementById(`journal_name_${ojs_jid}`).value
         const editor = document.getElementById(`editor_${ojs_jid}`).value
         if (name.length === 0 || editor.length === 0) {
-            addAlert("error", gettext("Editor and journal name need to be filled out."))
+            addAlert(
+                "error",
+                gettext("Editor and journal name need to be filled out.")
+            )
             return
         }
         const editor_id = parseInt(editor)
         if (isNaN(editor_id)) {
-            addAlert("error", gettext("Editor needs to be the ID number of the editor user."))
+            addAlert(
+                "error",
+                gettext("Editor needs to be the ID number of the editor user.")
+            )
             return
         }
 
-        post(
-            "/api/ojs/save_journal/",
-            {
-                editor_id,
-                name,
-                ojs_jid,
-                ojs_key: this.ojsKey,
-                ojs_url: this.ojsUrl
-            }
-        ).then(
-            response => {
+        post("/api/ojs/save_journal/", {
+            editor_id,
+            name,
+            ojs_jid,
+            ojs_key: this.ojsKey,
+            ojs_url: this.ojsUrl
+        })
+            .then(response => {
                 if (response.status === 201) {
                     addAlert("info", gettext("Journal saved."))
                 } else {
-                    addAlert("warning", gettext("Journal already present on server."))
+                    addAlert(
+                        "warning",
+                        gettext("Journal already present on server.")
+                    )
                 }
                 const journalEl = document.getElementById(`journal_${ojs_jid}`)
                 journalEl.parentElement.removeChild(journalEl)
-            }
-        ).catch(
-            error => {
-                addAlert("error", gettext("Could not save journal. Please check form."))
-                throw (error)
-            }
-        )
-
+            })
+            .catch(error => {
+                addAlert(
+                    "error",
+                    gettext("Could not save journal. Please check form.")
+                )
+                throw error
+            })
     }
 }

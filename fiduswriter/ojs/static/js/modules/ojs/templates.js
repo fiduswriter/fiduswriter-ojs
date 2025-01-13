@@ -2,7 +2,13 @@ import {escapeText} from "../common"
 
 /** Dialog to add a note to a revision before saving. */
 
-export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, affiliation, abstract}) =>
+export const firstSubmissionDialogTemplate = ({
+    journals,
+    first_name,
+    last_name,
+    affiliation,
+    abstract
+}) =>
     `<h3>${gettext("Submission information")}</h3>
     <table class="fw-dialog-table fw-dialog-table-wide">
         <tbody>
@@ -11,13 +17,14 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
                 <td>
                     <div class="fw-select-container">
                         <select id="submission-journal" class="fw-button fw-white fw-large">
-                        ${
-    journals.map(journal =>
-        `<option value="${journal.id}">
+                        ${journals
+                            .map(
+                                journal =>
+                                    `<option value="${journal.id}">
                                     ${escapeText(journal.name)}
                                 </option>`
-    ).join("")
-}
+                            )
+                            .join("")}
                         </select>
                         <div class="fw-select-arrow fa fa-caret-down"></div>
                     </div>
@@ -56,11 +63,9 @@ export const firstSubmissionDialogTemplate = ({journals, first_name, last_name, 
         </tbody>
     </table>`
 
-
 export const resubmissionDialogTemplate = () =>
     `<p>${gettext("By pressing the submit button your resubmission will be sent to the journal")}</p><br>
     <p><b>${gettext("Be aware that this action cannot be undone!")}</b></p>`
-
 
 export const reviewSubmitDialogTemplate = () =>
     `<label for="editor">${gettext("Message for editor")}:</label>

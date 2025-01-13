@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
-from testing.testcases import LiveTornadoTestCase
+from channels.testing import ChannelsLiveServerTestCase
 from testing.selenium_helper import SeleniumHelper
 
 from ojs import models
@@ -157,7 +157,7 @@ def get_free_port():
     return port
 
 
-class OJSDummyTest(LiveTornadoTestCase, SeleniumHelper):
+class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
     fixtures = ["initial_documenttemplates.json", "initial_styles.json"]
 
     @classmethod

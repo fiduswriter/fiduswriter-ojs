@@ -1,8 +1,7 @@
-import {Plugin, PluginKey} from "prosemirror-state"
 import {DOMSerializer} from "prosemirror-model"
+import {Plugin, PluginKey} from "prosemirror-state"
 
 const key = new PluginKey("reviewContributorInput")
-
 
 class ReviewContributorsPartView {
     constructor(node, view, getPos, contributors) {
@@ -15,7 +14,12 @@ class ReviewContributorsPartView {
         this.dom.classList.add(`article-${this.node.attrs.id}`)
         this.dom.classList.add(`article-${this.node.attrs.id}-readonly`)
         this.dom.contentEditable = false
-        if (node.attrs.hidden || node.attrs.deleted || !contributors || !contributors.length) {
+        if (
+            node.attrs.hidden ||
+            node.attrs.deleted ||
+            !contributors ||
+            !contributors.length
+        ) {
             this.dom.dataset.hidden = true
         } else {
             // Put contributors content back into place in the display if they are available.
@@ -23,8 +27,10 @@ class ReviewContributorsPartView {
             // not to reviewers.
             const schema = this.node.type.schema
             const serializer = DOMSerializer.fromSchema(schema)
-            contributors.forEach(
-                json => this.dom.append(serializer.serializeNode(schema.nodeFromJSON(json)))
+            contributors.forEach(json =>
+                this.dom.append(
+                    serializer.serializeNode(schema.nodeFromJSON(json))
+                )
             )
         }
         this.contentDOM = document.createElement("span")
@@ -34,13 +40,18 @@ class ReviewContributorsPartView {
     }
 }
 
-export const reviewContributorPlugin = function(options) {
-
+export const reviewContributorPlugin = function (options) {
     return new Plugin({
         key,
         props: {
             nodeViews: {
-                contributors_part: (node, view, getPos) => new ReviewContributorsPartView(node, view, getPos, options.contributors[node.attrs.id])
+                contributors_part: (node, view, getPos) =>
+                    new ReviewContributorsPartView(
+                        node,
+                        view,
+                        getPos,
+                        options.contributors[node.attrs.id]
+                    )
             }
         }
     })
