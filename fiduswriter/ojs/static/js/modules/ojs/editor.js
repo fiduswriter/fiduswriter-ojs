@@ -184,11 +184,11 @@ export class EditorOJS {
         ]
 
         const abstractNode =
-            this.editor.docInfo.confirmedDoc.firstChild.content.content.find(
+            this.editor.docInfo.confirmedDoc.content.content.find(
                 node => node.attrs && node.attrs.metadata === "abstract"
             )
         const authorsNode =
-            this.editor.docInfo.confirmedDoc.firstChild.content.content.find(
+            this.editor.docInfo.confirmedDoc.content.content.find(
                 node => node.attrs && node.attrs.metadata === "authors"
             )
         const authorNode =

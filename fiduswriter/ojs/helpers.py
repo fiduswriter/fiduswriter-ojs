@@ -44,6 +44,44 @@ def create_doc(
     return doc
 
 
+async def create_doc_async(
+    owner,
+    template,
+    title,
+    content,
+    bibliography,
+    images,
+    comments,
+    submission_id,
+    revision_version,
+):
+    doc = Document()
+    doc.owner = owner
+    doc.template = template
+    doc.title = title
+    doc.content = content
+    doc.bibliography = bibliography
+    doc.path = f"/Submission {submission_id}/{title.replace('/', '')} ({revision_version})"
+    doc.comments = comments
+    await doc.asave()
+
+    for image in images:
+        if image is None:
+            image = Image()
+            image.uploader = owner
+            f = open(
+                path.join(settings.PROJECT_PATH, "base/static/img/error.png")
+            )
+            image.image.save("error.png", File(f))
+            await image.asave()
+
+        await DocumentImage.objects.acreate(
+            document=doc, image=image, title=""
+        )
+
+    return doc
+
+
 def copy_revision(revision, old_version_stage, new_version_stage, new_version):
     images = []
     doc_images = revision.document.documentimage_set.all()

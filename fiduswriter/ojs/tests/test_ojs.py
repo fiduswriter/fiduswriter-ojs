@@ -2,10 +2,10 @@ import time
 import json
 import multiprocessing
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import cgi
 import socket
 import requests
 from urllib.parse import urljoin
+from urllib.parse import parse_qs
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -60,14 +60,8 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
             self.send_response(requests.codes.not_found)
             self.end_headers()
             return
-        form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={
-                "REQUEST_METHOD": "POST",
-                "CONTENT_TYPE": self.headers["Content-Type"],
-            },
-        )
+        content_length = int(self.headers["Content-Length"])
+        form = parse_qs(self.rfile.read(content_length).decode("utf-8"))
         if relative_url == "authorSubmit":
             if all(
                 i in form
@@ -262,8 +256,8 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         WebDriverWait(self.driver, self.wait_time).until(
             EC.presence_of_element_located((By.CLASS_NAME, "editor-toolbar"))
         )
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-title").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-title").send_keys(
             "Test"
         )
         # We enable the abstract
@@ -284,7 +278,7 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
                 "> ul > li:nth-child(1) > div > ul > li:nth-child(3) > span"
             ),
         ).click()
-        self.driver.find_element(By.CSS_SELECTOR, ".article-body").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-body").click()
         ActionChains(self.driver).send_keys(Keys.LEFT).send_keys(
             "An abstract"
         ).perform()
@@ -303,7 +297,7 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         self.driver.find_element(By.CSS_SELECTOR, "#document-top").click()
         # Add author
         self.driver.find_element(
-            By.CSS_SELECTOR, ".article-authors button"
+            By.CSS_SELECTOR, ".doc-authors button"
         ).click()
         self.driver.find_element(
             By.CSS_SELECTOR, "input[name=firstname]"
@@ -434,16 +428,16 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         )
         time.sleep(1)
         # Check that we cannot change the title
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-title").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-title").send_keys(
             "ARGH"
         )
         self.assertEqual(
-            self.driver.find_element(By.CSS_SELECTOR, ".article-title").text,
+            self.driver.find_element(By.CSS_SELECTOR, ".doc-title").text,
             "Test",
         )
         ActionChains(self.driver).double_click(
-            self.driver.find_element(By.CSS_SELECTOR, ".article-title")
+            self.driver.find_element(By.CSS_SELECTOR, ".doc-title")
         ).perform()
         self.driver.find_element(
             By.CSS_SELECTOR, 'button[title="Comment"]'
@@ -526,16 +520,16 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         )
         time.sleep(1)
         # Check that we cannot change the title
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".article-title").send_keys(
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-title").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-title").send_keys(
             "ARGH"
         )
         self.assertEqual(
-            self.driver.find_element(By.CSS_SELECTOR, ".article-title").text,
+            self.driver.find_element(By.CSS_SELECTOR, ".doc-title").text,
             "Test",
         )
         ActionChains(self.driver).double_click(
-            self.driver.find_element(By.CSS_SELECTOR, ".article-title")
+            self.driver.find_element(By.CSS_SELECTOR, ".doc-title")
         ).perform()
         self.driver.find_element(
             By.CSS_SELECTOR, 'button[title="Comment"]'
@@ -621,19 +615,19 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         self.assertEqual(
             len(
                 self.driver.find_elements(
-                    By.CSS_SELECTOR, "div.article-authors-readonly"
+                    By.CSS_SELECTOR, "div.doc-authors-readonly"
                 )
             ),
             1,
         )
         # Check that we can change the body
-        self.driver.find_element(By.CSS_SELECTOR, ".article-body").click()
-        self.driver.find_element(By.CSS_SELECTOR, ".article-body").send_keys(
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-body").click()
+        self.driver.find_element(By.CSS_SELECTOR, ".doc-body").send_keys(
             "An updated body"
         )
         time.sleep(1)
         self.assertEqual(
-            self.driver.find_element(By.CSS_SELECTOR, ".article-body").text,
+            self.driver.find_element(By.CSS_SELECTOR, ".doc-body").text,
             "An updated body",
         )
         # Resubmit
@@ -685,7 +679,7 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         self.assertEqual(
             len(
                 self.driver.find_elements(
-                    By.CSS_SELECTOR, "div.article-authors-readonly"
+                    By.CSS_SELECTOR, "div.doc-authors-readonly"
                 )
             ),
             0,
