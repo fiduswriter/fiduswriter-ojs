@@ -1,5 +1,4 @@
 import json
-from asgiref.sync import async_to_sync, sync_to_async
 from httpx import HTTPError, Request
 from urllib.parse import urlencode
 
@@ -269,10 +268,8 @@ def get_doc_info(request):
     return JsonResponse(response, status=status)
 
 
-@sync_to_async
 @login_required
 @require_GET
-@async_to_sync
 async def get_journals(request):
     base_url = request.GET["url"]
     key = request.GET["key"]
@@ -283,10 +280,8 @@ async def get_journals(request):
     return HttpResponse(response.content)
 
 
-@sync_to_async
 @login_required
 @require_POST
-@async_to_sync
 async def author_submit(request):
     # Submitting a new submission revision.
     document_id = request.POST["doc_id"]
@@ -439,10 +434,8 @@ async def author_submit(request):
         return HttpResponse(response.content)
 
 
-@sync_to_async
 @login_required
 @require_POST
-@async_to_sync
 async def copyedit_draft_submit(request):
     document_id = request.POST["doc_id"]
     revision = (
@@ -496,10 +489,8 @@ async def copyedit_draft_submit(request):
     return HttpResponse(response.content)
 
 
-@sync_to_async
 @login_required
 @require_POST
-@async_to_sync
 async def reviewer_submit(request):
     # Submitting a new submission revision.
     document_id = request.POST["doc_id"]
