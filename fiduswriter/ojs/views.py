@@ -292,10 +292,11 @@ async def author_submit(request):
         )
         .afirst()
     )
+    request_user = await request.auser()
     if revision:
         # resubmission
         submission = revision.submission
-        if submission.submitter != request.user:
+        if submission.submitter != request_user:
             # Trying to submit revision for submission of other user
             return HttpResponseForbidden()
         data = {
@@ -319,7 +320,7 @@ async def author_submit(request):
         # submission was successful, so we replace the user's write access
         # rights with read rights.
         right = await AccessRight.objects.aget(
-            user=request.user, document=revision.document
+            user=request_user, document=revision.document
         )
         right.rights = "read"
         await right.asave()
@@ -339,13 +340,9 @@ async def author_submit(request):
         if not template:
             # Template is not available for Journal.
             return HttpResponseForbidden()
-        submission = models.Submission()
-        submission.submitter = request.user
-        submission.journal_id = journal_id
-        await submission.asave()
-        revision = models.SubmissionRevision()
-        revision.submission = submission
-        revision.version = "1.0.0"
+        submission = await models.Submission.objects.acreate(
+            submitter=request_user, journal_id=journal_id
+        )
         version = "1.0.0"
         # Connect a new document to the submission.
         title = request.POST["title"]
@@ -370,19 +367,19 @@ async def author_submit(request):
             submission.id,
             version,
         )
-
-        revision.document = document
-        await revision.asave()
+        revision = await models.SubmissionRevision.objects.acreate(
+            submission=submission, version=version, document=document
+        )
 
         fidus_url = request.build_absolute_uri("/")[:-1]
 
         data = {
-            "username": request.user.username.encode("utf8"),
+            "username": request_user.username.encode("utf8"),
             "title": title.encode("utf8"),
             "abstract": abstract.encode("utf8"),
             "first_name": request.POST["firstname"].encode("utf8"),
             "last_name": request.POST["lastname"].encode("utf8"),
-            "email": request.user.email.encode("utf8"),
+            "email": request_user.email.encode("utf8"),
             "affiliation": request.POST["affiliation"].encode("utf8"),
             "author_url": request.POST["author_url"].encode("utf8"),
             "journal_id": journal.ojs_jid,
@@ -421,13 +418,13 @@ async def author_submit(request):
         ).afirst()
         if author is None:
             await models.Author.objects.acreate(
-                user=request.user,
+                user=request_user,
                 submission=submission,
                 ojs_jid=body_json["user_id"],
             )
             await AccessRight.objects.acreate(
                 document=revision.document,
-                holder_obj=request.user,
+                holder_obj=request_user,
                 path=revision.document.path,
                 rights="read-without-comments",
             )
@@ -438,6 +435,7 @@ async def author_submit(request):
 @require_POST
 async def copyedit_draft_submit(request):
     document_id = request.POST["doc_id"]
+    request_user = await request.auser()
     revision = (
         await models.SubmissionRevision.objects.filter(document_id=document_id)
         .select_related("submission__journal")
@@ -451,12 +449,12 @@ async def copyedit_draft_submit(request):
     submission = revision.submission
     journal = submission.journal
     ojs_uid = False
-    author = await submission.author_set.filter(user=request.user).afirst()
+    author = await submission.author_set.filter(user=request_user).afirst()
     if author:
         # User is the author
         ojs_uid = author.ojs_jid
     else:
-        editor = await submission.editor_set.filter(user=request.user).afirst()
+        editor = await submission.editor_set.filter(user=request_user).afirst()
         if editor:
             # User is the one of the editors
             ojs_uid = editor.ojs_jid
@@ -482,7 +480,7 @@ async def copyedit_draft_submit(request):
     # submission was successful, so we replace the user's write access
     # rights with read rights.
     right = await AccessRight.objects.aget(
-        user=request.user, document=revision.document
+        user=request_user, document=revision.document
     )
     right.rights = "read"
     await right.asave()
@@ -494,9 +492,10 @@ async def copyedit_draft_submit(request):
 async def reviewer_submit(request):
     # Submitting a new submission revision.
     document_id = request.POST["doc_id"]
+    request_user = await request.auser()
     reviewer = (
         await models.Reviewer.objects.filter(
-            revision__document_id=document_id, user=request.user
+            revision__document_id=document_id, user=request_user
         )
         .select_related("revision__submission__journal", "revision__document")
         .afirst()
@@ -528,7 +527,7 @@ async def reviewer_submit(request):
     # submission was successful, so we replace the user's write access
     # rights with read rights.
     right = await AccessRight.objects.aget(
-        user=request.user, document=reviewer.revision.document
+        user=request_user, document=reviewer.revision.document
     )
     right.rights = "read"
     await right.asave()
