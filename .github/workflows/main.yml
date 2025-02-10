@@ -53,6 +53,7 @@ jobs:
         fi
         cd fiduswriter
         mv ../ci/configuration.py ./
+        mv ../ci/.coveragerc ./
         pip install requests[security]
         pip install coverage
         pip install coveralls
