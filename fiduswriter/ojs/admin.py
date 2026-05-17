@@ -1,6 +1,10 @@
+import json
+
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path
+
+from base.views import get_frontend_settings
 
 from . import models
 
@@ -54,6 +58,7 @@ class JournalAdmin(admin.ModelAdmin):
 
     def register_journal_view(self, request):
         response = {}
+        response["settings"] = json.dumps(get_frontend_settings())
         return render(request, "admin/ojs/register_journals.html", response)
 
 

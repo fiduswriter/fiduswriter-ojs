@@ -5,18 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fiduswriter-ojs"
 description = "A Fidus Writer plugin to connect to OJS."
-version = "4.0.0"
+version = "4.1.0"
 readme = "README.md"
-license = {text = "AGPL-3.0-or-later"}
+license = "AGPL-3.0-or-later"
 authors = [
   {email = "johannes@fiduswriter.org", name = "Johannes Wilm"},
 ]
 classifiers=[
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 5.1",
+  "Framework :: Django :: 6.0",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: GNU Affero General Public License v3",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",

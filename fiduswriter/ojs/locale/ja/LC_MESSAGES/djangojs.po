@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ojs/static/js/modules/ojs/admin.js:57
+msgid "Provide a URL for the OJS server and the key to access it."
+msgstr "OJS サーバーの URL とそれにアクセスするためのキーを指定します。"
+
+#: ojs/static/js/modules/ojs/admin.js:96
+msgid "Editor"
+msgstr "エディタ"
+
+#: ojs/static/js/modules/ojs/admin.js:100
+msgid "Register"
+msgstr "登録する"
+
+#: ojs/static/js/modules/ojs/admin.js:109
+msgid "Could not connect to OJS server."
+msgstr "OJSサーバーに接続できませんでした。"
+
+#: ojs/static/js/modules/ojs/admin.js:126
+msgid "Editor and journal name need to be filled out."
+msgstr "編集者とジャーナル名を入力する必要があります。"
+
+#: ojs/static/js/modules/ojs/admin.js:134
+msgid "Editor needs to be the ID number of the editor user."
+msgstr "編集者は編集者ユーザーのID番号である必要があります。"
+
+#: ojs/static/js/modules/ojs/admin.js:148
+msgid "Journal saved."
+msgstr "日記が保存されました。"
+
+#: ojs/static/js/modules/ojs/admin.js:152
+msgid "Journal already present on server."
+msgstr "ジャーナルはすでにサーバー上に存在します。"
+
+#: ojs/static/js/modules/ojs/admin.js:161
+msgid "Could not save journal. Please check form."
+msgstr "日記を保存できませんでした。フォームをご確認ください。"
+
+#: ojs/static/js/modules/ojs/editor.js:40
+msgid "Could not obtain submission info."
+msgstr "提出情報を取得できませんでした。"
+
+#: ojs/static/js/modules/ojs/editor.js:72
+#: ojs/static/js/modules/ojs/editor.js:74
+msgid "Submit to journal"
+msgstr "ジャーナルに投稿する"
+
+#: ojs/static/js/modules/ojs/editor.js:136
+msgid "Submit"
+msgstr "提出する"
+
+#: ojs/static/js/modules/ojs/editor.js:165
+msgid "Firstname, lastname and abstract are obligatory fields!"
+msgstr "名、姓、要約は必須フィールドです。"
+
+#: ojs/static/js/modules/ojs/editor.js:202
+msgid "Complete missing information and choose journal"
+msgstr "不足している情報を入力してジャーナルを選択してください"
+
+#: ojs/static/js/modules/ojs/editor.js:225
+#: ojs/static/js/modules/ojs/editor.js:249
+#: ojs/static/js/modules/ojs/editor.js:323
+msgid "Send"
+msgstr "送信"
+
+#: ojs/static/js/modules/ojs/editor.js:239
+#: ojs/static/js/modules/ojs/editor.js:263
+msgid "Submit revision"
+msgstr "リビジョンの送信"
+
+#: ojs/static/js/modules/ojs/editor.js:274
+msgid "Editors are informed."
+msgstr "編集者に通知されます。"
+
+#: ojs/static/js/modules/ojs/editor.js:278
+msgid "Updates could not be submitted."
+msgstr "更新を送信できませんでした。"
+
+#: ojs/static/js/modules/ojs/editor.js:288
+msgid "Resubmission successful"
+msgstr "再送信が成功しました"
+
+#: ojs/static/js/modules/ojs/editor.js:292
+#: ojs/static/js/modules/ojs/editor.js:379
+msgid "Review could not be submitted."
+msgstr "レビューを送信できませんでした。"
+
+#: ojs/static/js/modules/ojs/editor.js:340
+msgid "Leave your messages for editor and authors"
+msgstr "編集者と著者にメッセージを残してください"
+
+#: ojs/static/js/modules/ojs/editor.js:363
+msgid "Fill out all fields before submitting!"
+msgstr "送信する前にすべてのフィールドに記入してください。"
+
+#: ojs/static/js/modules/ojs/editor.js:375
+msgid "Review submitted"
+msgstr "レビューが送信されました"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:51
+msgid "Article submitted"
+msgstr "投稿された記事"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:53
+msgid "Article could not be submitted."
+msgstr "記事を投稿できませんでした。"
+
+#: ojs/static/js/modules/ojs/templates.js:12
+msgid "Submission information"
+msgstr "投稿情報"
+
+#: ojs/static/js/modules/ojs/templates.js:16
+msgid "Journal"
+msgstr "ジャーナル"
+
+#: ojs/static/js/modules/ojs/templates.js:34
+msgid "Abstract"
+msgstr "抽象的な"
+
+#: ojs/static/js/modules/ojs/templates.js:41
+msgid "Corresponding author"
+msgstr "連絡著者"
+
+#: ojs/static/js/modules/ojs/templates.js:45
+msgid "First name"
+msgstr "ファーストネーム"
+
+#: ojs/static/js/modules/ojs/templates.js:51
+msgid "Last name"
+msgstr "苗字"
+
+#: ojs/static/js/modules/ojs/templates.js:56
+msgid "Affiliation"
+msgstr "所属"
+
+#: ojs/static/js/modules/ojs/templates.js:60
+msgid "Webpage"
+msgstr "ウェブページ"
+
+#: ojs/static/js/modules/ojs/templates.js:67
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr "送信ボタンを押すと、再投稿がジャーナルに送信されます。"
+
+#: ojs/static/js/modules/ojs/templates.js:68
+#: ojs/static/js/modules/ojs/templates.js:85
+msgid "Be aware that this action cannot be undone!"
+msgstr "この操作は元に戻せないことに注意してください。"
+
+#: ojs/static/js/modules/ojs/templates.js:71
+msgid "Message for editor"
+msgstr "編集者へのメッセージ"
+
+#: ojs/static/js/modules/ojs/templates.js:73
+msgid "Message for editor and authors"
+msgstr "編集者と著者へのメッセージ"
+
+#: ojs/static/js/modules/ojs/templates.js:75
+msgid "Recommendation"
+msgstr "おすすめ"
+
+#: ojs/static/js/modules/ojs/templates.js:77
+msgid "Choose One"
+msgstr "1 つ選択してください"
+
+#: ojs/static/js/modules/ojs/templates.js:78
+msgid "Accept Submission"
+msgstr "提出を受け入れる"
+
+#: ojs/static/js/modules/ojs/templates.js:79
+msgid "Revisions Required"
+msgstr "修正が必要です"
+
+#: ojs/static/js/modules/ojs/templates.js:80
+msgid "Resubmit for Review"
+msgstr "レビューのために再送信する"
+
+#: ojs/static/js/modules/ojs/templates.js:81
+msgid "Resubmit Elsewhere"
+msgstr "別の場所で再送信する"
+
+#: ojs/static/js/modules/ojs/templates.js:82
+msgid "Decline Submission"
+msgstr "提出を拒否する"
+
+#: ojs/static/js/modules/ojs/templates.js:83
+msgid "See Comments"
+msgstr "コメントを参照"

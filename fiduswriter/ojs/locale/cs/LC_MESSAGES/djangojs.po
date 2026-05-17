@@ -1,0 +1,207 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:50+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#: ojs/static/js/modules/ojs/admin.js:57
+msgid "Provide a URL for the OJS server and the key to access it."
+msgstr "Zadejte adresu URL serveru OJS a klíč pro přístup k němu."
+
+#: ojs/static/js/modules/ojs/admin.js:96
+msgid "Editor"
+msgstr "Editor"
+
+#: ojs/static/js/modules/ojs/admin.js:100
+msgid "Register"
+msgstr "Rejstřík"
+
+#: ojs/static/js/modules/ojs/admin.js:109
+msgid "Could not connect to OJS server."
+msgstr "Nelze se připojit k serveru OJS."
+
+#: ojs/static/js/modules/ojs/admin.js:126
+msgid "Editor and journal name need to be filled out."
+msgstr "Je třeba vyplnit jméno editora a časopisu."
+
+#: ojs/static/js/modules/ojs/admin.js:134
+msgid "Editor needs to be the ID number of the editor user."
+msgstr "Editor musí být identifikační číslo uživatele editoru."
+
+#: ojs/static/js/modules/ojs/admin.js:148
+msgid "Journal saved."
+msgstr "Deník uložen."
+
+#: ojs/static/js/modules/ojs/admin.js:152
+msgid "Journal already present on server."
+msgstr "Deník je již na serveru přítomen."
+
+#: ojs/static/js/modules/ojs/admin.js:161
+msgid "Could not save journal. Please check form."
+msgstr "Deník se nepodařilo uložit. Zkontrolujte prosím formulář."
+
+#: ojs/static/js/modules/ojs/editor.js:40
+msgid "Could not obtain submission info."
+msgstr "Nepodařilo se získat informace o odeslání."
+
+#: ojs/static/js/modules/ojs/editor.js:72
+#: ojs/static/js/modules/ojs/editor.js:74
+msgid "Submit to journal"
+msgstr "Odeslat do deníku"
+
+#: ojs/static/js/modules/ojs/editor.js:136
+msgid "Submit"
+msgstr "Předložit"
+
+#: ojs/static/js/modules/ojs/editor.js:165
+msgid "Firstname, lastname and abstract are obligatory fields!"
+msgstr "Jméno, příjmení a abstrakt jsou povinná pole!"
+
+#: ojs/static/js/modules/ojs/editor.js:202
+msgid "Complete missing information and choose journal"
+msgstr "Doplňte chybějící informace a vyberte deník"
+
+#: ojs/static/js/modules/ojs/editor.js:225
+#: ojs/static/js/modules/ojs/editor.js:249
+#: ojs/static/js/modules/ojs/editor.js:323
+msgid "Send"
+msgstr "Poslat"
+
+#: ojs/static/js/modules/ojs/editor.js:239
+#: ojs/static/js/modules/ojs/editor.js:263
+msgid "Submit revision"
+msgstr "Odeslat revizi"
+
+#: ojs/static/js/modules/ojs/editor.js:274
+msgid "Editors are informed."
+msgstr "Redakce je informována."
+
+#: ojs/static/js/modules/ojs/editor.js:278
+msgid "Updates could not be submitted."
+msgstr "Aktualizace nebylo možné odeslat."
+
+#: ojs/static/js/modules/ojs/editor.js:288
+msgid "Resubmission successful"
+msgstr "Opětovné odeslání bylo úspěšné"
+
+#: ojs/static/js/modules/ojs/editor.js:292
+#: ojs/static/js/modules/ojs/editor.js:379
+msgid "Review could not be submitted."
+msgstr "Recenzi se nepodařilo odeslat."
+
+#: ojs/static/js/modules/ojs/editor.js:340
+msgid "Leave your messages for editor and authors"
+msgstr "Nechte své zprávy pro editora a autory"
+
+#: ojs/static/js/modules/ojs/editor.js:363
+msgid "Fill out all fields before submitting!"
+msgstr "Před odesláním vyplňte všechna pole!"
+
+#: ojs/static/js/modules/ojs/editor.js:375
+msgid "Review submitted"
+msgstr "Recenze odeslána"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:51
+msgid "Article submitted"
+msgstr "Článek předložen"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:53
+msgid "Article could not be submitted."
+msgstr "Článek se nepodařilo odeslat."
+
+#: ojs/static/js/modules/ojs/templates.js:12
+msgid "Submission information"
+msgstr "Informace o podání"
+
+#: ojs/static/js/modules/ojs/templates.js:16
+msgid "Journal"
+msgstr "Časopis"
+
+#: ojs/static/js/modules/ojs/templates.js:34
+msgid "Abstract"
+msgstr "Abstraktní"
+
+#: ojs/static/js/modules/ojs/templates.js:41
+msgid "Corresponding author"
+msgstr "Odpovídající autor"
+
+#: ojs/static/js/modules/ojs/templates.js:45
+msgid "First name"
+msgstr "Křestní jméno"
+
+#: ojs/static/js/modules/ojs/templates.js:51
+msgid "Last name"
+msgstr "Příjmení"
+
+#: ojs/static/js/modules/ojs/templates.js:56
+msgid "Affiliation"
+msgstr "Afiliace"
+
+#: ojs/static/js/modules/ojs/templates.js:60
+msgid "Webpage"
+msgstr "webové stránky"
+
+#: ojs/static/js/modules/ojs/templates.js:67
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr ""
+"Stisknutím tlačítka odeslat bude vaše opětovné odeslání odesláno do deníku"
+
+#: ojs/static/js/modules/ojs/templates.js:68
+#: ojs/static/js/modules/ojs/templates.js:85
+msgid "Be aware that this action cannot be undone!"
+msgstr "Uvědomte si, že tuto akci nelze vrátit zpět!"
+
+#: ojs/static/js/modules/ojs/templates.js:71
+msgid "Message for editor"
+msgstr "Zpráva pro redaktora"
+
+#: ojs/static/js/modules/ojs/templates.js:73
+msgid "Message for editor and authors"
+msgstr "Zpráva pro redaktora a autory"
+
+#: ojs/static/js/modules/ojs/templates.js:75
+msgid "Recommendation"
+msgstr "Doporučení"
+
+#: ojs/static/js/modules/ojs/templates.js:77
+msgid "Choose One"
+msgstr "Vyberte jednu"
+
+#: ojs/static/js/modules/ojs/templates.js:78
+msgid "Accept Submission"
+msgstr "Přijmout odeslání"
+
+#: ojs/static/js/modules/ojs/templates.js:79
+msgid "Revisions Required"
+msgstr "Vyžadovány revize"
+
+#: ojs/static/js/modules/ojs/templates.js:80
+msgid "Resubmit for Review"
+msgstr "Znovu odeslat ke kontrole"
+
+#: ojs/static/js/modules/ojs/templates.js:81
+msgid "Resubmit Elsewhere"
+msgstr "Znovu odeslat jinde"
+
+#: ojs/static/js/modules/ojs/templates.js:82
+msgid "Decline Submission"
+msgstr "Odmítnout odeslání"
+
+#: ojs/static/js/modules/ojs/templates.js:83
+msgid "See Comments"
+msgstr "Viz Komentáře"

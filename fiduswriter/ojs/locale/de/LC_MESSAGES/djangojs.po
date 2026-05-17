@@ -1,189 +1,206 @@
+#
 msgid ""
 msgstr ""
+"Project-Id-Version: Fidus Writer OJS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 13:28+0000\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
-"Project-Id-Version: Fidus Writer OJS\n"
-"Language: de\n"
 
 #: ojs/static/js/modules/ojs/admin.js:57
 msgid "Provide a URL for the OJS server and the key to access it."
 msgstr "Gebe eine URL für einen OJS Server und den entsprechenden Key an."
 
-#: ojs/static/js/modules/ojs/admin.js:77
-msgid "Cannot find Fidus Writer user corresponding to email: "
-msgstr "Fidus Writer-Benutzer, der der E-Mail entspricht, kann nicht gefunden werden: "
-
-#: ojs/static/js/modules/ojs/admin.js:82
+#: ojs/static/js/modules/ojs/admin.js:96
 msgid "Editor"
 msgstr "Editor"
 
-#: ojs/static/js/modules/ojs/admin.js:82
+#: ojs/static/js/modules/ojs/admin.js:100
 msgid "Register"
 msgstr "Registrieren"
 
-#: ojs/static/js/modules/ojs/admin.js:86
+#: ojs/static/js/modules/ojs/admin.js:109
 msgid "Could not connect to OJS server."
 msgstr "Verbindung zum OJS-Server konnte nicht hergestellt werden."
 
-#: ojs/static/js/modules/ojs/admin.js:106
+#: ojs/static/js/modules/ojs/admin.js:126
 msgid "Editor and journal name need to be filled out."
 msgstr "Editor und Journal Name sind Pflichtfelder."
 
-#: ojs/static/js/modules/ojs/admin.js:113
+#: ojs/static/js/modules/ojs/admin.js:134
 msgid "Editor needs to be the ID number of the editor user."
 msgstr "Editor muss die ID Nummer des Editor Users sein."
 
-#: ojs/static/js/modules/ojs/admin.js:125
+#: ojs/static/js/modules/ojs/admin.js:148
 msgid "Journal saved."
 msgstr "Zeitschrift gespeichert."
 
-#: ojs/static/js/modules/ojs/admin.js:127
+#: ojs/static/js/modules/ojs/admin.js:152
 msgid "Journal already present on server."
 msgstr "Zeitschrift schon auf dem Server vorhanden."
 
-#: ojs/static/js/modules/ojs/admin.js:133
+#: ojs/static/js/modules/ojs/admin.js:161
 msgid "Could not save journal. Please check form."
-msgstr "Konnte die Zeitschrift nicht abspeichern. Bitte untersuche das Formular."
+msgstr ""
+"Konnte die Zeitschrift nicht abspeichern. Bitte untersuche das Formular."
 
-#: ojs/static/js/modules/ojs/editor.js:26
+#: ojs/static/js/modules/ojs/editor.js:40
 msgid "Could not obtain submission info."
 msgstr "Übermittlungsinformationen konnten nicht abgerufen werden."
 
-#: ojs/static/js/modules/ojs/editor.js:39
-#: ojs/static/js/modules/ojs/editor.js:41
+#: ojs/static/js/modules/ojs/editor.js:72
+#: ojs/static/js/modules/ojs/editor.js:74
 msgid "Submit to journal"
 msgstr "Sende an Journal"
 
-#: ojs/static/js/modules/ojs/editor.js:67
+#: ojs/static/js/modules/ojs/editor.js:136
 msgid "Submit"
 msgstr "Einschicken"
 
-#: ojs/static/js/modules/ojs/editor.js:78
+#: ojs/static/js/modules/ojs/editor.js:165
 msgid "Firstname, lastname and abstract are obligatory fields!"
 msgstr "Vorname, Nachname und Zusammenfassung sind Pflichtfelder!"
 
-#: ojs/static/js/modules/ojs/editor.js:102
+#: ojs/static/js/modules/ojs/editor.js:202
 msgid "Complete missing information and choose journal"
 msgstr "Vervollständige die Detalien und wähle Journal aus"
 
-#: ojs/static/js/modules/ojs/editor.js:118
-#: ojs/static/js/modules/ojs/editor.js:173
+#: ojs/static/js/modules/ojs/editor.js:225
+#: ojs/static/js/modules/ojs/editor.js:249
+#: ojs/static/js/modules/ojs/editor.js:323
 msgid "Send"
 msgstr "Abschicken"
 
-#: ojs/static/js/modules/ojs/editor.js:130
+#: ojs/static/js/modules/ojs/editor.js:239
+#: ojs/static/js/modules/ojs/editor.js:263
 msgid "Submit revision"
 msgstr "Überarbeitung einreichen"
 
-#: ojs/static/js/modules/ojs/editor.js:140
+#: ojs/static/js/modules/ojs/editor.js:274
+msgid "Editors are informed."
+msgstr "Die Redaktion wird informiert."
+
+#: ojs/static/js/modules/ojs/editor.js:278
+msgid "Updates could not be submitted."
+msgstr "Aktualisierungen konnten nicht übermittelt werden."
+
+#: ojs/static/js/modules/ojs/editor.js:288
 msgid "Resubmission successful"
 msgstr "Erneute Einreichung erfolgreich"
 
-#: ojs/static/js/modules/ojs/editor.js:143
-#: ojs/static/js/modules/ojs/editor.js:222
+#: ojs/static/js/modules/ojs/editor.js:292
+#: ojs/static/js/modules/ojs/editor.js:379
 msgid "Review could not be submitted."
 msgstr "Review konnte nicht eingereicht werden."
 
-#: ojs/static/js/modules/ojs/editor.js:188
+#: ojs/static/js/modules/ojs/editor.js:340
 msgid "Leave your messages for editor and authors"
 msgstr "Hinterlasse deine Nachricht für den Editor und die Autoren"
 
-#: ojs/static/js/modules/ojs/editor.js:207
+#: ojs/static/js/modules/ojs/editor.js:363
 msgid "Fill out all fields before submitting!"
 msgstr "Fülle alle Felder vor dem einschicken aus!"
 
-#: ojs/static/js/modules/ojs/editor.js:219
+#: ojs/static/js/modules/ojs/editor.js:375
 msgid "Review submitted"
 msgstr "Review eingeschickt"
 
-#: ojs/static/js/modules/ojs/submit_doc.js:60
+#: ojs/static/js/modules/ojs/submit_doc.js:51
 msgid "Article submitted"
 msgstr "Artikel eingeschickt"
 
-#: ojs/static/js/modules/ojs/submit_doc.js:61
+#: ojs/static/js/modules/ojs/submit_doc.js:53
 msgid "Article could not be submitted."
 msgstr "Artikel konnte nicht eingeschickt werden."
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:12
 msgid "Submission information"
 msgstr "Einreichungsinformationen"
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:16
 msgid "Journal"
 msgstr "Journal"
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:34
 msgid "Abstract"
 msgstr "Zusammenfassung"
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:41
 msgid "Corresponding author"
 msgstr "Korrespondierender Autor"
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:45
 msgid "First name"
 msgstr "Vorname"
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:51
 msgid "Last name"
 msgstr "Nachname"
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:56
 msgid "Affiliation"
 msgstr "Institution"
 
-#: ojs/static/js/modules/ojs/templates.js:10
+#: ojs/static/js/modules/ojs/templates.js:60
 msgid "Webpage"
 msgstr "Webseite"
 
-#: ojs/static/js/modules/ojs/templates.js:11
-msgid "By pressing the submit button your resubmission will be sent to the journal"
-msgstr "Durch das Betätigen der „Abschicken“-Schaltfläche wird der überarbeitete Beitrag gesendet."
+#: ojs/static/js/modules/ojs/templates.js:67
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr ""
+"Durch das Betätigen der „Abschicken“-Schaltfläche wird der überarbeitete "
+"Beitrag gesendet."
 
-#: ojs/static/js/modules/ojs/templates.js:11
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:68
+#: ojs/static/js/modules/ojs/templates.js:85
 msgid "Be aware that this action cannot be undone!"
 msgstr "Achtung, diese Handlung kann nicht rückgängig gemacht werden!"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:71
 msgid "Message for editor"
 msgstr "Nachricht an den Editor"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:73
 msgid "Message for editor and authors"
 msgstr "Nachricht an den Editor und die Autoren"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:75
 msgid "Recommendation"
 msgstr "Empfehlung"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:77
 msgid "Choose One"
 msgstr "Wähle Eine"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:78
 msgid "Accept Submission"
 msgstr "Akzeptiere Einreichung"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:79
 msgid "Revisions Required"
 msgstr "Überarbeitung nötig"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:80
 msgid "Resubmit for Review"
 msgstr "Neueinreichung für Review"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:81
 msgid "Resubmit Elsewhere"
 msgstr "Woanders Einreichen"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:82
 msgid "Decline Submission"
 msgstr "Einreichung Ablehnen"
 
-#: ojs/static/js/modules/ojs/templates.js:12
+#: ojs/static/js/modules/ojs/templates.js:83
 msgid "See Comments"
 msgstr "Siehe Kommentare"
 
+#~ msgid "Cannot find Fidus Writer user corresponding to email: "
+#~ msgstr ""
+#~ "Fidus Writer-Benutzer, der der E-Mail entspricht, kann nicht gefunden "
+#~ "werden: "

@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
+#, python-format
+msgid "Add %(name)s"
+msgstr "%(name)s を追加"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
+#: ojs/templates/admin/ojs/register_journals.html:4
+#: ojs/templates/admin/ojs/register_journals.html:27
+msgid "Register journals"
+msgstr "雑誌を登録する"
+
+#: ojs/templates/admin/ojs/register_journals.html:29
+msgid ""
+"\n"
+"            Register the journals from a particular OJS instance. Insert first the\n"
+"            URL and Key of the OJS installation. Decide then for each journal you\n"
+"            want to connect with Fidus Writer which user should be registered as\n"
+"            their editor.\n"
+"            "
+msgstr ""
+"\n"
+"            特定のOJSインスタンスからジャーナルを登録します。最初に挿入します\n"
+"            OJS インストールの URL とキー。次に、ジャーナルごとに決定します\n"
+"            Fidus Writer に接続したいのですが、どのユーザーとして登録する必要がありますか\n"
+"            彼らの編集者。\n"
+"            "
+
+#: ojs/templates/admin/ojs/register_journals.html:37
+msgid "URL"
+msgstr "URL"
+
+#: ojs/templates/admin/ojs/register_journals.html:38
+msgid "Key"
+msgstr "鍵"
+
+#: ojs/templates/admin/ojs/register_journals.html:39
+msgid "Query available journals"
+msgstr "利用可能なジャーナルを照会する"

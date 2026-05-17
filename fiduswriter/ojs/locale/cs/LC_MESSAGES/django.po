@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
+#, python-format
+msgid "Add %(name)s"
+msgstr "Přidejte %(name)s"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
+#: ojs/templates/admin/ojs/register_journals.html:4
+#: ojs/templates/admin/ojs/register_journals.html:27
+msgid "Register journals"
+msgstr "Registrovat časopisy"
+
+#: ojs/templates/admin/ojs/register_journals.html:29
+msgid ""
+"\n"
+"            Register the journals from a particular OJS instance. Insert first the\n"
+"            URL and Key of the OJS installation. Decide then for each journal you\n"
+"            want to connect with Fidus Writer which user should be registered as\n"
+"            their editor.\n"
+"            "
+msgstr ""
+"\n"
+"            Zaregistrujte časopisy z konkrétní instance OJS. Nejprve vložte\n"
+"            URL a klíč instalace OJS. Rozhodněte se pak pro každý deník, který jste\n"
+"            chcete se připojit k Fidus Writer, pod kterým uživatelem by měl být registrován\n"
+"            jejich redaktor.\n"
+"            "
+
+#: ojs/templates/admin/ojs/register_journals.html:37
+msgid "URL"
+msgstr "URL"
+
+#: ojs/templates/admin/ojs/register_journals.html:38
+msgid "Key"
+msgstr "Klíč"
+
+#: ojs/templates/admin/ojs/register_journals.html:39
+msgid "Query available journals"
+msgstr "Dotaz na dostupné časopisy"

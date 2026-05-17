@@ -1,0 +1,208 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:49+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: ojs/static/js/modules/ojs/admin.js:57
+msgid "Provide a URL for the OJS server and the key to access it."
+msgstr "Podaj adres URL serwera OJS i klucz dostępu do niego."
+
+#: ojs/static/js/modules/ojs/admin.js:96
+msgid "Editor"
+msgstr "Redaktor"
+
+#: ojs/static/js/modules/ojs/admin.js:100
+msgid "Register"
+msgstr "Rejestr"
+
+#: ojs/static/js/modules/ojs/admin.js:109
+msgid "Could not connect to OJS server."
+msgstr "Nie można połączyć się z serwerem OJS."
+
+#: ojs/static/js/modules/ojs/admin.js:126
+msgid "Editor and journal name need to be filled out."
+msgstr "Należy wypełnić redaktora i nazwę czasopisma."
+
+#: ojs/static/js/modules/ojs/admin.js:134
+msgid "Editor needs to be the ID number of the editor user."
+msgstr "Edytor musi być numerem identyfikacyjnym użytkownika edytora."
+
+#: ojs/static/js/modules/ojs/admin.js:148
+msgid "Journal saved."
+msgstr "Dziennik został zapisany."
+
+#: ojs/static/js/modules/ojs/admin.js:152
+msgid "Journal already present on server."
+msgstr "Dziennik już znajduje się na serwerze."
+
+#: ojs/static/js/modules/ojs/admin.js:161
+msgid "Could not save journal. Please check form."
+msgstr "Nie można zapisać dziennika. Sprawdź formularz."
+
+#: ojs/static/js/modules/ojs/editor.js:40
+msgid "Could not obtain submission info."
+msgstr "Nie udało się uzyskać informacji o przesłaniu."
+
+#: ojs/static/js/modules/ojs/editor.js:72
+#: ojs/static/js/modules/ojs/editor.js:74
+msgid "Submit to journal"
+msgstr "Prześlij do dziennika"
+
+#: ojs/static/js/modules/ojs/editor.js:136
+msgid "Submit"
+msgstr "Składać"
+
+#: ojs/static/js/modules/ojs/editor.js:165
+msgid "Firstname, lastname and abstract are obligatory fields!"
+msgstr "Imię, nazwisko i streszczenie to pola obowiązkowe!"
+
+#: ojs/static/js/modules/ojs/editor.js:202
+msgid "Complete missing information and choose journal"
+msgstr "Uzupełnij brakujące informacje i wybierz czasopismo"
+
+#: ojs/static/js/modules/ojs/editor.js:225
+#: ojs/static/js/modules/ojs/editor.js:249
+#: ojs/static/js/modules/ojs/editor.js:323
+msgid "Send"
+msgstr "Wysłać"
+
+#: ojs/static/js/modules/ojs/editor.js:239
+#: ojs/static/js/modules/ojs/editor.js:263
+msgid "Submit revision"
+msgstr "Prześlij wersję"
+
+#: ojs/static/js/modules/ojs/editor.js:274
+msgid "Editors are informed."
+msgstr "Redakcja zostaje poinformowana."
+
+#: ojs/static/js/modules/ojs/editor.js:278
+msgid "Updates could not be submitted."
+msgstr "Nie można przesłać aktualizacji."
+
+#: ojs/static/js/modules/ojs/editor.js:288
+msgid "Resubmission successful"
+msgstr "Ponowne przesłanie powiodło się"
+
+#: ojs/static/js/modules/ojs/editor.js:292
+#: ojs/static/js/modules/ojs/editor.js:379
+msgid "Review could not be submitted."
+msgstr "Nie można przesłać recenzji."
+
+#: ojs/static/js/modules/ojs/editor.js:340
+msgid "Leave your messages for editor and authors"
+msgstr "Zostaw swoje wiadomości redaktorowi i autorom"
+
+#: ojs/static/js/modules/ojs/editor.js:363
+msgid "Fill out all fields before submitting!"
+msgstr "Wypełnij wszystkie pola przed przesłaniem!"
+
+#: ojs/static/js/modules/ojs/editor.js:375
+msgid "Review submitted"
+msgstr "Recenzja przesłana"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:51
+msgid "Article submitted"
+msgstr "Artykuł przesłany"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:53
+msgid "Article could not be submitted."
+msgstr "Nie można przesłać artykułu."
+
+#: ojs/static/js/modules/ojs/templates.js:12
+msgid "Submission information"
+msgstr "Informacje o przesłaniu"
+
+#: ojs/static/js/modules/ojs/templates.js:16
+msgid "Journal"
+msgstr "Dziennik"
+
+#: ojs/static/js/modules/ojs/templates.js:34
+msgid "Abstract"
+msgstr "Abstrakcyjny"
+
+#: ojs/static/js/modules/ojs/templates.js:41
+msgid "Corresponding author"
+msgstr "Autor korespondencji"
+
+#: ojs/static/js/modules/ojs/templates.js:45
+msgid "First name"
+msgstr "Imię"
+
+#: ojs/static/js/modules/ojs/templates.js:51
+msgid "Last name"
+msgstr "Nazwisko"
+
+#: ojs/static/js/modules/ojs/templates.js:56
+msgid "Affiliation"
+msgstr "Przynależność"
+
+#: ojs/static/js/modules/ojs/templates.js:60
+msgid "Webpage"
+msgstr "Strona internetowa"
+
+#: ojs/static/js/modules/ojs/templates.js:67
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr ""
+"Po naciśnięciu przycisku przesyłania ponownie przesłane zgłoszenie zostanie "
+"przesłane do czasopisma"
+
+#: ojs/static/js/modules/ojs/templates.js:68
+#: ojs/static/js/modules/ojs/templates.js:85
+msgid "Be aware that this action cannot be undone!"
+msgstr "Pamiętaj, że tej akcji nie można cofnąć!"
+
+#: ojs/static/js/modules/ojs/templates.js:71
+msgid "Message for editor"
+msgstr "Wiadomość dla redaktora"
+
+#: ojs/static/js/modules/ojs/templates.js:73
+msgid "Message for editor and authors"
+msgstr "Wiadomość dla redaktora i autorów"
+
+#: ojs/static/js/modules/ojs/templates.js:75
+msgid "Recommendation"
+msgstr "Zalecenie"
+
+#: ojs/static/js/modules/ojs/templates.js:77
+msgid "Choose One"
+msgstr "Wybierz jeden"
+
+#: ojs/static/js/modules/ojs/templates.js:78
+msgid "Accept Submission"
+msgstr "Zaakceptuj zgłoszenie"
+
+#: ojs/static/js/modules/ojs/templates.js:79
+msgid "Revisions Required"
+msgstr "Wymagane poprawki"
+
+#: ojs/static/js/modules/ojs/templates.js:80
+msgid "Resubmit for Review"
+msgstr "Prześlij ponownie do sprawdzenia"
+
+#: ojs/static/js/modules/ojs/templates.js:81
+msgid "Resubmit Elsewhere"
+msgstr "Prześlij ponownie w innym miejscu"
+
+#: ojs/static/js/modules/ojs/templates.js:82
+msgid "Decline Submission"
+msgstr "Odrzuć przesłanie"
+
+#: ojs/static/js/modules/ojs/templates.js:83
+msgid "See Comments"
+msgstr "Zobacz Komentarze"

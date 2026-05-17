@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:48+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ojs/static/js/modules/ojs/admin.js:57
+msgid "Provide a URL for the OJS server and the key to access it."
+msgstr "Provide a URL for the OJS server and the key to access it."
+
+#: ojs/static/js/modules/ojs/admin.js:96
+msgid "Editor"
+msgstr "Editor"
+
+#: ojs/static/js/modules/ojs/admin.js:100
+msgid "Register"
+msgstr "Register"
+
+#: ojs/static/js/modules/ojs/admin.js:109
+msgid "Could not connect to OJS server."
+msgstr "Could not connect to OJS server."
+
+#: ojs/static/js/modules/ojs/admin.js:126
+msgid "Editor and journal name need to be filled out."
+msgstr "Editor and journal name need to be filled out."
+
+#: ojs/static/js/modules/ojs/admin.js:134
+msgid "Editor needs to be the ID number of the editor user."
+msgstr "Editor needs to be the ID number of the editor user."
+
+#: ojs/static/js/modules/ojs/admin.js:148
+msgid "Journal saved."
+msgstr "Journal saved."
+
+#: ojs/static/js/modules/ojs/admin.js:152
+msgid "Journal already present on server."
+msgstr "Journal already present on server."
+
+#: ojs/static/js/modules/ojs/admin.js:161
+msgid "Could not save journal. Please check form."
+msgstr "Could not save journal. Please check form."
+
+#: ojs/static/js/modules/ojs/editor.js:40
+msgid "Could not obtain submission info."
+msgstr "Could not obtain submission info."
+
+#: ojs/static/js/modules/ojs/editor.js:72
+#: ojs/static/js/modules/ojs/editor.js:74
+msgid "Submit to journal"
+msgstr "Submit to journal"
+
+#: ojs/static/js/modules/ojs/editor.js:136
+msgid "Submit"
+msgstr "Submit"
+
+#: ojs/static/js/modules/ojs/editor.js:165
+msgid "Firstname, lastname and abstract are obligatory fields!"
+msgstr "Firstname, lastname and abstract are obligatory fields!"
+
+#: ojs/static/js/modules/ojs/editor.js:202
+msgid "Complete missing information and choose journal"
+msgstr "Complete missing information and choose journal"
+
+#: ojs/static/js/modules/ojs/editor.js:225
+#: ojs/static/js/modules/ojs/editor.js:249
+#: ojs/static/js/modules/ojs/editor.js:323
+msgid "Send"
+msgstr "Send"
+
+#: ojs/static/js/modules/ojs/editor.js:239
+#: ojs/static/js/modules/ojs/editor.js:263
+msgid "Submit revision"
+msgstr "Submit revision"
+
+#: ojs/static/js/modules/ojs/editor.js:274
+msgid "Editors are informed."
+msgstr "Editors are informed."
+
+#: ojs/static/js/modules/ojs/editor.js:278
+msgid "Updates could not be submitted."
+msgstr "Updates could not be submitted."
+
+#: ojs/static/js/modules/ojs/editor.js:288
+msgid "Resubmission successful"
+msgstr "Resubmission successful"
+
+#: ojs/static/js/modules/ojs/editor.js:292
+#: ojs/static/js/modules/ojs/editor.js:379
+msgid "Review could not be submitted."
+msgstr "Review could not be submitted."
+
+#: ojs/static/js/modules/ojs/editor.js:340
+msgid "Leave your messages for editor and authors"
+msgstr "Leave your messages for editor and authors"
+
+#: ojs/static/js/modules/ojs/editor.js:363
+msgid "Fill out all fields before submitting!"
+msgstr "Fill out all fields before submitting!"
+
+#: ojs/static/js/modules/ojs/editor.js:375
+msgid "Review submitted"
+msgstr "Review submitted"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:51
+msgid "Article submitted"
+msgstr "Article submitted"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:53
+msgid "Article could not be submitted."
+msgstr "Article could not be submitted."
+
+#: ojs/static/js/modules/ojs/templates.js:12
+msgid "Submission information"
+msgstr "Submission information"
+
+#: ojs/static/js/modules/ojs/templates.js:16
+msgid "Journal"
+msgstr "Journal"
+
+#: ojs/static/js/modules/ojs/templates.js:34
+msgid "Abstract"
+msgstr "Abstract"
+
+#: ojs/static/js/modules/ojs/templates.js:41
+msgid "Corresponding author"
+msgstr "Corresponding author"
+
+#: ojs/static/js/modules/ojs/templates.js:45
+msgid "First name"
+msgstr "First name"
+
+#: ojs/static/js/modules/ojs/templates.js:51
+msgid "Last name"
+msgstr "Last name"
+
+#: ojs/static/js/modules/ojs/templates.js:56
+msgid "Affiliation"
+msgstr "Affiliation"
+
+#: ojs/static/js/modules/ojs/templates.js:60
+msgid "Webpage"
+msgstr "Webpage"
+
+#: ojs/static/js/modules/ojs/templates.js:67
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr ""
+"By pressing the submit button your resubmission will be sent to the journal"
+
+#: ojs/static/js/modules/ojs/templates.js:68
+#: ojs/static/js/modules/ojs/templates.js:85
+msgid "Be aware that this action cannot be undone!"
+msgstr "Be aware that this action cannot be undone!"
+
+#: ojs/static/js/modules/ojs/templates.js:71
+msgid "Message for editor"
+msgstr "Message for editor"
+
+#: ojs/static/js/modules/ojs/templates.js:73
+msgid "Message for editor and authors"
+msgstr "Message for editor and authors"
+
+#: ojs/static/js/modules/ojs/templates.js:75
+msgid "Recommendation"
+msgstr "Recommendation"
+
+#: ojs/static/js/modules/ojs/templates.js:77
+msgid "Choose One"
+msgstr "Choose One"
+
+#: ojs/static/js/modules/ojs/templates.js:78
+msgid "Accept Submission"
+msgstr "Accept Submission"
+
+#: ojs/static/js/modules/ojs/templates.js:79
+msgid "Revisions Required"
+msgstr "Revisions Required"
+
+#: ojs/static/js/modules/ojs/templates.js:80
+msgid "Resubmit for Review"
+msgstr "Resubmit for Review"
+
+#: ojs/static/js/modules/ojs/templates.js:81
+msgid "Resubmit Elsewhere"
+msgstr "Resubmit Elsewhere"
+
+#: ojs/static/js/modules/ojs/templates.js:82
+msgid "Decline Submission"
+msgstr "Decline Submission"
+
+#: ojs/static/js/modules/ojs/templates.js:83
+msgid "See Comments"
+msgstr "See Comments"

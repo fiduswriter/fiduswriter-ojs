@@ -1,0 +1,58 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
+#, python-format
+msgid "Add %(name)s"
+msgstr "%(name)s 추가"
+
+#: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
+#: ojs/templates/admin/ojs/register_journals.html:4
+#: ojs/templates/admin/ojs/register_journals.html:27
+msgid "Register journals"
+msgstr "저널 등록"
+
+#: ojs/templates/admin/ojs/register_journals.html:29
+msgid ""
+"\n"
+"            Register the journals from a particular OJS instance. Insert first the\n"
+"            URL and Key of the OJS installation. Decide then for each journal you\n"
+"            want to connect with Fidus Writer which user should be registered as\n"
+"            their editor.\n"
+"            "
+msgstr ""
+"\n"
+"            특정 OJS 인스턴스의 저널을 등록합니다. 먼저 삽입하세요.\n"
+"            OJS 설치 URL 및 키. 그런 다음 각 저널에 대해 결정하십시오.\n"
+"            사용자를 등록해야 하는 Fidus Writer에 연결하고 싶습니다.\n"
+"            그들의 편집자.\n"
+"            "
+
+#: ojs/templates/admin/ojs/register_journals.html:37
+msgid "URL"
+msgstr "URL"
+
+#: ojs/templates/admin/ojs/register_journals.html:38
+msgid "Key"
+msgstr "열쇠"
+
+#: ojs/templates/admin/ojs/register_journals.html:39
+msgid "Query available journals"
+msgstr "이용 가능한 저널 조회"

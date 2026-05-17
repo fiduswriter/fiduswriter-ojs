@@ -44,8 +44,8 @@ export class SendDocSubmission {
             doc_id: this.doc.id,
             title: this.doc.title,
             abstract: this.abstract,
-            content: JSON.stringify(content),
-            bibliography: JSON.stringify(bibDB),
+            content,
+            bibliography: bibDB,
             image_ids: Object.keys(imageDB)
         })
             .then(() => addAlert("success", gettext("Article submitted")))

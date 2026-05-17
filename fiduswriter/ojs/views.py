@@ -12,7 +12,6 @@ from django.http import (
     HttpResponseNotFound,
 )
 from django.shortcuts import redirect
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.db import IntegrityError
@@ -36,7 +35,7 @@ OJS_PLUGIN_PATH = "/index.php/index/gateway/plugin/FidusWriterGatewayPlugin/"
 # logs a user in
 def login_user(request, user):
     # TODO: Is next line really needed?
-    user.backend = settings.AUTHENTICATION_BACKENDS[0]
+    user.backend = "django.contrib.auth.backends.ModelBackend"
     login(request, user)
 
 
@@ -126,7 +125,6 @@ def open_revision_doc(request, submission_id, version):
         submission_id=submission_id, version=version
     )
     key = rev.submission.journal.ojs_key
-
     if not token.check_token(user, key, login_token):
         return HttpResponse("No access", status=403)
     if (
@@ -142,7 +140,6 @@ def open_revision_doc(request, submission_id, version):
         # Access forbidden
         return HttpResponse("Missing access rights", status=403)
     login_user(request, user)
-
     return redirect(f"/document/{rev.document.id}/", permanent=True)
 
 
@@ -194,10 +191,10 @@ def check_revision_doc(request, submission_id, version):
 @require_POST
 def get_doc_info(request):
     response = {}
-    document_id = int(request.POST.get("doc_id"))
+    document_id = request.JSON.get("doc_id")
     if document_id == 0:
         response["submission"] = {"status": "unsubmitted"}
-        template_id = int(request.POST.get("template_id"))
+        template_id = request.JSON.get("template_id")
     else:
         document = Document.objects.get(id=document_id)
         if (
@@ -284,7 +281,7 @@ async def get_journals(request):
 @require_POST
 async def author_submit(request):
     # Submitting a new submission revision.
-    document_id = request.POST["doc_id"]
+    document_id = request.JSON["doc_id"]
     revision = (
         await models.SubmissionRevision.objects.filter(document_id=document_id)
         .select_related(
@@ -328,7 +325,7 @@ async def author_submit(request):
         return HttpResponse(response.content)
     else:
         # The document is not part of an existing submission.
-        journal_id = request.POST["journal_id"]
+        journal_id = request.JSON["journal_id"]
         journal = (
             await models.Journal.objects.filter(id=journal_id)
             .select_related("editor")
@@ -345,23 +342,22 @@ async def author_submit(request):
         )
         version = "1.0.0"
         # Connect a new document to the submission.
-        title = request.POST["title"]
-        abstract = request.POST["abstract"]
-        content = request.POST["content"]
-        bibliography = request.POST["bibliography"]
-        image_ids = request.POST.getlist("image_ids[]")
+        title = request.JSON["title"]
+        abstract = request.JSON["abstract"]
+        content = request.JSON["content"]
+        bibliography = request.JSON["bibliography"]
+        image_ids = request.JSON.get("image_ids")
 
         images = []
         for id in image_ids:
             image = await Image.objects.filter(id=id).afirst()
             images.append(image)
-
         document = await helpers.create_doc_async(
             journal.editor,
             template,
             title,
-            json.loads(content),
-            json.loads(bibliography),
+            content,
+            bibliography,
             images,
             {},
             submission.id,
@@ -377,11 +373,11 @@ async def author_submit(request):
             "username": request_user.username.encode("utf8"),
             "title": title.encode("utf8"),
             "abstract": abstract.encode("utf8"),
-            "first_name": request.POST["firstname"].encode("utf8"),
-            "last_name": request.POST["lastname"].encode("utf8"),
+            "first_name": request.JSON["firstname"].encode("utf8"),
+            "last_name": request.JSON["lastname"].encode("utf8"),
             "email": request_user.email.encode("utf8"),
-            "affiliation": request.POST["affiliation"].encode("utf8"),
-            "author_url": request.POST["author_url"].encode("utf8"),
+            "affiliation": request.JSON["affiliation"].encode("utf8"),
+            "author_url": request.JSON["author_url"].encode("utf8"),
             "journal_id": journal.ojs_jid,
             "fidus_url": fidus_url,
             "fidus_id": submission.id,
@@ -434,7 +430,7 @@ async def author_submit(request):
 @login_required
 @require_POST
 async def copyedit_draft_submit(request):
-    document_id = request.POST["doc_id"]
+    document_id = request.JSON["doc_id"]
     request_user = await request.auser()
     revision = (
         await models.SubmissionRevision.objects.filter(document_id=document_id)
@@ -491,7 +487,7 @@ async def copyedit_draft_submit(request):
 @require_POST
 async def reviewer_submit(request):
     # Submitting a new submission revision.
-    document_id = request.POST["doc_id"]
+    document_id = request.JSON["doc_id"]
     request_user = await request.auser()
     reviewer = (
         await models.Reviewer.objects.filter(
@@ -507,9 +503,9 @@ async def reviewer_submit(request):
         "submission_id": reviewer.revision.submission.ojs_jid,
         "version": reviewer.revision.version,
         "user_id": reviewer.ojs_jid,
-        "editor_message": request.POST["editor_message"],
-        "editor_author_message": request.POST["editor_author_message"],
-        "recommendation": request.POST["recommendation"],
+        "editor_message": request.JSON["editor_message"],
+        "editor_author_message": request.JSON["editor_author_message"],
+        "recommendation": request.JSON["recommendation"],
     }
 
     key = reviewer.revision.submission.journal.ojs_key
@@ -540,7 +536,7 @@ async def reviewer_submit(request):
 def get_user(request):
     response = {}
     status = 200
-    email = request.POST.get("email")
+    email = request.JSON.get("email")
     email_address = EmailAddress.objects.filter(email=email).first()
     if email_address:
         response["user_id"] = email_address.user.id
@@ -555,11 +551,11 @@ def save_journal(request):
     response = {}
     try:
         journal = models.Journal.objects.create(
-            ojs_jid=request.POST.get("ojs_jid"),
-            ojs_key=request.POST.get("ojs_key"),
-            ojs_url=request.POST.get("ojs_url"),
-            name=request.POST.get("name"),
-            editor_id=request.POST.get("editor_id"),
+            ojs_jid=request.JSON.get("ojs_jid"),
+            ojs_key=request.JSON.get("ojs_key"),
+            ojs_url=request.JSON.get("ojs_url"),
+            name=request.JSON.get("name"),
+            editor_id=request.JSON.get("editor_id"),
         )
         dts = DocumentTemplate.objects.filter(user=None)
         for dt in dts:

@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ojs/static/js/modules/ojs/admin.js:57
+msgid "Provide a URL for the OJS server and the key to access it."
+msgstr "提供 OJS 服务器的 URL 以及访问它的密钥。"
+
+#: ojs/static/js/modules/ojs/admin.js:96
+msgid "Editor"
+msgstr "编辑"
+
+#: ojs/static/js/modules/ojs/admin.js:100
+msgid "Register"
+msgstr "登记"
+
+#: ojs/static/js/modules/ojs/admin.js:109
+msgid "Could not connect to OJS server."
+msgstr "无法连接到 OJS 服务器。"
+
+#: ojs/static/js/modules/ojs/admin.js:126
+msgid "Editor and journal name need to be filled out."
+msgstr "需要填写编辑和期刊名称。"
+
+#: ojs/static/js/modules/ojs/admin.js:134
+msgid "Editor needs to be the ID number of the editor user."
+msgstr "编辑者需要是编辑者用户的ID号。"
+
+#: ojs/static/js/modules/ojs/admin.js:148
+msgid "Journal saved."
+msgstr "日记已保存。"
+
+#: ojs/static/js/modules/ojs/admin.js:152
+msgid "Journal already present on server."
+msgstr "日志已存在于服务器上。"
+
+#: ojs/static/js/modules/ojs/admin.js:161
+msgid "Could not save journal. Please check form."
+msgstr "无法保存日记。请检查表格。"
+
+#: ojs/static/js/modules/ojs/editor.js:40
+msgid "Could not obtain submission info."
+msgstr "无法获取提交信息。"
+
+#: ojs/static/js/modules/ojs/editor.js:72
+#: ojs/static/js/modules/ojs/editor.js:74
+msgid "Submit to journal"
+msgstr "提交至期刊"
+
+#: ojs/static/js/modules/ojs/editor.js:136
+msgid "Submit"
+msgstr "提交"
+
+#: ojs/static/js/modules/ojs/editor.js:165
+msgid "Firstname, lastname and abstract are obligatory fields!"
+msgstr "名字、姓氏和摘要是必填字段！"
+
+#: ojs/static/js/modules/ojs/editor.js:202
+msgid "Complete missing information and choose journal"
+msgstr "填写缺失信息并选择期刊"
+
+#: ojs/static/js/modules/ojs/editor.js:225
+#: ojs/static/js/modules/ojs/editor.js:249
+#: ojs/static/js/modules/ojs/editor.js:323
+msgid "Send"
+msgstr "发送"
+
+#: ojs/static/js/modules/ojs/editor.js:239
+#: ojs/static/js/modules/ojs/editor.js:263
+msgid "Submit revision"
+msgstr "提交修改"
+
+#: ojs/static/js/modules/ojs/editor.js:274
+msgid "Editors are informed."
+msgstr "编辑们已获悉。"
+
+#: ojs/static/js/modules/ojs/editor.js:278
+msgid "Updates could not be submitted."
+msgstr "无法提交更新。"
+
+#: ojs/static/js/modules/ojs/editor.js:288
+msgid "Resubmission successful"
+msgstr "重新提交成功"
+
+#: ojs/static/js/modules/ojs/editor.js:292
+#: ojs/static/js/modules/ojs/editor.js:379
+msgid "Review could not be submitted."
+msgstr "无法提交审核。"
+
+#: ojs/static/js/modules/ojs/editor.js:340
+msgid "Leave your messages for editor and authors"
+msgstr "给编辑和作者留言"
+
+#: ojs/static/js/modules/ojs/editor.js:363
+msgid "Fill out all fields before submitting!"
+msgstr "提交前填写所有字段！"
+
+#: ojs/static/js/modules/ojs/editor.js:375
+msgid "Review submitted"
+msgstr "已提交审核"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:51
+msgid "Article submitted"
+msgstr "文章已提交"
+
+#: ojs/static/js/modules/ojs/submit_doc.js:53
+msgid "Article could not be submitted."
+msgstr "文章无法提交。"
+
+#: ojs/static/js/modules/ojs/templates.js:12
+msgid "Submission information"
+msgstr "提交信息"
+
+#: ojs/static/js/modules/ojs/templates.js:16
+msgid "Journal"
+msgstr "杂志"
+
+#: ojs/static/js/modules/ojs/templates.js:34
+msgid "Abstract"
+msgstr "抽象的"
+
+#: ojs/static/js/modules/ojs/templates.js:41
+msgid "Corresponding author"
+msgstr "通讯作者"
+
+#: ojs/static/js/modules/ojs/templates.js:45
+msgid "First name"
+msgstr "名"
+
+#: ojs/static/js/modules/ojs/templates.js:51
+msgid "Last name"
+msgstr "姓"
+
+#: ojs/static/js/modules/ojs/templates.js:56
+msgid "Affiliation"
+msgstr "联系"
+
+#: ojs/static/js/modules/ojs/templates.js:60
+msgid "Webpage"
+msgstr "网页"
+
+#: ojs/static/js/modules/ojs/templates.js:67
+msgid ""
+"By pressing the submit button your resubmission will be sent to the journal"
+msgstr "按提交按钮，您的重新提交将被发送至期刊"
+
+#: ojs/static/js/modules/ojs/templates.js:68
+#: ojs/static/js/modules/ojs/templates.js:85
+msgid "Be aware that this action cannot be undone!"
+msgstr "请注意，此操作无法撤消！"
+
+#: ojs/static/js/modules/ojs/templates.js:71
+msgid "Message for editor"
+msgstr "给编辑的留言"
+
+#: ojs/static/js/modules/ojs/templates.js:73
+msgid "Message for editor and authors"
+msgstr "致编辑和作者的信息"
+
+#: ojs/static/js/modules/ojs/templates.js:75
+msgid "Recommendation"
+msgstr "推荐"
+
+#: ojs/static/js/modules/ojs/templates.js:77
+msgid "Choose One"
+msgstr "选择一项"
+
+#: ojs/static/js/modules/ojs/templates.js:78
+msgid "Accept Submission"
+msgstr "接受提交"
+
+#: ojs/static/js/modules/ojs/templates.js:79
+msgid "Revisions Required"
+msgstr "需要修改"
+
+#: ojs/static/js/modules/ojs/templates.js:80
+msgid "Resubmit for Review"
+msgstr "重新提交审核"
+
+#: ojs/static/js/modules/ojs/templates.js:81
+msgid "Resubmit Elsewhere"
+msgstr "在其他地方重新提交"
+
+#: ojs/static/js/modules/ojs/templates.js:82
+msgid "Decline Submission"
+msgstr "拒绝提交"
+
+#: ojs/static/js/modules/ojs/templates.js:83
+msgid "See Comments"
+msgstr "查看评论"

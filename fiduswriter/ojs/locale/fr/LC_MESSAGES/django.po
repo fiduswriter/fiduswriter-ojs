@@ -1,44 +1,49 @@
+#
 msgid ""
 msgstr ""
+"Project-Id-Version: Fidus Writer OJS backend\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-14 09:43+0000\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
-"Project-Id-Version: Fidus Writer OJS backend\n"
-"Language: fr\n"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:8
+#, python-format
 msgid "Add %(name)s"
 msgstr "Ajouter %(name)s"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
 #: ojs/templates/admin/ojs/register_journals.html:4
-#: ojs/templates/admin/ojs/register_journals.html:24
+#: ojs/templates/admin/ojs/register_journals.html:27
 msgid "Register journals"
 msgstr "Enregistrer des revues"
 
-#: ojs/templates/admin/ojs/register_journals.html:26
-msgid "\n"
+#: ojs/templates/admin/ojs/register_journals.html:29
+msgid ""
+"\n"
 "            Register the journals from a particular OJS instance. Insert first the\n"
 "            URL and Key of the OJS installation. Decide then for each journal you\n"
 "            want to connect with Fidus Writer which user should be registered as\n"
 "            their editor.\n"
 "            "
-msgstr "\n"
+msgstr ""
+"\n"
 "            Enregistrez les journaux d'une instance OJS particulière. Insérez d'abord le\n"
 "            URL et clé de l'installation OJS. Décidez ensuite pour chaque journal auquel vous\n"
 "            souhaitez  connecter Fidus Writer quel utilisateur doit être enregistré en tant qu'éditeur.\n"
 "                        "
 
-#: ojs/templates/admin/ojs/register_journals.html:34
+#: ojs/templates/admin/ojs/register_journals.html:37
 msgid "URL"
 msgstr "URL"
 
-#: ojs/templates/admin/ojs/register_journals.html:35
+#: ojs/templates/admin/ojs/register_journals.html:38
 msgid "Key"
 msgstr "Clé"
 
-#: ojs/templates/admin/ojs/register_journals.html:36
+#: ojs/templates/admin/ojs/register_journals.html:39
 msgid "Query available journals"
 msgstr "Recherchez les journaux disponibles"
-

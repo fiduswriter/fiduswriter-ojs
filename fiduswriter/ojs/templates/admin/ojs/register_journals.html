@@ -20,6 +20,8 @@
 <script type="text/javascript" src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
 <!-- Font Awesome -->
 <link type="text/css" rel="stylesheet" href="{% static "css/fontawesome/css/all.css" %}" />
+<!-- Set window.settings FIRST, before dependent scripts -->
+{% include "includes/frontend_settings.html" %}
 <script type="text/javascript" src="{% static "js/ojs_admin_register_journals.mjs" %}"></script>
 {% endblock %}
 {% block content %}

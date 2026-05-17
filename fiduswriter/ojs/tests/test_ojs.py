@@ -408,14 +408,13 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         )
         self.assertEqual(response.status_code, 200)
         login_token = json.loads(response.content)["token"]
-        self.driver.get(
-            urljoin(
-                self.base_url,
-                "/api/ojs/revision/{}/3.0.0/?token={}".format(
-                    submission_id, login_token
-                ),
-            )
+        url = urljoin(
+            self.base_url,
+            "/api/ojs/revision/{}/3.0.0/?token={}".format(
+                submission_id, login_token
+            ),
         )
+        self.driver.get(url)
         WebDriverWait(self.driver, self.wait_time).until(
             EC.presence_of_element_located((By.CLASS_NAME, "editor-toolbar"))
         )
