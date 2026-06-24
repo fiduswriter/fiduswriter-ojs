@@ -33,7 +33,8 @@ msgstr "Le nom de l'éditeur et du journal doivent être renseignés."
 #: ojs/static/js/modules/ojs/admin.js:134
 msgid "Editor needs to be the ID number of the editor user."
 msgstr ""
-"L'éditeur doit être le numéro d'identification de l'utilisateur de l'éditeur."
+"L'éditeur doit être le numéro d'identification de l'utilisateur de "
+"l'éditeur."
 
 #: ojs/static/js/modules/ojs/admin.js:148
 msgid "Journal saved."
@@ -202,5 +203,4 @@ msgstr "Voir les commentaires"
 
 #~ msgid "Cannot find Fidus Writer user corresponding to email: "
 #~ msgstr ""
-#~ "Impossible de trouver l'utilisateur Fidus Writer correspondant à l'e-"
-#~ "mail: "
+#~ "Impossible de trouver l'utilisateur Fidus Writer correspondant à l'e-mail: "

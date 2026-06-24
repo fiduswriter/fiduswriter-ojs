@@ -150,7 +150,8 @@ msgstr "Pagina web"
 #: ojs/static/js/modules/ojs/templates.js:67
 msgid ""
 "By pressing the submit button your resubmission will be sent to the journal"
-msgstr "Premendo il pulsante di invio il tuo reinvio verrà inviato al giornale"
+msgstr ""
+"Premendo il pulsante di invio il tuo reinvio verrà inviato al giornale"
 
 #: ojs/static/js/modules/ojs/templates.js:68
 #: ojs/static/js/modules/ojs/templates.js:85

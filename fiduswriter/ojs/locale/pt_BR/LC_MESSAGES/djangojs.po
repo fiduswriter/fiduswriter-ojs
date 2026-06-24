@@ -199,5 +199,4 @@ msgstr "Ver comentários"
 
 #~ msgid "Cannot find Fidus Writer user corresponding to email: "
 #~ msgstr ""
-#~ "Não é possível encontrar o usuário do Fidus Writer correspondente ao "
-#~ "email: "
+#~ "Não é possível encontrar o usuário do Fidus Writer correspondente ao email: "

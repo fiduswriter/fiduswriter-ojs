@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fidus Writer OJS backend\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-14 09:43+0000\n"
+"POT-Creation-Date: 2026-06-02 17:00+0000\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,11 +17,11 @@ msgstr "Füge %(name)s hinzu"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
 #: ojs/templates/admin/ojs/register_journals.html:4
-#: ojs/templates/admin/ojs/register_journals.html:27
+#: ojs/templates/admin/ojs/register_journals.html:29
 msgid "Register journals"
 msgstr "Registriere Zeitschriften"
 
-#: ojs/templates/admin/ojs/register_journals.html:29
+#: ojs/templates/admin/ojs/register_journals.html:31
 msgid ""
 "\n"
 "            Register the journals from a particular OJS instance. Insert first the\n"
@@ -37,14 +37,14 @@ msgstr ""
 "            und welcher Fidus Writer User als Editor für das Journal registriert\n"
 "            werden soll."
 
-#: ojs/templates/admin/ojs/register_journals.html:37
+#: ojs/templates/admin/ojs/register_journals.html:39
 msgid "URL"
 msgstr "URL"
 
-#: ojs/templates/admin/ojs/register_journals.html:38
+#: ojs/templates/admin/ojs/register_journals.html:40
 msgid "Key"
 msgstr "Key"
 
-#: ojs/templates/admin/ojs/register_journals.html:39
+#: ojs/templates/admin/ojs/register_journals.html:41
 msgid "Query available journals"
 msgstr "Suche verfügbare Zeitschriften"

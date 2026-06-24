@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-14 09:43+0000\n"
+"POT-Creation-Date: 2026-06-02 17:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,11 +25,11 @@ msgstr "%(name)s 추가"
 
 #: ojs/templates/admin/ojs/journal/change_list_object_tools.html:13
 #: ojs/templates/admin/ojs/register_journals.html:4
-#: ojs/templates/admin/ojs/register_journals.html:27
+#: ojs/templates/admin/ojs/register_journals.html:29
 msgid "Register journals"
 msgstr "저널 등록"
 
-#: ojs/templates/admin/ojs/register_journals.html:29
+#: ojs/templates/admin/ojs/register_journals.html:31
 msgid ""
 "\n"
 "            Register the journals from a particular OJS instance. Insert first the\n"
@@ -45,14 +45,14 @@ msgstr ""
 "            그들의 편집자.\n"
 "            "
 
-#: ojs/templates/admin/ojs/register_journals.html:37
+#: ojs/templates/admin/ojs/register_journals.html:39
 msgid "URL"
 msgstr "URL"
 
-#: ojs/templates/admin/ojs/register_journals.html:38
+#: ojs/templates/admin/ojs/register_journals.html:40
 msgid "Key"
 msgstr "열쇠"
 
-#: ojs/templates/admin/ojs/register_journals.html:39
+#: ojs/templates/admin/ojs/register_journals.html:41
 msgid "Query available journals"
 msgstr "이용 가능한 저널 조회"

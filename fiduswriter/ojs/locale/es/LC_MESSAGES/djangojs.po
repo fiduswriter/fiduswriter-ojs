@@ -12,7 +12,8 @@ msgstr ""
 
 #: ojs/static/js/modules/ojs/admin.js:57
 msgid "Provide a URL for the OJS server and the key to access it."
-msgstr "Proporcione una URL para el servidor OJS y la llave para acceder a él."
+msgstr ""
+"Proporcione una URL para el servidor OJS y la llave para acceder a él."
 
 #: ojs/static/js/modules/ojs/admin.js:96
 msgid "Editor"
@@ -199,5 +200,5 @@ msgstr "Ver comentarios"
 
 #~ msgid "Cannot find Fidus Writer user corresponding to email: "
 #~ msgstr ""
-#~ "No se puede encontrar el usuario de Fidus Writer correspondiente al "
-#~ "correo electrónico: "
+#~ "No se puede encontrar el usuario de Fidus Writer correspondiente al correo "
+#~ "electrónico: "
