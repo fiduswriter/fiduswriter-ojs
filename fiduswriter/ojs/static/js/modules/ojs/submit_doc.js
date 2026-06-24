@@ -1,5 +1,5 @@
 import {ShrinkFidus} from "@fiduswriter/document/exporter/native/shrink"
-import {addAlert, post} from "../common"
+import {addAlert, post} from "fwtoolkit"
 // Send an article submission to FW and OJS servers.
 
 export class SendDocSubmission {

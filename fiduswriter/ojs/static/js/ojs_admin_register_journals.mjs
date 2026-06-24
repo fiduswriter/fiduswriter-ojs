@@ -1,4 +1,4 @@
-import {initSettings} from "./modules/common/settings.js"
+import {initSettings} from "fwtoolkit/settings.js"
 import {AdminRegisterJournals} from "./modules/ojs/admin.js"
 
 initSettings(window.settings)

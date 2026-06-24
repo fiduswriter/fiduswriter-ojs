@@ -5,7 +5,7 @@ import {
     noSpaceTmp,
     post,
     postJson
-} from "../common"
+} from "fwtoolkit"
 // Adds capabilities for admins to register journals
 
 export class AdminRegisterJournals {

@@ -1,4 +1,4 @@
-import {escapeText} from "../common"
+import {escapeText} from "fwtoolkit"
 
 /** Dialog to add a note to a revision before saving. */
 
