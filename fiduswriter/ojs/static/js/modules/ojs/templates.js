@@ -32,7 +32,7 @@ export const firstSubmissionDialogTemplate = ({
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext("Abstract")} *</h4></th>
-                <td class="entry-field">
+                <td class="fw-entry-field">
                     <textarea id="submission-abstract" rows="8" style="width:678px;resize:none;">${escapeText(abstract || "")}</textarea>
                 </td>
             </tr>
@@ -43,22 +43,22 @@ export const firstSubmissionDialogTemplate = ({
         <tbody>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext("First name")} *</h4></th>
-                <td class="entry-field">
+                <td class="fw-entry-field">
                     <input type="text" id="submission-firstname" value="${escapeText(first_name || "")}">
                 </td>
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext("Last name")} *</h4></th>
-                <td class="entry-field">
+                <td class="fw-entry-field">
                     <input type="text" id="submission-lastname" value="${escapeText(last_name || "")}"></td>
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext("Affiliation")}</h4></th>
-                <td class="entry-field"><input type="text" id="submission-affiliation" value="${escapeText(affiliation || "")}"></td>
+                <td class="fw-entry-field"><input type="text" id="submission-affiliation" value="${escapeText(affiliation || "")}"></td>
             </tr>
             <tr>
                 <th><h4 class="fw-tablerow-title">${gettext("Webpage")}</h4></th>
-                <td class="entry-field"><input type="text" id="submission-author-url"></td>
+                <td class="fw-entry-field"><input type="text" id="submission-author-url"></td>
             </tr>
         </tbody>
     </table>`
