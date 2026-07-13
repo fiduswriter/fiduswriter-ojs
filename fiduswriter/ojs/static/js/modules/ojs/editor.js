@@ -1,3 +1,5 @@
+import {COMMENT_ONLY_ROLES, READ_ONLY_ROLES} from "@fiduswriter/editor"
+import {contributorInputPlugin} from "@fiduswriter/editor/state_plugins/index"
 import {
     Dialog,
     activateWait,
@@ -6,8 +8,6 @@ import {
     post,
     postJson
 } from "fwtoolkit"
-import {COMMENT_ONLY_ROLES, READ_ONLY_ROLES} from "../editor"
-import {contributorInputPlugin} from "../editor/state_plugins"
 import {reviewContributorPlugin} from "./contributor_state_plugin"
 import {SendDocSubmission} from "./submit_doc"
 import {
