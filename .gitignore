@@ -1,3 +1,5 @@
+lint/node_modules/
+lint/package-lock.json
 *.pyc
 *~
 dist/
