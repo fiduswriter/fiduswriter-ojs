@@ -207,7 +207,7 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
                 if (
                     self.driver.find_element(
                         By.CSS_SELECTOR,
-                        "body #alerts-outer-wrapper .alerts-success",
+                        "body #fw-alerts-outer-wrapper .alerts-success",
                     ).text
                     == message
                 ):
