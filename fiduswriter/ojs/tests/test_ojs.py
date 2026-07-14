@@ -313,7 +313,7 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         ).send_keys("Sunny University")
 
         self.driver.find_element(
-            By.CSS_SELECTOR, ".ui-dialog-buttonset .fw-dark"
+            By.CSS_SELECTOR, ".fw-dialog-buttonset .fw-dark"
         ).click()
         time.sleep(1)
         # Check that there is now one author
