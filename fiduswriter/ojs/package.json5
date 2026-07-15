@@ -1,6 +1,3 @@
 {
-    dependencies: {
-        "@fiduswriter/document": "^0.2.20",
-        "@fiduswriter/editor": "^0.1.19"
-    }
+    dependencies: {}
 }
