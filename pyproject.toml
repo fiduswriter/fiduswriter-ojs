@@ -26,7 +26,7 @@ dynamic = ["dependencies"]
 
 [project.urls]
 homepage = "https://www.fiduswriter.org/ojs-integration/"
-repository = "https://github.com/fiduswriter/fiduswriter-ojs/"
+repository = "https://github.com/fiduswriter/fiduswriter-ojs-plugin/"
 
 [tool.setuptools.dynamic]
 dependencies = {file = "requirements.txt"}
