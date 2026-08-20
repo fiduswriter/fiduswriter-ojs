@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 from testing.live_server import ChannelsLiveServerTestCase
@@ -458,10 +459,9 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         self.driver.find_element(By.ID, "message-editor-author").send_keys(
             "A message for the editor and author"
         )
-        self.driver.find_element(By.ID, "recommendation").click()
-        ActionChains(self.driver).send_keys(Keys.DOWN).send_keys(
-            Keys.DOWN
-        ).send_keys(Keys.DOWN).send_keys(Keys.ENTER).perform()
+        Select(
+            self.driver.find_element(By.ID, "recommendation")
+        ).select_by_index(3)
         self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
         self.assertSuccessAlert("Review submitted")
         # Let OJS assign a new anonymous reviewer to the submitted article
@@ -550,10 +550,9 @@ class OJSDummyTest(SeleniumHelper, ChannelsLiveServerTestCase):
         self.driver.find_element(By.ID, "message-editor-author").send_keys(
             "Another message for the editor and author"
         )
-        self.driver.find_element(By.ID, "recommendation").click()
-        ActionChains(self.driver).send_keys(Keys.DOWN).send_keys(
-            Keys.DOWN
-        ).send_keys(Keys.DOWN).send_keys(Keys.ENTER).perform()
+        Select(
+            self.driver.find_element(By.ID, "recommendation")
+        ).select_by_index(3)
         self.driver.find_element(By.CSS_SELECTOR, "button.fw-dark").click()
         self.assertSuccessAlert("Review submitted")
         # Make another copy to give the original author access to the reviewed

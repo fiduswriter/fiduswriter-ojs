@@ -1,15 +1,32 @@
 const path = require("path")
 const {execSync} = require("child_process")
+const fs = require("fs")
 
 function getFidusWriterPath() {
     try {
-        const fwPath = execSync(
-            "python -c \"import fiduswriter; print(next(filter(lambda path: '/site-packages/' in path, fiduswriter.__path__), ''))\""
-        )
-            .toString()
-            .trim()
+        let fwPath = ""
+        try {
+            fwPath = execSync(
+                "python -c \"import fiduswriter; print(next(filter(lambda path: '/site-packages/' in path, fiduswriter.__path__), ''))\""
+            )
+                .toString()
+                .trim()
+        } catch {
+            fwPath = ""
+        }
         if (fwPath) {
             return fwPath
+        }
+        // Fallback: the backend is checked out as a sibling
+        // (fiduswriter-server-backend/fiduswriter).
+        const sibling = path.resolve(
+            __dirname,
+            "..",
+            "fiduswriter-server-backend",
+            "fiduswriter"
+        )
+        if (fs.existsSync(sibling) && fs.statSync(sibling).isDirectory()) {
+            return sibling
         }
         throw new Error("Fidus Writer not found")
     } catch (error) {
@@ -33,7 +50,11 @@ module.exports = {
             true,
             {
                 importFrom: [
-                    path.join(fidusWriterPath, "base/static/css/colors.css")
+                    path.join(
+                        fidusWriterPath,
+                        "static-libs/css/fwtoolkit/colors.css"
+                    ),
+                    path.join(fidusWriterPath, "static-libs/css/colors.css")
                 ]
             }
         ],
