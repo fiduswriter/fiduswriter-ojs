@@ -2,5 +2,6 @@ include LICENSE
 include README.rst
 recursive-include fiduswriter/ojs/static *
 recursive-include fiduswriter/ojs/assets *
+include fiduswriter/ojs/package.json5
 recursive-include fiduswriter/ojs/locale *
 recursive-include fiduswriter/ojs/templates *
